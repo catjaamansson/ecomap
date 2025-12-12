@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-function App() {
+function Frontpage() {
   
 
   return (
@@ -40,4 +40,4 @@ function App() {
   )
 }
 
-export default App
+export default Frontpage;

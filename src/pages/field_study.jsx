@@ -1,6 +1,6 @@
 import Sidebar from '../components/sidebar.jsx';
 
-function App() {
+function FieldStudy() {
 
     
     return (
@@ -29,4 +29,4 @@ function App() {
     );
 } 
 
-export default App;
+export default FieldStudy;

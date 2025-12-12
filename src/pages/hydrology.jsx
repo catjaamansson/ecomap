@@ -1,6 +1,7 @@
 import Sidebar from '../components/sidebar.jsx';
+import Mapview from '../components/mapview.jsx';
 
-function App() {
+function Hydrology() {
 
     
     return (
@@ -22,11 +23,13 @@ function App() {
         <Sidebar active="hydrology" />
 
         <h1 className="font-bold" style={{ fontFamily: 'serif', letterSpacing: '0.05em', color: '#223D2D', fontSize: '120px', margin: 0, padding: 0 }}>EcoMap</h1>
-
         
+        <div style={{ marginTop: '20px', flex: 1}}>
+            <Mapview />
+          </div>
         </div>
     </div>  
     );
 } 
 
-export default App;
+export default Hydrology;

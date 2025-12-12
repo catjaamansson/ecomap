@@ -21,7 +21,7 @@ const Sidebar = ({ active }) => (
         textAlign: 'center',
         backgroundColor: '#597D68',
         color: '#223D2D',
-        border: active === 'hydrology' ? '2px solid #72ED81' : 'none',
+        border: active === 'hydrology' ? '2px solid #86DB90' : 'none',
         borderRadius: '12px',      // rundade symmetriska knappar
         cursor: 'pointer'
       }}>
@@ -37,7 +37,7 @@ const Sidebar = ({ active }) => (
         textAlign: 'center',
         backgroundColor: '#597D68',
         color: '#223D2D',
-        border: active === 'ecology' ? '2px solid #72ED81' : 'none',
+        border: active === 'ecology' ? '2px solid #86DB90' : 'none',
         borderRadius: '12px',
         cursor: 'pointer'
       }}>
@@ -53,7 +53,7 @@ const Sidebar = ({ active }) => (
         textAlign: 'center',
         backgroundColor: '#597D68',
         color: '#223D2D',
-        border: active === 'field_study' ? '2px solid #72ED81' : 'none',
+        border: active === 'field_study' ? '2px solid #86DB90' : 'none',
         borderRadius: '12px',
         cursor: 'pointer'
       }}>
@@ -69,7 +69,7 @@ const Sidebar = ({ active }) => (
         textAlign: 'center',
         backgroundColor: '#597D68',
         color: '#223D2D',
-        border: active === 'custom' ? '2px solid #72ED81' : 'none',
+        border: active === 'custom' ? '2px solid #86DB90' : 'none',
         borderRadius: '12px',
         cursor: 'pointer'
       }}>

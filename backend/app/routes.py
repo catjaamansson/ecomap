@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from .services.flood_model import flood_from_level
+from .services.flood_model import flood_to_geojson
 
 
 api = Blueprint("api", __name__)
@@ -10,16 +10,13 @@ def ping():
 
 @api.route("/flood")
 def flood():
-    level = float(request.args.get("level"))
+    level = request.args.get("level")
 
-    flooded = flood_from_level(
-        "app/data/dem.tif",
-        level
-    )
+    if level is None:
+        return jsonify({"error": "Missing level"}), 400
+    
+    level = float(level)
 
-    flooded_cells = int(flooded.sum())
-
-    return jsonify({
-        "water_level": level,
-        "flooded_cells": flooded_cells
-    })
+    geojson = flood_to_geojson(level)
+    return jsonify(geojson)
+    

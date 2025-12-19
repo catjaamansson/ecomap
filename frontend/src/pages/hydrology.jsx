@@ -28,7 +28,7 @@ function Hydrology() {
 
         <Hydrosidebar active={active} setActive={setActive} setWaterLevel={setWaterLevel} />
 
-        <div style={{ marginTop: '20px', flex: 1, height: '80vh', width: '70vw'}}>
+        <div style={{ marginTop: '20px', flex: 1, height: '80vh', width: '70vw', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
           <Mapview center={[55.7047, 13.1910]} zoom={10}>
             <HydrologyLayers level={waterLevel} />
           </Mapview>

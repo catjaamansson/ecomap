@@ -1,4 +1,6 @@
-import Sidebar from '../components/sidebar.jsx';
+import Sidebar from '../components/sidebar/hydrosidebar.jsx';
+import { useState } from 'react';
+import Navbar from '../components/navbar.jsx';
 
 function Custom() {
 
@@ -16,6 +18,7 @@ function Custom() {
         backgroundColor: '#356d4fff',
       }}
       >
+    <Navbar />
     
     <div style={{ display: 'flex', alignItems: 'flex-start', gap: '60px', padding: '40px' }}>
 

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import Navbar from '../components/navbar.jsx'
 
 function Frontpage() {
   
@@ -17,6 +18,7 @@ function Frontpage() {
         backgroundColor: '#356d4fff',
       }}
     >
+      <Navbar />
 
       <h1 className="font-bold" style={{ fontFamily: 'serif', letterSpacing: '0.05em', color: '#223D2D', fontSize: '120px', margin: 0, padding: 0 }}>EcoMap</h1>
       {<div style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '20px', alignItems: 'center' }}>

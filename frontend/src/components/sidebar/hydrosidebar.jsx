@@ -1,23 +1,23 @@
 import { useState } from 'react'
 
-const Sidebar = ({ active, setActive, setWaterLevel }) => {
+const Hydrosidebar = ({ active, setActive, setWaterLevel }) => {
   const [sliderValue, setSliderValue] = useState(0)
 
   const handleLowEmissions = () => {
     console.log('Low emissions clicked')
-    setActive('low_emissions')
+    setActive('low')
     setWaterLevel(1)
     setSliderValue(1)
   }
 
   const handleMediumEmissions = () => {
-    setActive('medium_emissions')
+    setActive('medium')
     setWaterLevel(2)
     setSliderValue(2)
   }
 
   const handleHighEmissions = () => {
-    setActive('high_emissions')
+    setActive('high')
     setWaterLevel(3)
     setSliderValue(3)
   }
@@ -49,13 +49,13 @@ const Sidebar = ({ active, setActive, setWaterLevel }) => {
           textAlign: 'center',
           backgroundColor: '#597D68',
           color: '#223D2D',
-          border: active === 'low_emissions' ? '3px solid #86DB90' : 'none',
+          border: active === 'low' ? '3px solid #86DB90' : 'none',
           borderRadius: '12px',
           cursor: 'pointer',
-          fontWeight: active === 'low_emissions' ? 'bold' : 'normal'
+          fontWeight: active === 'low' ? 'bold' : 'normal'
         }}
       >
-        Low emissions
+        Low (1 m)
       </button>
 
       <button
@@ -66,13 +66,13 @@ const Sidebar = ({ active, setActive, setWaterLevel }) => {
           textAlign: 'center',
           backgroundColor: '#597D68',
           color: '#223D2D',
-          border: active === 'medium_emissions' ? '3px solid #86DB90' : 'none',
+          border: active === 'medium' ? '3px solid #86DB90' : 'none',
           borderRadius: '12px',
           cursor: 'pointer',
-          fontWeight: active === 'medium_emissions' ? 'bold' : 'normal'
+          fontWeight: active === 'medium' ? 'bold' : 'normal'
         }}
       >
-        Medium emissions
+        Medium (2 m)
       </button>
 
       <button
@@ -83,13 +83,13 @@ const Sidebar = ({ active, setActive, setWaterLevel }) => {
           textAlign: 'center',
           backgroundColor: '#597D68',
           color: '#223D2D',
-          border: active === 'high_emissions' ? '3px solid #86DB90' : 'none',
+          border: active === 'high' ? '3px solid #86DB90' : 'none',
           borderRadius: '12px',
           cursor: 'pointer',
-          fontWeight: active === 'high_emissions' ? 'bold' : 'normal'
+          fontWeight: active === 'high' ? 'bold' : 'normal'
         }}
       >
-        High emissions
+        High (3 m)
       </button>
 
       <div style={{ borderTop: '2px solid #597D68', paddingTop: '15px', marginTop: '10px' }}>
@@ -113,4 +113,4 @@ const Sidebar = ({ active, setActive, setWaterLevel }) => {
   )
 }
 
-export default Sidebar;
+export default Hydrosidebar;

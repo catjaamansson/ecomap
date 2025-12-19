@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Sidebar from '../components/sidebar.jsx';
+import Hydrosidebar from '../components/sidebar/hydrosidebar.jsx';
 import Mapview from '../components/map/mapview.jsx';
 import Navbar from '../components/navbar.jsx'
 import HydrologyLayers from '../components/map/layers/hydrology/hydrologylayers.jsx';
@@ -26,7 +26,7 @@ function Hydrology() {
     
     <div style={{ display: 'flex', alignItems: 'flex-start', gap: '60px', padding: '40px' }}>
 
-        <Sidebar active={active} setActive={setActive} setWaterLevel={setWaterLevel} />
+        <Hydrosidebar active={active} setActive={setActive} setWaterLevel={setWaterLevel} />
 
         <div style={{ marginTop: '20px', flex: 1, height: '80vh', width: '70vw'}}>
           <Mapview center={[55.7047, 13.1910]} zoom={10}>

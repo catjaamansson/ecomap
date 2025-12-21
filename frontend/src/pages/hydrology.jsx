@@ -22,8 +22,6 @@ function Hydrology() {
       >
     <Navbar />
     
-    <h1 className="font-bold" style={{ fontFamily: 'serif', letterSpacing: '0.05em', color: '#223D2D', fontSize: '120px', margin: 0, padding: '40px' }}>EcoMap</h1>
-    
     <div style={{ display: 'flex', alignItems: 'flex-start', gap: '60px', padding: '40px' }}>
 
         <Hydrosidebar active={active} setActive={setActive} setWaterLevel={setWaterLevel} />

@@ -26,6 +26,18 @@ function Navbar() {
     }}>
       
       <div style={{ display: 'flex', gap: '20px', justifyContent: 'space-around', width: '100%' }}>
+        <h1 className="font-bold" style={{ 
+          fontFamily: 'serif', 
+          letterSpacing: '0.08em', 
+          color: '#223D2D', 
+          fontSize: '28px', 
+          margin: 0, 
+          padding: '0 20px',
+          fontWeight: '700',
+          textShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+          transition: 'all 0.3s ease',
+          letterSpacing: '2px'
+        }}>EcoMap</h1>
         {tabs.map((tab) => (
           <Link key={tab.label} to={tab.path} style={{ textDecoration: 'none' }}>
             <button

@@ -22,7 +22,7 @@ function Hydrology() {
       >
     <Navbar />
     
-    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '60px', padding: '40px' }}>
+    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '60px', padding: '40px'}}>
 
         <Hydrosidebar active={active} setActive={setActive} setWaterLevel={setWaterLevel} />
 

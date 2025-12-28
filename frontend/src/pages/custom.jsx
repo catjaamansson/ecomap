@@ -20,7 +20,7 @@ function Custom() {
       >
     <Navbar />
     
-    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '60px', padding: '40px' }}>
+    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '60px', padding: '40px'}}>
 
         <Sidebar active="custom" />
 

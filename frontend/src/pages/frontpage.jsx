@@ -58,7 +58,7 @@ function Frontpage() {
           <Link to={currentPage.path} style={{ textDecoration: 'none' }}>
             <div
               style={{
-                width: '400px',
+                width: '600px',
                 height: '400px',
                 backgroundImage: `url(${currentPage.image})`,
                 backgroundSize: 'cover',

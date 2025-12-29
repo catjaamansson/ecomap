@@ -2,19 +2,24 @@ import { useState } from 'react'
 
 const Ecosidebar = ({ active, setActive, setThreatLevel }) => {
 
-  const handleVulnerable = () => {
-    setActive('vulnerable')
-    setThreatLevel('VU')
+  const vegetation = () => {
+    setActive('vegetation')
+    setThreatLevel('veg')
   }
 
-  const handleEndangered = () => {
-    setActive('endangered')
-    setThreatLevel('EN')
+  const protected_areas = () => {
+    setActive('protected_areas')
+    setThreatLevel('pro')
   }
 
-  const handleCritical = () => {
-    setActive('critical')
-    setThreatLevel('CR')
+  const threatened_animals = () => {
+    setActive('threatened_animals')
+    setThreatLevel('tha')
+  }
+
+  const threatened_plants = () => {
+    setActive('threatened_plants')
+    setThreatLevel('thp')
   }
 
   return (
@@ -31,54 +36,71 @@ const Ecosidebar = ({ active, setActive, setThreatLevel }) => {
       }}
     >
       <button
-        onClick={handleVulnerable}
+        onClick={vegetation}
         style={{
           width: '100%',
           padding: '15px',
           textAlign: 'center',
           backgroundColor: '#597D68',
           color: '#223D2D',
-          border: active === 'vulnerable' ? '3px solid #86DB90' : 'none',
+          border: active === 'vegetation' ? '3px solid #86DB90' : 'none',
           borderRadius: '12px',
           cursor: 'pointer',
-          fontWeight: active === 'vulnerable' ? 'bold' : 'normal'
+          fontWeight: active === 'vegetation' ? 'bold' : 'normal'
         }}
       >
-        Vulnerable (VU)
+        Vegetation
       </button>
 
       <button
-        onClick={handleEndangered}
+        onClick={protected_areas}
         style={{
           width: '100%',
           padding: '15px',
           textAlign: 'center',
           backgroundColor: '#597D68',
           color: '#223D2D',
-          border: active === 'endangered' ? '3px solid #86DB90' : 'none',
+          border: active === 'protected_areas' ? '3px solid #86DB90' : 'none',
           borderRadius: '12px',
           cursor: 'pointer',
-          fontWeight: active === 'endangered' ? 'bold' : 'normal'
+          fontWeight: active === 'protected_areas' ? 'bold' : 'normal'
         }}
       >
-        Endangered (EN)
+        Protected areas
       </button>
 
       <button
-        onClick={handleCritical}
+        onClick={threatened_animals}
         style={{
           width: '100%',
           padding: '15px',
           textAlign: 'center',
           backgroundColor: '#597D68',
           color: '#223D2D',
-          border: active === 'critical' ? '3px solid #86DB90' : 'none',
+          border: active === 'threatened_animals' ? '3px solid #86DB90' : 'none',
           borderRadius: '12px',
           cursor: 'pointer',
-          fontWeight: active === 'critical' ? 'bold' : 'normal'
+          fontWeight: active === 'threatened_animals' ? 'bold' : 'normal'
         }}
       >
-        Critically Endangered (CR)
+        Threatened animals
+      </button>
+      
+      <button
+        onClick={threatened_plants}
+        style={{
+          width: '100%',
+          padding: '15px',
+          textAlign: 'center',
+          backgroundColor: '#597D68',
+          color: '#223D2D',
+          border: active === 'threatened_plants' ? '3px solid #86DB90' : 'none',
+          borderRadius: '12px',
+          cursor: 'pointer',
+          fontWeight: active === 'threatened_plants' ? 'bold' : 'normal'
+        }}
+      >
+        Threatened plants
       </button>
 
     </div>

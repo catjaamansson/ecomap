@@ -25,8 +25,8 @@ function Ecology() {
     <div style={{ display: 'flex', alignItems: 'flex-start', gap: '60px', padding: '40px' }}>
         <Ecosidebar active={active} setActive={setActive} />
 
-        <div style={{ marginTop: '20px', flex: 1, height: '80vh', width: '70vw'}}>
-          <Mapview center={[55.7047, 13.1910]} zoom={10}>
+        <div style={{ marginTop: '0px', flex: 1, height: '74vh', width: '70vw', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+          <Mapview center={[55.5543, 13.2428]} zoom={10}>
           </Mapview>
         </div>
     </div>

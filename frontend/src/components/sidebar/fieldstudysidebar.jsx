@@ -40,7 +40,7 @@ const FieldStudySidebar = ({ active, setActive }) => {
           fontWeight: active === 'area1' ? 'bold' : 'normal'
         }}
       >
-        Area 1
+        Land Use
       </button>
 
       <button
@@ -57,7 +57,7 @@ const FieldStudySidebar = ({ active, setActive }) => {
           fontWeight: active === 'area2' ? 'bold' : 'normal'
         }}
       >
-        Area 2
+        Buffert zone
       </button>
 
       <button
@@ -74,7 +74,7 @@ const FieldStudySidebar = ({ active, setActive }) => {
           fontWeight: active === 'area3' ? 'bold' : 'normal'
         }}
       >
-        Area 3
+        Soil/vegetation
       </button>
     </div>
   )

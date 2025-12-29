@@ -29,8 +29,8 @@ function FieldStudy() {
 
         <Sidebar active="field_study" />
 
-        <div style={{ marginTop: '0px', flex: 1, height: '100%', width: '100%'}}>
-          <Mapview center={[55.7047, 13.1910]} zoom={10}>
+        <div style={{ marginTop: '0px', flex: 1, height: '100%', width: '100%', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+          <Mapview center={[55.5543, 13.2428]} zoom={10}>
             <FieldStudyLayers />
           </Mapview>
         </div>

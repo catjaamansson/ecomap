@@ -1,4 +1,4 @@
-import Sidebar from '../components/sidebar/hydrosidebar.jsx';
+import Sidebar from '../components/sidebar/customsidebar.jsx';
 import { useState } from 'react';
 import Navbar from '../components/navbar.jsx';
 import Mapview from '../components/map/mapview.jsx';

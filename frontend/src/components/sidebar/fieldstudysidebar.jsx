@@ -1,16 +1,16 @@
 import { useState } from 'react'
 
 const FieldStudySidebar = ({ active, setActive }) => {
-  const area1 = () => {
-    setActive('area1')
+  const toggleLandUse = () => {
+    setActive(active === 'landUse' ? null : 'landUse')
   }
 
-  const area2 = () => {
-    setActive('area2')
+  const toggleBufferZone = () => {
+    setActive(active === 'bufferZone' ? null : 'bufferZone')
   }
 
-  const area3 = () => {
-    setActive('area3')
+  const toggleSoilVegetation = () => {
+    setActive(active === 'soilVegetation' ? null : 'soilVegetation')
   }
 
   return (
@@ -27,51 +27,51 @@ const FieldStudySidebar = ({ active, setActive }) => {
       }}
     >
       <button
-        onClick={area1}
+        onClick={toggleLandUse}
         style={{
           width: '100%',
           padding: '15px',
           textAlign: 'center',
           backgroundColor: '#597D68',
           color: '#223D2D',
-          border: active === 'area1' ? '3px solid #86DB90' : 'none',
+          border: active === 'landUse' ? '3px solid #86DB90' : 'none',
           borderRadius: '12px',
           cursor: 'pointer',
-          fontWeight: active === 'area1' ? 'bold' : 'normal'
+          fontWeight: active === 'landUse' ? 'bold' : 'normal'
         }}
       >
         Land Use
       </button>
 
       <button
-        onClick={area2}
+        onClick={toggleBufferZone}
         style={{
           width: '100%',
           padding: '15px',
           textAlign: 'center',
           backgroundColor: '#597D68',
           color: '#223D2D',
-          border: active === 'area2' ? '3px solid #86DB90' : 'none',
+          border: active === 'bufferZone' ? '3px solid #86DB90' : 'none',
           borderRadius: '12px',
           cursor: 'pointer',
-          fontWeight: active === 'area2' ? 'bold' : 'normal'
+          fontWeight: active === 'bufferZone' ? 'bold' : 'normal'
         }}
       >
         Buffert zone
       </button>
 
       <button
-        onClick={area3}
+        onClick={toggleSoilVegetation}
         style={{
           width: '100%',
           padding: '15px',
           textAlign: 'center',
           backgroundColor: '#597D68',
           color: '#223D2D',
-          border: active === 'area3' ? '3px solid #86DB90' : 'none',
+          border: active === 'soilVegetation' ? '3px solid #86DB90' : 'none',
           borderRadius: '12px',
           cursor: 'pointer',
-          fontWeight: active === 'area3' ? 'bold' : 'normal'
+          fontWeight: active === 'soilVegetation' ? 'bold' : 'normal'
         }}
       >
         Soil/vegetation

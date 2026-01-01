@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 from .services.flood_model import flood_to_geojson
+from .services.land_use_model import land_use_to_geojson
 import csv
 import os
 
@@ -22,12 +23,20 @@ def flood():
     geojson = flood_to_geojson(level)
     return jsonify(geojson)
 
+@api.route("/land_use")
+def land_use():
+    try:
+        geojson = land_use_to_geojson()
+        return jsonify(geojson)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @api.route("/species")
 def species():
     threat = request.args.get("threat", "VU")  # Default: Vulnerable
     
     species_list = []
-    csv_path = os.path.join(os.path.dirname(__file__), "data", "rodlistade_arter.csv")
+    csv_path = os.path.join(os.path.dirname(__file__), "data", "rodlistade_arten.csv")
     
     try:
         with open(csv_path, 'r', encoding='utf-8') as f:
@@ -44,4 +53,3 @@ def species():
         return jsonify({"error": str(e)}), 500
     
     return jsonify({"species": species_list})
-    

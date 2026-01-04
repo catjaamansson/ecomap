@@ -74,6 +74,20 @@ function Frontpage() {
               onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
               onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
             >
+              <h2
+                style={{
+                  backgroundColor: 'rgba(34, 61, 45, 0.7)',
+                  color: 'white',
+                  padding: '10px 20px',
+                  borderRadius: '10px',
+                  fontSize: '32px',
+                  textAlign: 'center',
+                  textShadow: '2px 2px 4px rgba(0,0,0,0.7)'
+                }}
+              >
+                {currentPage.name}
+              </h2>
+
             </div>
           </Link>
 

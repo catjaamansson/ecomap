@@ -28,7 +28,6 @@ function Navbar() {
       <div style={{ display: 'flex', gap: '20px', justifyContent: 'space-around', width: '100%' }}>
         <h1 className="font-bold" style={{ 
           fontFamily: 'serif', 
-          letterSpacing: '0.08em', 
           color: '#223D2D', 
           fontSize: '28px', 
           margin: 0, 

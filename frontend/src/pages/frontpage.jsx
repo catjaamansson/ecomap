@@ -6,7 +6,7 @@ function Frontpage() {
   const pages = [
     { name: 'Hydrology', path: '/hydrology', image: '/images/hydrology.png' },
     { name: 'Ecology', path: '/ecology', image: '/images/ecology.png' },
-    { name: 'Field study', path: '/field_study', image: '/images/field_study.png' },
+    { name: 'Field study', path: '/field_study', image: '/images/fieldstudy.png' },
     { name: 'Custom', path: '/custom', image: '/images/custom.png' }
   ]
 

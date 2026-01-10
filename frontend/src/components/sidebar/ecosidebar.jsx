@@ -1,25 +1,21 @@
 import { useState } from 'react'
 
-const Ecosidebar = ({ active, setActive, setThreatLevel }) => {
+const Ecosidebar = ({ active, setActive}) => {
 
   const vegetation = () => {
     setActive('vegetation')
-    setThreatLevel('veg')
   }
 
   const protected_areas = () => {
     setActive('protected_areas')
-    setThreatLevel('pro')
   }
 
   const threatened_animals = () => {
     setActive('threatened_animals')
-    setThreatLevel('tha')
   }
 
   const threatened_plants = () => {
     setActive('threatened_plants')
-    setThreatLevel('thp')
   }
 
   return (

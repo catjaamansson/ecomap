@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+// import ForestLayer from './forestlayer'  // TODO: optimera forest
 
 function EcologyLayers({ threatLevel }) {
   const [species, setSpecies] = useState([])
@@ -17,11 +18,18 @@ function EcologyLayers({ threatLevel }) {
   }, [threatLevel])
 
   if (loading) {
-    return <div>Laddar arter...</div>
+    return (
+      <>
+        {/* <ForestLayer /> */}
+        <div>Laddar arter...</div>
+      </>
+    )
   }
 
   return (
-    <div style={{
+    <>
+      {/* <ForestLayer /> */}
+      <div style={{
       position: 'absolute',
       bottom: '20px',
       left: '20px',
@@ -50,7 +58,8 @@ function EcologyLayers({ threatLevel }) {
       ) : (
         <p>Inga arter funna.</p>
       )}
-    </div>
+      </div>
+    </>
   )
 }
 

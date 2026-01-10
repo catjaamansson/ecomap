@@ -100,6 +100,7 @@ const Hydrosidebar = ({ active, setActive, setWaterLevel }) => {
           type="range" 
           min="0" 
           max="10" 
+          step="0.5"
           value={sliderValue}
           onChange={handleSliderChange}
           style={{

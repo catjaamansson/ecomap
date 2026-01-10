@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from .services.flood_model import flood_to_geojson
 from .services.land_use_model import land_use_to_geojson
+# from .services.forest_model import forest_to_geojson  # TODO: optimera forest
 import csv
 import os
 
@@ -29,6 +30,14 @@ def land_use():
         geojson = land_use_to_geojson()
         return jsonify(geojson)
     except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# @api.route("/forest")
+# def forest():
+#     try:
+#         geojson = forest_to_geojson()
+#         return jsonify(geojson)
+#     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 @api.route("/species")

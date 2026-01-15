@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Navbar from '../components/navbar.jsx';
 import Mapview from '../components/map/mapview.jsx';
 import FieldStudyLayers from '../components/map/layers/fieldstudy/fieldstudylayers.jsx';
+import Waterbodieslayers from '../components/map/layers/fieldstudy/waterbodieslayers.jsx';
 
 function FieldStudy() {
   const [active, setActive] = useState(null);
@@ -33,6 +34,7 @@ function FieldStudy() {
         <div style={{ marginTop: '0px', flex: 1, height: '100%', width: '100%', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
           <Mapview center={[55.5543, 13.2428]} zoom={10}>
             {active === 'landUse' && <FieldStudyLayers />}
+            {active === 'bufferZone' && <Waterbodieslayers />}
           </Mapview>
         </div>
 

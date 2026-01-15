@@ -6,31 +6,46 @@ function ForestLayer() {
   const map = useMap()
   const layerRef = useRef(null)
 
-  // Färger för olika skogstyper
-  const forestColors = {
-    "Öppen mark / Ingen skog": "#f5f5f5",
-    "Öppen mark / Gles vegetation": "#fffacd",
+  console.log('ForestLayer mounted, map:', map)
+
+  // Funktion för att få färg baserat på värde (0-255)
+  // Gradient: blå → grön → gult → rött
+  const getColorFromValue = (value) => {
+    if (value === 255 || value === undefined) return '#ffffff'
     
-    "Barrskog - tät": "#1a5c1a",
-    "Barrskog - glest": "#2d7a2d",
+    const normalized = Math.min(Math.max(value / 255, 0), 1)
     
-    "Lövskog - tät": "#6ba346",
-    "Lövskog - glest": "#85c94a",
-    
-    "Blandad skog - tät": "#2d5a2d",
-    "Blandad skog - glest": "#4a7a4a",
-    
-    "Ungskog - barrskog": "#4a9a4a",
-    "Ungskog - lövskog": "#7aaa7a",
-    
-    "Myr/Torvmark": "#8b7355",
-    "Myr - bewuxen": "#a0826d",
-    
-    "Nodata/Okänd": "#ffffff"
+    // Gradient från blå (0) → grön (0.33) → gult (0.66) → rött (1)
+    if (normalized < 0.33) {
+      // Blå → Grön
+      const t = normalized / 0.33
+      const r = Math.round(0 + (100 - 0) * t)
+      const g = Math.round(50 + (200 - 50) * t)
+      const b = Math.round(255 + (0 - 255) * t)
+      return `rgb(${r}, ${g}, ${b})`
+    } else if (normalized < 0.66) {
+      // Grön → Gult
+      const t = (normalized - 0.33) / 0.33
+      const r = Math.round(100 + (255 - 100) * t)
+      const g = Math.round(200 + (255 - 200) * t)
+      const b = Math.round(0 + (0 - 0) * t)
+      return `rgb(${r}, ${g}, ${b})`
+    } else {
+      // Gult → Rött
+      const t = (normalized - 0.66) / 0.34
+      const r = Math.round(255)
+      const g = Math.round(255 + (100 - 255) * t)
+      const b = Math.round(0)
+      return `rgb(${r}, ${g}, ${b})`
+    }
   }
 
   useEffect(() => {
-    if (!map) return
+    console.log('ForestLayer useEffect, map:', map)
+    if (!map) {
+      console.log('Map not available, returning')
+      return
+    }
 
     // Ta bort gamla lagret om det finns
     if (layerRef.current) {
@@ -38,6 +53,7 @@ function ForestLayer() {
     }
 
     // Hämta skogsdata från backend
+    console.log('Fetching forest data...')
     fetch('http://127.0.0.1:5000/forest')
       .then(res => res.json())
       .then(data => {
@@ -45,23 +61,23 @@ function ForestLayer() {
         
         const geoJsonLayer = L.geoJSON(data, {
           style: (feature) => {
-            const forestType = feature.properties?.forest_type
-            const color = forestColors[forestType] || '#90ee90'
+            const value = feature.properties?.forest_value
+            const color = getColorFromValue(value)
             
             return {
               color: color,
               fillColor: color,
-              fillOpacity: 0.6,
+              fillOpacity: 0.7,
               weight: 0.5
             }
           },
           onEachFeature: (feature, layer) => {
-            if (feature.properties?.forest_type) {
-              layer.bindPopup(`
-                <strong>Skogstyp:</strong> ${feature.properties.forest_type}<br>
-                <strong>Värde:</strong> ${feature.properties.forest_value}
-              `)
-            }
+            const type = feature.properties?.forest_type
+            const value = feature.properties?.forest_value
+            layer.bindPopup(`
+              <strong>Skogstyp:</strong> ${type}<br>
+              <strong>Värde:</strong> ${value}
+            `)
           }
         }).addTo(map)
         

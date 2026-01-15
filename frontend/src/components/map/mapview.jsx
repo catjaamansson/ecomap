@@ -10,6 +10,7 @@ L.Icon.Default.mergeOptions({
 })
 
 function MapView({ center, zoom, children }) {
+  console.log('MapView mounted, children:', children)
   return (
     <div style={{ height: '100%', width: '100%' }}>
       <MapContainer

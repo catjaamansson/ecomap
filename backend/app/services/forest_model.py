@@ -4,9 +4,10 @@ import numpy as np
 from rasterio.features import shapes
 import json
 from rasterio.io import MemoryFile
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-FOREST_PATH = BASE_DIR / "data" / "forest.tiff"
+FOREST_PATH = BASE_DIR / "data" / "forest.tif"
 
 def forest_to_geojson():
     """
@@ -15,13 +16,19 @@ def forest_to_geojson():
     
     OPTIMERAT: Decimerar rasterfilen för snabbare konvertering
     """
+    print(f"DEBUG: FOREST_PATH = {FOREST_PATH}")
+    print(f"DEBUG: File exists = {os.path.exists(FOREST_PATH)}")
+    
     with rasterio.open(FOREST_PATH) as src:
+        print(f"DEBUG: Opened file successfully")
         forest = src.read(1)
+        print(f"DEBUG: Forest shape = {forest.shape}, dtype = {forest.dtype}")
+        print(f"DEBUG: Unique values = {np.unique(forest)[:20]}") 
         transform = src.transform
         
         # Decimera för snabbare bearbetning (var 10:e pixel)
         # Ändra decimation_factor för mindre/mer detail
-        decimation_factor = 50
+        decimation_factor = 10
         forest_decimated = forest[::decimation_factor, ::decimation_factor]
         
         # Justera transform för decimerad data

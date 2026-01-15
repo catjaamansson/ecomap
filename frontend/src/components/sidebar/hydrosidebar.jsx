@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const Hydrosidebar = ({ active, setActive, setWaterLevel }) => {
+const Hydrosidebar = ({ active, setActive, setWaterLevel, showWaterQuality, setShowWaterQuality }) => {
   const [sliderValue, setSliderValue] = useState(0)
 
   const handleLowEmissions = () => {
@@ -109,6 +109,26 @@ const Hydrosidebar = ({ active, setActive, setWaterLevel }) => {
             accentColor: '#86DB90'
           }}
         />
+      </div>
+
+      <div style={{ borderTop: '2px solid #597D68', paddingTop: '15px', marginTop: '10px' }}>
+        <label style={{ 
+          color: '#86DB90', 
+          fontWeight: 'bold', 
+          fontSize: '14px', 
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          cursor: 'pointer'
+        }}>
+          <input 
+            type="checkbox" 
+            checked={showWaterQuality}
+            onChange={(e) => setShowWaterQuality(e.target.checked)}
+            style={{ cursor: 'pointer', width: '18px', height: '18px' }}
+          />
+          Visa vattenkvalitet
+        </label>
       </div>
     </div>
   )

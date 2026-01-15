@@ -7,6 +7,7 @@ import HydrologyLayers from '../components/map/layers/hydrology/hydrologylayers.
 function Hydrology() {
     const [active, setActive] = useState(null);
     const [waterLevel, setWaterLevel] = useState(0);
+    const [showWaterQuality, setShowWaterQuality] = useState(false);
 
     return (
       <div
@@ -24,11 +25,11 @@ function Hydrology() {
     
     <div style={{ display: 'flex', alignItems: 'flex-start', gap: '60px', padding: '40px'}}>
 
-        <Hydrosidebar active={active} setActive={setActive} setWaterLevel={setWaterLevel} />
+        <Hydrosidebar active={active} setActive={setActive} setWaterLevel={setWaterLevel} showWaterQuality={showWaterQuality} setShowWaterQuality={setShowWaterQuality} />
 
         <div style={{ marginTop: '0px', flex: 1, height: '74vh', width: '70vw', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
           <Mapview center={[55.5543, 13.2428]} zoom={10}>
-            <HydrologyLayers level={waterLevel} />
+            <HydrologyLayers level={waterLevel} showWaterQuality={showWaterQuality} />
           </Mapview>
         </div>
         

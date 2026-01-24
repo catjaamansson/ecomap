@@ -4,6 +4,8 @@ from .services.land_use_model import land_use_to_geojson
 from .services.water_quality_model import water_quality_to_geojson
 from .services.forest_model import forest_to_geojson
 from .services.waterbodies_model import water_bodies_to_geojson
+from .services.soilmoisture_model import soil_moisture_to_geojson
+from .services.forest2_model import forest2_to_geojson
 import csv
 import os
 
@@ -54,6 +56,22 @@ def waterbodies():
 def forest():
     try:
         geojson = forest_to_geojson()
+        return jsonify(geojson)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@api.route("/forest2")
+def forest2():
+    try:
+        geojson = forest2_to_geojson()
+        return jsonify(geojson)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500    
+
+@api.route("/soil_moisture")
+def soil_moisture():
+    try:
+        geojson = soil_moisture_to_geojson()
         return jsonify(geojson)
     except Exception as e:
         return jsonify({"error": str(e)}), 500

@@ -3,20 +3,21 @@ import { useState } from 'react'
 const Ecosidebar = ({ active, setActive}) => {
 
   const vegetation = () => {
-    setActive('vegetation')
+    active === 'vegetation' ? setActive(null) : setActive('vegetation')
+  }
+
+  const soil_moisture = () => {
+    active === 'soil_moisture' ? setActive(null) : setActive('soil_moisture')
   }
 
   const protected_areas = () => {
-    setActive('protected_areas')
+    active === 'protected_areas' ? setActive(null) : setActive('protected_areas')
   }
 
   const threatened_animals = () => {
-    setActive('threatened_animals')
+    active === 'threatened_animals' ? setActive(null) : setActive('threatened_animals')
   }
 
-  const threatened_plants = () => {
-    setActive('threatened_plants')
-  }
 
   return (
     <div 
@@ -46,6 +47,23 @@ const Ecosidebar = ({ active, setActive}) => {
         }}
       >
         Vegetation
+      </button>
+
+       <button
+        onClick={soil_moisture}
+        style={{
+          width: '100%',
+          padding: '15px',
+          textAlign: 'center',
+          backgroundColor: '#597D68',
+          color: '#223D2D',
+          border: active === 'soil_moisture' ? '3px solid #86DB90' : 'none',
+          borderRadius: '12px',
+          cursor: 'pointer',
+          fontWeight: active === 'soil_moisture' ? 'bold' : 'normal'
+        }}
+      >
+        Soil Moisture
       </button>
 
       <button
@@ -81,24 +99,6 @@ const Ecosidebar = ({ active, setActive}) => {
       >
         Threatened animals
       </button>
-      
-      <button
-        onClick={threatened_plants}
-        style={{
-          width: '100%',
-          padding: '15px',
-          textAlign: 'center',
-          backgroundColor: '#597D68',
-          color: '#223D2D',
-          border: active === 'threatened_plants' ? '3px solid #86DB90' : 'none',
-          borderRadius: '12px',
-          cursor: 'pointer',
-          fontWeight: active === 'threatened_plants' ? 'bold' : 'normal'
-        }}
-      >
-        Threatened plants
-      </button>
-
     </div>
   )
 }

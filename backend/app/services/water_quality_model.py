@@ -49,18 +49,21 @@ def water_quality_to_geojson():
 def classify_water_quality(value):
     """
     Klassificerar vattenkvalitet baserat på värde
-    1-2: Bra (grön)
-    3-4: Medel (gul)
-    5-6: Dålig (orange)
-    7+: Mycket dålig (röd)
+    1-20: Bra vattenkvalitet (grön)
+    20-40: Acceptabel vattenkvalitet (gul)
+    40-60: Måttlig vattenkvalitet (orange)
+    60-80: Dålig vattenkvalitet (röd)
+    80-100: Mycket dålig vattenkvalitet (mörkröd)
     """
-    if value >= 1 and value <= 2:
+    if value >= 1 and value <= 20:
         return "Bra"
-    elif value >= 3 and value <= 4:
-        return "Medel"
-    elif value >= 5 and value <= 6:
+    elif value >= 20 and value <= 40:
+        return "Acceptabel"
+    elif value >= 40 and value <= 60:
+        return "Måttlig"
+    elif value >= 60 and value <= 80:
         return "Dålig"
-    elif value >= 7:
+    elif value >= 80 and value <= 100:
         return "Mycket dålig"
     else:
-        return f"Okänd ({value})" 
+        return f"Okänd" 

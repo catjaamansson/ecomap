@@ -25,11 +25,13 @@ function WaterQualityLayer({ geojson, showWaterQuality }) {
         // Färgklassificering baserat på vattenkvalitet
         const getColor = (waterQualityValue) => {
             // Klassificera vattenkvalitet värden
-            if (waterQualityValue >= 1 && waterQualityValue <= 2) return '#00AA00' // Bra (grön)
-            if (waterQualityValue >= 3 && waterQualityValue <= 4) return '#FFFF00' // Medel (gul)
-            if (waterQualityValue >= 5 && waterQualityValue <= 6) return '#FFA500' // Dålig (orange)
-            if (waterQualityValue >= 7) return '#FF0000' // Mycket dålig (röd)
-            return '#808080' // Okänd (grå)
+            
+            if (waterQualityValue >= 1 && waterQualityValue <= 20) return '#1B1777' // Bra (grön)
+            if (waterQualityValue >= 20 && waterQualityValue <= 40) return '#3465BA' // Acceptabel (gul)
+            if (waterQualityValue >= 40 && waterQualityValue <= 60) return '#3D89D8' // Måttlig (orange)
+            if (waterQualityValue >= 60 && waterQualityValue <= 80) return '#3CD0C2' // Dålig (röd)
+            if (waterQualityValue >= 80 && waterQualityValue <= 100) return '#45CA84' // Mycket dålig (mörkröd)
+            return '#8fd2cd' // Okänd (grå)
         }
 
         // Skapa nytt lager och lägg till på kartan
@@ -48,7 +50,6 @@ function WaterQualityLayer({ geojson, showWaterQuality }) {
                 const popupContent = `
                     <div style="font-size: 12px;">
                         <strong>Vattenkvalitet</strong><br/>
-                        Värde: ${props.water_quality_value}<br/>
                         Klassificering: ${props.water_quality_type}
                     </div>
                 `

@@ -41,6 +41,10 @@ const Hydrosidebar = ({ active, setActive, setWaterLevel, showWaterQuality, setS
         boxShadow: '0 4px 8px rgba(0,0,0,0.15)'
       }}
     >
+      <h3 style={{ color: '#86DB90', margin: '0 0 10px 0', fontSize: '16px' }}>
+        Översvämningsnivå
+      </h3>
+      
       <button
         onClick={handleLowEmissions}
         style={{

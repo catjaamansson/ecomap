@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useMap } from 'react-leaflet'
 import L from 'leaflet'
 
@@ -47,6 +47,8 @@ function ForestLayer() {
       return
     }
 
+    let isMounted = true
+
     // Ta bort gamla lagret om det finns
     if (layerRef.current) {
       map.removeLayer(layerRef.current)
@@ -85,6 +87,7 @@ function ForestLayer() {
       })
       .catch(error => console.error('Error loading forest data:', error))
 
+    // Rensa upp vid avmontering
     return () => {
       if (layerRef.current) {
         map.removeLayer(layerRef.current)

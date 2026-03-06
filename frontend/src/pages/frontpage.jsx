@@ -150,7 +150,7 @@ function Frontpage() {
               Hydrology
             </h3>
             <p style={{ fontSize: '14px', margin: '0', lineHeight: '1.6', color: 'white' }}>
-              Explore...
+              Explore water levels, water quality and potential flooding areas.
             </p>
           </div>
           
@@ -180,7 +180,7 @@ function Frontpage() {
               Ecology
             </h3>
             <p style={{ fontSize: '14px', margin: '0', lineHeight: '1.6', color: 'white' }}>
-              Explore...
+              Explore vegetation types, habitats and threatened species in the area.
             </p>
           </div>
         </div>
@@ -213,7 +213,7 @@ function Frontpage() {
               Field Study
             </h3>
             <p style={{ fontSize: '14px', margin: '0', lineHeight: '1.6', color: 'white' }}>
-              Explore...
+              Explore landuse, buffert zones and on-site environmental observations.
             </p>
           </div>
           
@@ -243,7 +243,7 @@ function Frontpage() {
               Custom
             </h3>
             <p style={{ fontSize: '14px', margin: '0', lineHeight: '1.6', color: 'white' }}>
-              Explore...
+              Explore hydrology, ecology, and field study data combined into a single map.
             </p>
           </div>
         </div>

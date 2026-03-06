@@ -32,7 +32,7 @@ function FieldStudy() {
         <Sidebar active={active} setActive={setActive} />
 
         <div style={{ marginTop: '0px', flex: 1, height: '100%', width: '100%', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
-          <Mapview center={[55.5543, 13.2428]} zoom={10}>
+          <Mapview center={[55.6229, 13.3486]} zoom={9.4}>
             {active === 'landUse' && <Landuselayers />}
             {active === 'bufferZone' && <Waterbodieslayers />}
           </Mapview>

@@ -131,7 +131,7 @@ const Hydrosidebar = ({ active, setActive, setWaterLevel, showWaterQuality, setS
             onChange={(e) => setShowWaterQuality(e.target.checked)}
             style={{ cursor: 'pointer', width: '18px', height: '18px' }}
           />
-          Show water quality
+          Water quality
         </label>
       </div>
     </div>

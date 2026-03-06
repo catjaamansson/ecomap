@@ -15,7 +15,7 @@ function Hydrology() {
             backgroundImage: "url('/leaf.svg')",
             backgroundRepeat: 'repeat',
             backgroundSize: '200px',
-        width: '100vw',
+        width: '100%',
         margin: 0,
         padding: 0,
         backgroundColor: '#356d4fff',

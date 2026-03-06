@@ -18,22 +18,22 @@ function Navbar() {
       justifyContent: 'space-around',
       alignItems: 'center',
       padding: '15px 20px',
-      backgroundColor: '#35664A',
-      borderBottom: '2px solid #2f573eff',
+      backgroundImage: 'radial-gradient(circle at 20% 50%, #4a8262 0%, #396449 100%)',
       position: 'sticky',
       top: 0,
-      zIndex: 100
+      zIndex: 100,
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.2)'
     }}>
       
       <div style={{ display: 'flex', gap: '20px', justifyContent: 'space-around', width: '100%' }}>
         <h1 className="font-bold" style={{ 
-          fontFamily: 'serif', 
+          fontFamily: 'Playfair Display, serif',
           color: '#223D2D', 
           fontSize: '28px', 
           margin: 0, 
           padding: '0 20px',
           fontWeight: '700',
-          textShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+          textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)',
           transition: 'all 0.3s ease',
           letterSpacing: '2px'
         }}>EcoMap</h1>
@@ -44,11 +44,13 @@ function Navbar() {
                 padding: '8px 16px',
                 backgroundColor: 'transparent',
                 color: '#ffffff',
-                border: location.pathname === tab.path ? '2px solid #86DB90' : 'none',
-                borderBottom: location.pathname === tab.path ? '3px solid #86DB90' : 'none',
-                borderRadius: '12px',
+                fontFamily: 'Playfair Display, serif',
+                textShadow: '0 2px 4px rgba(0, 0, 0, 0.8)',
+                border: location.pathname === tab.path ? '2px solid #8edb97' : 'none',
+                borderBottom: location.pathname === tab.path ? '3px solid #8edb97' : 'none',
+                borderRadius: '15px',
                 cursor: 'pointer',
-                fontSize: '14px',
+                fontSize: '15px',
                 fontWeight: location.pathname === tab.path ? 'bold' : 'normal',
                 transition: 'all 0.3s ease'
               }}

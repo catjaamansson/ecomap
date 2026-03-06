@@ -42,7 +42,7 @@ const Hydrosidebar = ({ active, setActive, setWaterLevel, showWaterQuality, setS
       }}
     >
       <h3 style={{ color: '#86DB90', margin: '0 0 10px 0', fontSize: '16px' }}>
-        Översvämningsnivå
+        Flood level
       </h3>
       
       <button
@@ -98,7 +98,7 @@ const Hydrosidebar = ({ active, setActive, setWaterLevel, showWaterQuality, setS
 
       <div style={{ borderTop: '2px solid #597D68', paddingTop: '15px', marginTop: '10px' }}>
         <label style={{ color: '#86DB90', fontWeight: 'bold', fontSize: '14px', display: 'block', marginBottom: '10px' }}>
-          Vattennivå: {sliderValue} m
+          Water level: {sliderValue} m
         </label>
         <input 
           type="range" 
@@ -131,7 +131,7 @@ const Hydrosidebar = ({ active, setActive, setWaterLevel, showWaterQuality, setS
             onChange={(e) => setShowWaterQuality(e.target.checked)}
             style={{ cursor: 'pointer', width: '18px', height: '18px' }}
           />
-          Visa vattenkvalitet
+          Show water quality
         </label>
       </div>
     </div>

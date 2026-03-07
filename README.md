@@ -35,9 +35,13 @@ EcoMap is currently in early development and primarily runs in a local developme
 ### Frontend
 - Vite-React
 - Leaflet
+- JavaScript
+- HTML
+- CSS
+
 ### Backend
 - Python (Flask)
-- 
+
 ### Data
 - GeoJSON
 
@@ -65,6 +69,7 @@ python run.py
 ```
 
 ## Screenshots
-<img width="300" height="250" alt="hydrology floodlayer" src="https://github.com/user-attachments/assets/3747a8a7-46ef-49f7-8c7c-234a73dfbf63" />
-<img width="300" height="250" alt="fieldstudy landuse layer" src="https://github.com/user-attachments/assets/16d3abfe-d5f9-4542-8b1f-830c340b3625" />
-
+<img width="400" height="300" alt="Skärmbild 2026-03-07 130409" src="https://github.com/user-attachments/assets/7b9518d7-edcf-45f4-a5c3-beca77b54e4e" />
+<img width="400" height="300" alt="Skärmbild 2026-03-07 131720" src="https://github.com/user-attachments/assets/48073208-c8ad-468c-9462-b19e8fe89e1c" />
+<img width="400" height="300" alt="Skärmbild 2026-03-07 130534" src="https://github.com/user-attachments/assets/21685fca-b34e-4905-a09d-9d191c124ec2" />
+<img width="400" height="300" alt="Skärmbild 2026-03-07 130601" src="https://github.com/user-attachments/assets/b24ba98d-c3ed-4b77-a477-083711e544dc" />

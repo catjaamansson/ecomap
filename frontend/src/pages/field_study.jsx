@@ -15,7 +15,7 @@ function FieldStudy() {
             backgroundImage: "url('/leaf.svg')",
             backgroundRepeat: 'repeat',
             backgroundSize: '200px',
-        width: '100vw',
+        width: '100%',
         height: '100vh',
         margin: 0,
         padding: 0,
@@ -27,7 +27,7 @@ function FieldStudy() {
     <Navbar />
     
     
-    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '60px', padding: '40px', flex: 1, overflow: 'auto' }}>
+    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '60px', padding: '30px', flex: 1, overflow: 'auto' }}>
 
         <Sidebar active={active} setActive={setActive} />
 

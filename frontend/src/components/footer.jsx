@@ -46,13 +46,10 @@ function Footer() {
           <h3 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '15px', textTransform: 'uppercase', letterSpacing: '1px' }}>PROJECT</h3>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
             <li style = {{ marginBottom: '10px' }}>
-              <Link to="/" style={{ color: '#8edb97', textDecoration: 'none', fontSize: '14px' }}>Data sources</Link>
+              <Link to="/datasources" style={{ color: '#8edb97', textDecoration: 'none', fontSize: '14px' }}>Data sources</Link>
             </li>
             <li style={{ marginBottom: '10px' }}>
-              <Link to="/" style={{ color: '#8edb97', textDecoration: 'none', fontSize: '14px' }}>Contact</Link>
-            </li>
-            <li style={{ marginBottom: '10px' }}>
-              <Link to="/" style={{ color: '#8edb97', textDecoration: 'none', fontSize: '14px' }}>Support</Link>
+              <Link to="/contact" style={{ color: '#8edb97', textDecoration: 'none', fontSize: '14px' }}>Contact & Feedback</Link>
             </li>
           </ul>
         </div>
@@ -62,7 +59,7 @@ function Footer() {
           <h3 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '15px', textTransform: 'uppercase', letterSpacing: '1px' }}>LEGAL</h3>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
             <li style={{ marginBottom: '10px' }}>
-              <Link to="/" style={{ color: '#8edb97', textDecoration: 'none', fontSize: '14px' }}>Privacy Policy</Link>
+              <Link to="/privacypolicy" style={{ color: '#8edb97', textDecoration: 'none', fontSize: '14px' }}>Privacy Policy</Link>
             </li>
             <li>
               <Link to="/" style={{ color: '#8edb97', textDecoration: 'none', fontSize: '14px' }}>Terms</Link>
@@ -73,7 +70,7 @@ function Footer() {
 
       {/* Bottom Footer */}
       <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)', paddingTop: '10px', paddingBottom: "10px", display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: '1200px', margin: '0 auto', fontSize: '14px', color: 'rgba(255, 255, 255, 0.6)' }}>
-        <div>© Sweden - Catja Månsson - 2026</div>
+        <div>© Sweden - Catja Månsson - 2025</div>
         <div style={{ display: 'flex', gap: '10px' }}>
         </div>
       </div>

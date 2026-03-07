@@ -18,19 +18,22 @@ function Ecology() {
             backgroundImage: "url('/leaf.svg')",
             backgroundRepeat: 'repeat',
             backgroundSize: '200px',
-        width: '100vw',
+        width: '100%',
+        height: '100vh',
         margin: 0,
         padding: 0,
-        backgroundColor: '#356d4fff',
+        backgroundColor: '#356d4f',
+        display: 'flex',
+        flexDirection: 'column'
       }}
       >
     <Navbar />
     
     
-    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '60px', padding: '40px' }}>
+    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '60px', padding: '30px', flex:"1" }}>
         <Ecosidebar active={active} setActive={setActive} />
 
-        <div style={{ marginTop: '0px', flex: 1, height: '74vh', width: '70vw', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+        <div style={{ marginTop: '0px', flex: 1, height: '100%', width: '70vw', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
           <Mapview center={[55.6229, 13.3486]} zoom={9.4}>
             {active === 'vegetation' && <ForestLayer2 key="vegetation" />}
             {active === 'soil_moisture' && <SoilMoistureLayer key="soil_moisture" />}

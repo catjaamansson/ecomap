@@ -8,6 +8,9 @@ import Hydrology from './pages/hydrology.jsx'
 import Ecology from './pages/ecology.jsx'
 import FieldStudy from './pages/field_study.jsx'
 import Custom from './pages/custom.jsx'
+import Datasources from './pages/datasources.jsx'
+import Contact from './pages/contact&feedback.jsx'
+import PrivacyPolicy from './pages/privacypolicy.jsx'
 
 
 function App() {
@@ -19,6 +22,10 @@ function App() {
         <Route path ='/ecology' element={<Ecology />} />
         <Route path ='/field_study' element={<FieldStudy />} />
         <Route path ='/custom' element={<Custom />} />
+        <Route path ='/datasources' element={<Datasources />} />
+        <Route path ='/contact' element={<Contact />} />
+        <Route path ='/privacypolicy' element={<PrivacyPolicy />} />
+
       </Routes>
   )
 }

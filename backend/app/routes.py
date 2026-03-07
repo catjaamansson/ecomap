@@ -98,3 +98,27 @@ def species():
         return jsonify({"error": str(e)}), 500
     
     return jsonify({"species": species_list})
+
+@api.route("/datasources")
+def datasources():
+    sources = [
+        {"name": "Lantmäteriet", "url": "https://www.lantmateriet.se/"},
+        {"name": "SMHI", "url": "https://www.smhi.se/"},
+        {"name": "Naturvårdsverket", "url": "https://www.naturvardsverket.se/"},
+        {"name": "ArtDatabanken", "url": "https://www.artdatabanken.se/"}
+    ]
+    return jsonify({"datasources": sources})
+
+@api.route("/contact")
+def contact():
+    contact_info = {
+        "email": "contact@ekomap.se", 
+    }
+    return jsonify(contact_info)    
+
+@api.route("/privacypolicy")
+def privacypolicy():
+    policy = {
+        "content": "EcoMap collects no personal data. All functionality is client-side, and your data remains on your device."
+    }
+    return jsonify(policy)

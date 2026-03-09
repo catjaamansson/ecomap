@@ -61,9 +61,6 @@ function Footer() {
             <li style={{ marginBottom: '10px' }}>
               <Link to="/privacypolicy" style={{ color: '#8edb97', textDecoration: 'none', fontSize: '14px' }}>Privacy Policy</Link>
             </li>
-            <li>
-              <Link to="/" style={{ color: '#8edb97', textDecoration: 'none', fontSize: '14px' }}>Terms</Link>
-            </li>
           </ul>
         </div>
       </div>

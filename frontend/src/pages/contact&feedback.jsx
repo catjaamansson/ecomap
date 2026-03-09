@@ -42,20 +42,20 @@ function Contact() {
                     <a href="mailto:ecomap@gmail.com" style={{ 
     color: '#ffffff', 
     textDecoration: 'none',
-    fontSize: '16px',
+    fontSize: '16px', 
     fontWeight: 'bold'
 }}>
-    Email
+    Email: ecomap@gmail.com
 </a>
                 </ul>
                 <ul style={{ fontSize: '16px', lineHeight: '1.8' }}>
                     <a href="https://github.com/catjaamansson" target="_blank" rel="noopener noreferrer" style={{
     color: '#ffffff',
     textDecoration: 'none',
-    fontSize: '16px',
+    fontSize: '16px', 
     fontWeight: 'bold'
 }}>
-    GitHub
+    GitHub: catjaamansson
 </a>
                 </ul>
                 <ul style={{ fontSize: '16px', lineHeight: '1.8' }}>
@@ -65,7 +65,7 @@ function Contact() {
     fontSize: '16px',
     fontWeight: 'bold'
 }}>
-    LinkedIn
+    LinkedIn: Catja Månsson
 </a>
                 </ul>
             </div>

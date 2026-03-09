@@ -57,13 +57,13 @@ function PrivacyPolicy() {
                     <p style={{ fontSize: '16px', lineHeight: '1.8' }}>
                         EcoMap operates entirely in your browser. We do not:
                     </p>
-                    <ul style={{ fontSize: '16px', lineHeight: '1.8', paddingLeft: '24px' }}>
-                        <li>Collect names, email addresses, or personal information</li>
-                        <li>Store user interactions or sessions</li>
-                        <li>Create user accounts or profiles</li>
-                        <li>Track individual users across sessions</li>
-                        <li>Use cookies for tracking purposes</li>
-                    </ul>
+                    <p style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '15px' }}>
+                        • Collect names, email addresses, or personal information<br/>
+                        • Store user interactions or sessions<br/>
+                        • Create user accounts or profiles<br/>
+                        • Track individual users across sessions<br/>
+                        • Use cookies for tracking purposes
+                    </p>
                 </div>
 
                 <div style={{ marginBottom: '30px' }}>
@@ -73,13 +73,13 @@ function PrivacyPolicy() {
                     <p style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '15px' }}>
                         EcoMap displays environmental and geographical data from third-party sources:
                     </p>
-                    <ul style={{ fontSize: '16px', lineHeight: '1.8', paddingLeft: '24px' }}>
-                        <li><strong>Copernicus</strong> - Satellite imagery and environmental data</li>
-                        <li><strong>SMHI</strong> - Swedish Meteorological and Hydrological Institute data</li>
-                        <li><strong>Lantmäteriet</strong> - Swedish National Land Survey data</li>
-                        <li><strong>Artdatabanken</strong> - Species and habitat information</li>
-                        <li><strong>Leaflet</strong> - Map rendering library (OpenStreetMap)</li>
-                    </ul>
+                    <p style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '15px' }}>
+                        • <strong>Copernicus</strong> - Satellite imagery and environmental data<br/>
+                        • <strong>SMHI</strong> - Swedish Meteorological and Hydrological Institute data<br/>
+                        • <strong>Lantmäteriet</strong> - Swedish National Land Survey data<br/>
+                        • <strong>Artdatabanken</strong> - Species and habitat information<br/>
+                        • <strong>Leaflet</strong> - Map rendering library (OpenStreetMap)
+                    </p>
                 </div>
 
                 <div style={{ marginBottom: '30px' }}>
@@ -89,12 +89,12 @@ function PrivacyPolicy() {
                     <p style={{ fontSize: '16px', lineHeight: '1.8' }}>
                         Any data generated while using EcoMap is stored only on your device in your browser's local storage. This data:
                     </p>
-                    <ul style={{ fontSize: '16px', lineHeight: '1.8', paddingLeft: '24px' }}>
-                        <li>Is never sent to our servers</li>
-                        <li>Remains under your complete control</li>
-                        <li>Can be deleted by clearing your browser cache</li>
-                        <li>Is not accessible to us or any third parties</li>
-                    </ul>
+                    <p style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '15px' }}>
+                        • Is never sent to our servers<br/>
+                        • Remains under your complete control<br/>
+                        • Can be deleted by clearing your browser cache<br/>
+                        • Is not accessible to us or any third parties
+                    </p>
                 </div>
 
                 <div style={{ marginBottom: '30px' }}>
@@ -104,11 +104,11 @@ function PrivacyPolicy() {
                     <p style={{ fontSize: '16px', lineHeight: '1.8' }}>
                         EcoMap may use third-party services for map rendering and data visualization. These services may collect technical information such as:
                     </p>
-                    <ul style={{ fontSize: '16px', lineHeight: '1.8', paddingLeft: '24px' }}>
-                        <li>IP addresses</li>
-                        <li>Browser type and version</li>
-                        <li>Approximate geographic location (via IP)</li>
-                    </ul>
+                    <p style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '15px' }}>
+                        • IP addresses<br/>
+                        • Browser type and version<br/>
+                        • Approximate geographic location (via IP)
+                    </p>
                     <p style={{ fontSize: '16px', lineHeight: '1.8', marginTop: '15px' }}>
                         Please review the privacy policies of Leaflet, OpenStreetMap, and Copernicus for more information.
                     </p>
@@ -148,10 +148,10 @@ function PrivacyPolicy() {
                     <p style={{ fontSize: '16px', lineHeight: '1.8' }}>
                         If you have questions about this Privacy Policy or our privacy practices, please contact us:
                     </p>
-                    <ul style={{ fontSize: '16px', lineHeight: '1.8', paddingLeft: '24px', marginTop: '15px' }}>
-                        <li><a href="mailto:ecomap@gmail.com" style={{ color: '#8edb97', textDecoration: 'none' }}>Email: ecomap@gmail.com</a></li>
-                        <li><a href="https://github.com/catjaamansson" target="_blank" rel="noopener noreferrer" style={{ color: '#8edb97', textDecoration: 'none' }}>GitHub: github.com/catjaamansson</a></li>
-                    </ul>
+                    <p style={{ fontSize: '16px', lineHeight: '1.8' }}>
+                        • <a href="mailto:ecomap@gmail.com" style={{ color: '#8edb97', textDecoration: 'none' }}>Email: ecomap@gmail.com</a><br/>
+                        • <a href="https://github.com/catjaamansson" target="_blank" rel="noopener noreferrer" style={{ color: '#8edb97', textDecoration: 'none' }}>GitHub: github.com/catjaamansson</a>
+                    </p>
                 </div>
             </div>
             

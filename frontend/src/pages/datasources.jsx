@@ -41,7 +41,7 @@ function Datasources() {
                             Map
                         </h2>
                         <ul style={{ fontSize: '16px', lineHeight: '1.0', listStyle: 'none', paddingLeft: 0 , marginTop: '10px' , marginBottom: '0px' }}>
-                            <li><strong>Leaflet</strong> - Interactive maps</li>
+                            <li><strong>Leaflet</strong> - Interactive mapping library</li>
                         </ul>
                 </div>
                 <div style={{ marginTop: '35px' }}>
@@ -50,10 +50,8 @@ function Datasources() {
                             Hydrology Data
                         </h2>
                         <ul style={{ fontSize: '16px', lineHeight: '2', listStyle: 'none', paddingLeft: 0 , marginTop: '3px' , marginBottom: '0px' }}>
-                            <li><strong>DEM</strong> - Radar imagery</li>
-                            <li><strong>Sentinel-2</strong> - Multispectral imagery</li>
-                            <li><strong>Sentinel-3</strong> - Ocean and land color data</li>
-                            <li><strong>Sentinel-5P</strong> - Atmospheric composition</li>
+                            <li><strong>Copernicus DEM (Digital Elevation Model) </strong> - Topographic elevation data</li>
+                            <li><strong>CLMS Lake Water Quality</strong> - Lake water quality indicators </li>
                         </ul>
                     </div>
 

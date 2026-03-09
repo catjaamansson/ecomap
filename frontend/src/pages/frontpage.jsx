@@ -2,8 +2,13 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Navbar from '../components/navbar.jsx'
 import Footer from '../components/footer.jsx'
+import { Leaf, Droplets, Map, Trees } from "lucide-react"
+import { useEffect } from 'react'
 
 function Frontpage() {
+  useEffect(() => {
+          window.scrollTo(0, 0);
+  }, []);
   const pages = [
     { name: 'Hydrology', path: '/hydrology', image: '/images/hydrology.png' },
     { name: 'Ecology', path: '/ecology', image: '/images/ecology.png' },
@@ -146,6 +151,8 @@ function Frontpage() {
             onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
             onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
           >
+            <Droplets size={36} color="#8edb97" />
+
             <h3 style={{ fontSize: '24px', margin: '0 0 10px 0', fontWeight: 'bold', color: 'white' }}>
               Hydrology
             </h3>
@@ -176,6 +183,8 @@ function Frontpage() {
             onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
             onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
           >
+            <Leaf size={36} color="#8edb97" />
+
             <h3 style={{ fontSize: '24px', margin: '0 0 10px 0', fontWeight: 'bold', color: 'white' }}>
               Ecology
             </h3>
@@ -209,6 +218,8 @@ function Frontpage() {
             onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
             onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
           >
+            <Trees size={36} color="#8edb97" />
+
             <h3 style={{ fontSize: '24px', margin: '0 0 10px 0', fontWeight: 'bold', color: 'white' }}>
               Field Study
             </h3>
@@ -239,6 +250,8 @@ function Frontpage() {
             onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
             onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
           >
+            <Map size={36} color="#8edb97" />
+
             <h3 style={{ fontSize: '24px', margin: '0 0 10px 0', fontWeight: 'bold', color: 'white' }}>
               Custom
             </h3>

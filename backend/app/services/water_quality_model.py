@@ -5,7 +5,7 @@ from rasterio.features import shapes
 import json
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-WQ_PATH = BASE_DIR / "data" / "waterquality.tif"
+WQ_PATH = BASE_DIR / "data" / "waterquality_skane.tif"
 
 def water_quality_to_geojson():
     """

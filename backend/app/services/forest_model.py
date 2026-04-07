@@ -7,20 +7,15 @@ from rasterio.io import MemoryFile
 import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-FOREST_PATH = BASE_DIR / "data" / "forest.tif"
+FOREST_PATH = BASE_DIR / "data" / "forest_3035_skane_50m.tif"
 
 def forest_to_geojson():
-    """
-    Konverterar forest.tiff till GeoJSON
-    Visar olika skogsklassificeringar
-    
-    OPTIMERAT: Decimerar rasterfilen för snabbare konvertering
-    """
     print(f"DEBUG: FOREST_PATH = {FOREST_PATH}")
     print(f"DEBUG: File exists = {os.path.exists(FOREST_PATH)}")
     
     with rasterio.open(FOREST_PATH) as src:
         print(f"DEBUG: Opened file successfully")
+        print(f"DEBUG: CRS = {src.crs}")
         forest = src.read(1)
         print(f"DEBUG: Forest shape = {forest.shape}, dtype = {forest.dtype}")
         print(f"DEBUG: Unique values = {np.unique(forest)[:20]}") 
@@ -73,42 +68,11 @@ def forest_to_geojson():
     }
 
 def classify_forest(value):
-    """
-    Klassificerar skogstyper baserat på rastervärden
-    
-    Värdena följer ett mönster (0, 1, 4, 5, 8, 9...) som kan representera:
-    - Jämna nummer: En kategori (ex. ren barr/löv)
-    - Udda nummer: En underkategori eller blandning
-    
-    UPPDATERA DETTA baserat på din datakälla!
-    Se dokumentation för forest.tiff eller kontakta dataprovider.
-    """
-    # MALL: Uppdatera dessa värden baserat på din faktiska datakälla
     forest_classes = {
-        0: "Öppen mark / Ingen skog",
-        1: "Öppen mark / Gles vegetation",
-        
-        # Barrskog
-        4: "Barrskog - tät",
-        5: "Barrskog - glest",
-        
-        # Lövskog
-        8: "Lövskog - tät",
-        9: "Lövskog - glest",
-        
-        # Blandad skog
-        12: "Blandad skog - tät",
-        13: "Blandad skog - glest",
-        
-        # Ungskog/Ungskog
-        16: "Ungskog - barrskog",
-        17: "Ungskog - lövskog",
-        
-        # Moränskogen
-        20: "Myr/Torvmark",
-        21: "Myr - bewuxen",
-        
-        255: "Nodata/Okänd"
+        0: "Ingen skog",
+        1: "Skog",
+        2: "Annan vegetation",
+        255: "Okänd"
     }
     
     # Fallback för okända värden - försök att klassificera baserat på område
@@ -121,3 +85,4 @@ def classify_forest(value):
         if base in forest_classes:
             return f"{forest_classes[base]} (variant {value})"
         return f"Skogstyp {value}" 
+    

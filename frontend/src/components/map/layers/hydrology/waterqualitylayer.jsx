@@ -31,7 +31,7 @@ function WaterQualityLayer({ geojson, showWaterQuality }) {
             if (waterQualityValue >= 40 && waterQualityValue <= 60) return '#3D89D8' // Måttlig (orange)
             if (waterQualityValue >= 60 && waterQualityValue <= 80) return '#3CD0C2' // Dålig (röd)
             if (waterQualityValue >= 80 && waterQualityValue <= 100) return '#45CA84' // Mycket dålig (mörkröd)
-            return '#8fd2cd' // Okänd (grå)
+            return 'rgba(0,0,0,0)' // Okänd (grå)
         }
 
         // Skapa nytt lager och lägg till på kartan

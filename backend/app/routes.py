@@ -50,23 +50,7 @@ def waterbodies():
         geojson = water_bodies_to_geojson()
         return jsonify(geojson)
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-@api.route("/forest")
-def forest():
-    try:
-        geojson = forest_to_geojson()
-        return jsonify(geojson)
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-    
-@api.route("/forest2")
-def forest2():
-    try:
-        geojson = forest2_to_geojson()
-        return jsonify(geojson)
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500    
+        return jsonify({"error": str(e)}), 500  
 
 @api.route("/soil_moisture")
 def soil_moisture():

@@ -1,0 +1,9 @@
+__pycache__/
+*.tif
+*.tiff
+frontend/public/tiles/
+frontend/public/tiles_flood/
+frontend/public/tiles_land_use/
+backend/app/outputdata/
+
+

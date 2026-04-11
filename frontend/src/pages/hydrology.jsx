@@ -1,14 +1,19 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Hydrosidebar from '../components/sidebar/hydrosidebar.jsx';
 import Mapview from '../components/map/mapview.jsx';
 import Navbar from '../components/navbar.jsx'
-import HydrologyLayers from '../components/map/layers/hydrology/hydrologylayers.jsx';
+import Floodlayers from '../components/map/layers/hydrology/floodlayers_tiles';
+import WaterQualityLayer from '../components/map/layers/hydrology/waterqualitylayer.jsx';
 import Footer from '../components/footer.jsx';
 
 function Hydrology() {
     const [active, setActive] = useState(null);
     const [waterLevel, setWaterLevel] = useState(0);
     const [showWaterQuality, setShowWaterQuality] = useState(false);
+
+    useEffect(() => {
+      console.log("Active:", active);
+    }, [active]);
 
     return (
       <div
@@ -31,9 +36,13 @@ function Hydrology() {
 
         <Hydrosidebar active={active} setActive={setActive} setWaterLevel={setWaterLevel} showWaterQuality={showWaterQuality} setShowWaterQuality={setShowWaterQuality} />
 
-        <div style={{ marginTop: '0px', flex: 1, height: '100%', width: '100%', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+        <div style={{ marginTop: '0px', flex: 1, height: '100%', width: '70vw', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
           <Mapview center={[55.6229, 13.3486]} zoom={9.4}>
-            <HydrologyLayers level={waterLevel} showWaterQuality={showWaterQuality} />
+            {active === "low" && <Floodlayers level = {waterLevel} />}
+            {active === 'medium' && <Floodlayers level = {waterLevel}/>}
+            {active === 'high' && <Floodlayers level = {waterLevel}/>}
+            {!active && waterLevel > 0 && <Floodlayers level={waterLevel} />}
+            {showWaterQuality && <WaterQualityLayer showWaterQuality={showWaterQuality} />}
           </Mapview>
         </div>
       </div>

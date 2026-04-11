@@ -8,24 +8,29 @@ const Hydrosidebar = ({ active, setActive, setWaterLevel, showWaterQuality, setS
     setActive('low')
     setWaterLevel(1)
     setSliderValue(1)
+    setShowWaterQuality(false) // Dölja vattenkvalitetslagret när en emissionsnivå väljs
   }
 
   const handleMediumEmissions = () => {
     setActive('medium')
     setWaterLevel(2)
     setSliderValue(2)
+    setShowWaterQuality(false) // Dölja vattenkvalitetslagret när en emissionsnivå väljs
   }
 
   const handleHighEmissions = () => {
     setActive('high')
     setWaterLevel(3)
     setSliderValue(3)
+    setShowWaterQuality(false) // Dölja vattenkvalitetslagret när en emissionsnivå väljs
   }
 
   const handleSliderChange = (e) => {
     const value = Number(e.target.value)
     setSliderValue(value)
     setWaterLevel(value)
+    setActive(null) // Avmarkera knapparna när slider ändras
+    setShowWaterQuality(false) // Dölja vattenkvalitetslagret när slider ändras
   }
 
   return (
@@ -128,7 +133,15 @@ const Hydrosidebar = ({ active, setActive, setWaterLevel, showWaterQuality, setS
           <input 
             type="checkbox" 
             checked={showWaterQuality}
-            onChange={(e) => setShowWaterQuality(e.target.checked)}
+            onChange={() => {
+              const newValue = !showWaterQuality
+              setShowWaterQuality(newValue)
+              if (newValue) {
+                setActive(null) // Avmarkera knapparna när vattenkvalitet visas
+                setWaterLevel(0) // Nollställ vattennivån när vattenkvalitet visas
+                setSliderValue(0) // Nollställ slider när vattenkvalitet visas  
+              } 
+            }}
             style={{ cursor: 'pointer', width: '18px', height: '18px' }}
           />
           Water quality

@@ -2,7 +2,7 @@ import Sidebar from '../components/sidebar/fieldstudysidebar.jsx';
 import { useState } from 'react';
 import Navbar from '../components/navbar.jsx';
 import Mapview from '../components/map/mapview.jsx';
-import Landuselayers from '../components/map/layers/fieldstudy/landuselayers.jsx';
+import Landuselayers from '../components/map/layers/fieldstudy/landuselayer_tiles.jsx';
 import Waterbodieslayers from '../components/map/layers/fieldstudy/waterbodieslayers.jsx';
 
 function FieldStudy() {

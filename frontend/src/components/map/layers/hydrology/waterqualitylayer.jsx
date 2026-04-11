@@ -1,10 +1,27 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef , useState} from 'react'
 import { useMap } from 'react-leaflet'
 import L from 'leaflet'
 
-function WaterQualityLayer({ geojson, showWaterQuality }) {
+function WaterQualityLayer({ showWaterQuality }) {
     const map = useMap()
     const layerRef = useRef(null)
+    const [geojson, setGeojson] = useState(null)
+
+    useEffect(() => {
+        
+        if (!showWaterQuality) {
+            return
+        }
+
+        console.log('Fetching water quality data')
+        fetch('http://127.0.0.1:5000/water_quality')
+            .then(res => res.json())
+            .then(data => {
+                console.log('Fetched water quality data:', data)
+                setGeojson(data)
+            })
+            .catch(err => console.error("Fetch water quality error:", err))
+    }, [showWaterQuality])
 
     useEffect(() => {
         // Ta bort gamla lagret
@@ -31,7 +48,7 @@ function WaterQualityLayer({ geojson, showWaterQuality }) {
             if (waterQualityValue >= 40 && waterQualityValue <= 60) return '#3D89D8' // Måttlig (orange)
             if (waterQualityValue >= 60 && waterQualityValue <= 80) return '#3CD0C2' // Dålig (röd)
             if (waterQualityValue >= 80 && waterQualityValue <= 100) return '#45CA84' // Mycket dålig (mörkröd)
-            return 'rgba(0,0,0,0)' // Okänd (grå)
+            return 'transparent' 
         }
 
         // Skapa nytt lager och lägg till på kartan
@@ -58,6 +75,13 @@ function WaterQualityLayer({ geojson, showWaterQuality }) {
         }).addTo(map)
 
         layerRef.current = newLayer
+
+        // Cleanup - ta bort lagret när showWaterQuality blir false
+        return () => {
+            if (layerRef.current) {
+                map.removeLayer(layerRef.current)
+            }
+        }
     }, [geojson, showWaterQuality, map])
 
     // Denna komponent renderar ingenting själv, bara Leaflet direkt

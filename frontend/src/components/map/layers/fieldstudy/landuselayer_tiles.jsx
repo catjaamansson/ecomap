@@ -3,7 +3,7 @@ import { TileLayer } from 'react-leaflet'
 function Landuselayer() {
   return (
     <TileLayer
-      url="/tiles_land_use/{z}/{x}/{y}.png"
+      url="/tiles_landuse2/{z}/{x}/{y}.png"
       tms={true}
       minNativeZoom={6}
       maxNativeZoom={11}

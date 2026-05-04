@@ -4,6 +4,8 @@ __pycache__/
 frontend/public/tiles/
 frontend/public/tiles_flood/
 frontend/public/tiles_land_use/
+frontend/public/tiles_landuse2/
+frontend/public/tiles_landuse_new/
 backend/app/outputdata/
 
 

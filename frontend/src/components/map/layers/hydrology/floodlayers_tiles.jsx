@@ -1,7 +1,7 @@
 import { TileLayer } from 'react-leaflet'
 
 function Floodlayers({level=1}) {
-  const tileUrl = `/tiles_flood/flood_${level}m_tiles/{z}/{x}/{y}.png`;
+  const tileUrl = `/tiles_flood/flood_${level}m_tiles_new/{z}/{x}/{y}.png`;
 
   return (
     <TileLayer

@@ -63,7 +63,7 @@ const Ecosidebar = ({ active, setActive}) => {
           fontWeight: active === 'soil_moisture' ? 'bold' : 'normal'
         }}
       >
-        Soil Moisture
+        Water bodies
       </button>
 
       <button

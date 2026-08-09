@@ -3,7 +3,7 @@ import Hydrosidebar from '../components/sidebar/hydrosidebar.jsx';
 import Mapview from '../components/map/mapview.jsx';
 import Navbar from '../components/navbar.jsx'
 import Floodlayers from '../components/map/layers/hydrology/floodlayers_tiles';
-import WaterQualityLayer from '../components/map/layers/hydrology/waterqualitylayer.jsx';
+import WaterQualityTiles from '../components/map/layers/hydrology/waterquality_tiles.jsx';
 import Footer from '../components/footer.jsx';
 
 function Hydrology() {
@@ -42,7 +42,7 @@ function Hydrology() {
             {active === 'medium' && <Floodlayers level = {waterLevel}/>}
             {active === 'high' && <Floodlayers level = {waterLevel}/>}
             {!active && waterLevel > 0 && <Floodlayers level={waterLevel} />}
-            {showWaterQuality && <WaterQualityLayer showWaterQuality={showWaterQuality} />}
+            {showWaterQuality && <WaterQualityTiles />}
           </Mapview>
         </div>
       </div>

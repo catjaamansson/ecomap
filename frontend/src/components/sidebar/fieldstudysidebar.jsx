@@ -26,6 +26,7 @@ const FieldStudySidebar = ({ active, setActive }) => {
         boxShadow: '0 4px 8px rgba(0,0,0,0.15)'
       }}
     >
+      {/* land use button */}
       <button
         onClick={toggleLandUse}
         style={{
@@ -43,6 +44,7 @@ const FieldStudySidebar = ({ active, setActive }) => {
         Land Use
       </button>
 
+      {/* buffer zone button */}
       <button
         onClick={toggleBufferZone}
         style={{
@@ -60,6 +62,7 @@ const FieldStudySidebar = ({ active, setActive }) => {
         Buffert zone
       </button>
 
+      {/* soil/vegetation button */}
       <button
         onClick={toggleSoilVegetation}
         style={{

@@ -35,6 +35,7 @@ const Ecosidebar = ({ active, setActive, setThreatLevel }) => {
         boxShadow: '0 4px 8px rgba(0,0,0,0.15)'
       }}
     >
+      {/* vegetation button */}
       <button
         onClick={vegetation}
         style={{
@@ -52,6 +53,7 @@ const Ecosidebar = ({ active, setActive, setThreatLevel }) => {
         blabla1
       </button>
 
+      {/* protected areas button */}
       <button
         onClick={protected_areas}
         style={{
@@ -69,6 +71,7 @@ const Ecosidebar = ({ active, setActive, setThreatLevel }) => {
         blabla2
       </button>
 
+      {/* threatened animals button */}
       <button
         onClick={threatened_animals}
         style={{
@@ -85,7 +88,7 @@ const Ecosidebar = ({ active, setActive, setThreatLevel }) => {
       >
         blabla3
       </button>
-      
+      {/* threatened plants button */}
       <button
         onClick={threatened_plants}
         style={{

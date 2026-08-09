@@ -10,8 +10,7 @@ const ThreatenedAnimalsLayer = () => null;
 
 function Ecology() {
     const [active, setActive] = useState(null);
-    console.log('ecology.jsx - active state:', active)
-
+    console.log('ecology.jsx - active state:', active);
     
     return (
       <div
@@ -29,8 +28,7 @@ function Ecology() {
       }}
       >
     <Navbar />
-    
-    
+  
     <div style={{ display: 'flex', alignItems: 'flex-start', gap: '60px', padding: '30px', flex:"1" }}>
         <Ecosidebar active={active} setActive={setActive} />
 

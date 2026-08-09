@@ -37,6 +37,7 @@ function Navbar() {
           transition: 'all 0.3s ease',
           letterSpacing: '2px'
         }}>EcoMap</h1>
+        
         {tabs.map((tab) => (
           <Link key={tab.label} to={tab.path} style={{ textDecoration: 'none' }}>
             <button

@@ -3,34 +3,34 @@ import { useState } from 'react'
 const Hydrosidebar = ({ active, setActive, setWaterLevel, showWaterQuality, setShowWaterQuality }) => {
   const [sliderValue, setSliderValue] = useState(0)
 
-  const handleLowEmissions = () => {
+  const flood1m = () => {
     console.log('Low emissions clicked')
     setActive('low')
     setWaterLevel(1)
     setSliderValue(1)
-    setShowWaterQuality(false) // Dölja vattenkvalitetslagret när en emissionsnivå väljs
+    setShowWaterQuality(false) // dont show waterquality when flood level is selected
   }
 
-  const handleMediumEmissions = () => {
+  const flood2m = () => {
     setActive('medium')
     setWaterLevel(2)
     setSliderValue(2)
-    setShowWaterQuality(false) // Dölja vattenkvalitetslagret när en emissionsnivå väljs
+    setShowWaterQuality(false)
   }
 
-  const handleHighEmissions = () => {
+  const flood3m = () => {
     setActive('high')
     setWaterLevel(3)
     setSliderValue(3)
-    setShowWaterQuality(false) // Dölja vattenkvalitetslagret när en emissionsnivå väljs
+    setShowWaterQuality(false)
   }
 
   const handleSliderChange = (e) => {
     const value = Number(e.target.value)
     setSliderValue(value)
     setWaterLevel(value)
-    setActive(null) // Avmarkera knapparna när slider ändras
-    setShowWaterQuality(false) // Dölja vattenkvalitetslagret när slider ändras
+    setActive(null) // deselect buttons when slider is used
+    setShowWaterQuality(false) 
   }
 
   return (
@@ -51,7 +51,7 @@ const Hydrosidebar = ({ active, setActive, setWaterLevel, showWaterQuality, setS
       </h3>
       
       <button
-        onClick={handleLowEmissions}
+        onClick={flood1m}
         style={{
           width: '100%',
           padding: '15px',
@@ -68,7 +68,7 @@ const Hydrosidebar = ({ active, setActive, setWaterLevel, showWaterQuality, setS
       </button>
 
       <button
-        onClick={handleMediumEmissions}
+        onClick={flood2m}
         style={{
           width: '100%',
           padding: '15px',
@@ -85,7 +85,7 @@ const Hydrosidebar = ({ active, setActive, setWaterLevel, showWaterQuality, setS
       </button>
 
       <button
-        onClick={handleHighEmissions}
+        onClick={flood3m}
         style={{
           width: '100%',
           padding: '15px',
@@ -137,9 +137,9 @@ const Hydrosidebar = ({ active, setActive, setWaterLevel, showWaterQuality, setS
               const newValue = !showWaterQuality
               setShowWaterQuality(newValue)
               if (newValue) {
-                setActive(null) // Avmarkera knapparna när vattenkvalitet visas
-                setWaterLevel(0) // Nollställ vattennivån när vattenkvalitet visas
-                setSliderValue(0) // Nollställ slider när vattenkvalitet visas  
+                setActive(null) // deselect flood level buttons when water quality is selected
+                setWaterLevel(0) // reset flood level when water quality is selected
+                setSliderValue(0) // reset slider when water quality is selected
               } 
             }}
             style={{ cursor: 'pointer', width: '18px', height: '18px' }}

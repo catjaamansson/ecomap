@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from .services.flood_model import flood_to_geojson
 from .services.land_use_model import land_use_to_geojson
-from .services.water_quality_model import water_quality_to_geojson
+from .services.water_quality_model import water_quality_to_geojson, water_quality_at_point
 from .services.forest_model import forest_to_geojson
 from .services.waterbodies_model import water_bodies_to_geojson
 from .services.soilmoisture_model import soil_moisture_to_geojson
@@ -39,6 +39,17 @@ def land_use():
 @api.route("/water_quality")
 def water_quality():
     try:
+        lat = request.args.get("lat")
+        lng = request.args.get("lng")
+
+        if lat is not None and lng is not None:
+            point_data = water_quality_at_point(float(lat), float(lng))
+
+            if "error" in point_data:
+                return jsonify(point_data), 404
+
+            return jsonify(point_data)
+
         geojson = water_quality_to_geojson()
         return jsonify(geojson)
     except Exception as e:

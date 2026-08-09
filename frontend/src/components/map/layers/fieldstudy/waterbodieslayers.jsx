@@ -8,7 +8,7 @@ function WaterBodiesLayer() {
 
   console.log('WaterBodiesLayer mounted, map:', map)
 
-  // Färger för vattentyper
+  // color mapping for different water body types
   const waterColors = {
     "Sjöar": "#1e90ff",           // Djup blå
     "Vattendrag": "#4169e1",      // Blå
@@ -24,19 +24,19 @@ function WaterBodiesLayer() {
       return
     }
 
-    // Ta bort gamla lagret om det finns
+    // remove existing layer if it exists
     if (layerRef.current) {
       map.removeLayer(layerRef.current)
     }
 
-    // Hämta vattendata från backend
+    // fetch water bodies data from backend
     console.log('Fetching waterbodies data...')
     fetch('http://127.0.0.1:5000/waterbodies')
       .then(res => res.json())
       .then(data => {
         console.log('Waterbodies data loaded:', data)
         
-        // Filtrera bara vatten-features (ignorera "Ingen vattencykel")
+        // filter out features with "Ingen vattencykel" and create new GeoJSON layer  
         const waterFeatures = {
           ...data,
           features: data.features.filter(

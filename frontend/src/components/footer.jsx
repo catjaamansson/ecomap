@@ -7,7 +7,8 @@ function Footer() {
       backgroundColor: '#42795a',
       color: 'white',
       padding: '20px 10px 20px',
-      marginTop: '20px'
+      marginTop: '20px',
+      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)'
     }}>
       {/* Main Footer Content */}
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', maxWidth: '1200px', margin: '0 auto 40px' }}>
@@ -67,7 +68,7 @@ function Footer() {
 
       {/* Bottom Footer */}
       <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)', paddingTop: '10px', paddingBottom: "10px", display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: '1200px', margin: '0 auto', fontSize: '14px', color: 'rgba(255, 255, 255, 0.6)' }}>
-        <div>© Sweden - Catja Månsson - 2025</div>
+        <div>© Sweden - Catja Månsson - 2026</div>
         <div style={{ display: 'flex', gap: '10px' }}>
         </div>
       </div>

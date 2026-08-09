@@ -2,6 +2,7 @@ from pathlib import Path
 import rasterio
 import numpy as np
 from rasterio.features import shapes
+from rasterio.warp import transform as transform_coords
 import json
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -44,6 +45,30 @@ def water_quality_to_geojson():
     return {
         "type": "FeatureCollection",
         "features": features
+    }
+
+def water_quality_at_point(lat, lng):
+    """
+    Hämtar vattenkvalitet för en enskild punkt.
+    lat/lng antas vara i EPSG:4326.
+    """
+    with rasterio.open(WQ_PATH) as src:
+        x, y = lng, lat
+
+        if src.crs and src.crs.to_string() != "EPSG:4326":
+            x_coords, y_coords = transform_coords("EPSG:4326", src.crs, [lng], [lat])
+            x, y = x_coords[0], y_coords[0]
+
+        sampled_value = next(src.sample([(x, y)]))[0]
+
+    if sampled_value == -128:
+        return {"error": "No data at this location"}
+
+    sampled_value = int(sampled_value)
+
+    return {
+        "water_quality_value": sampled_value,
+        "water_quality_type": classify_water_quality(sampled_value)
     }
 
 def classify_water_quality(value):

@@ -18,7 +18,6 @@ const Ecosidebar = ({ active, setActive}) => {
     active === 'threatened_animals' ? setActive(null) : setActive('threatened_animals')
   }
 
-
   return (
     <div 
       style={{ 
@@ -32,6 +31,7 @@ const Ecosidebar = ({ active, setActive}) => {
         boxShadow: '0 4px 8px rgba(0,0,0,0.15)'
       }}
     >
+      {/* vegetation button */}
       <button
         onClick={vegetation}
         style={{
@@ -49,6 +49,7 @@ const Ecosidebar = ({ active, setActive}) => {
         Vegetation
       </button>
 
+      {/* water bodies button */}
        <button
         onClick={soil_moisture}
         style={{
@@ -66,6 +67,7 @@ const Ecosidebar = ({ active, setActive}) => {
         Water bodies
       </button>
 
+      {/* protected areas button */}
       <button
         onClick={protected_areas}
         style={{
@@ -83,6 +85,7 @@ const Ecosidebar = ({ active, setActive}) => {
         Protected areas
       </button>
 
+      {/* threatened animals button */}
       <button
         onClick={threatened_animals}
         style={{

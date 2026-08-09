@@ -7,6 +7,8 @@ frontend/public/tiles_land_use/
 frontend/public/tiles_landuse2/
 frontend/public/tiles_landuse_new/
 frontend/public/tiles_waterbodies/
-backend/app/outputdata/
+frontend/public/waterquality_tiles4/
+backend/app/data/dem.tif
+backend/app/data/landuse.tif
 
 

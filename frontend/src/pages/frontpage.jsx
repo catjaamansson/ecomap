@@ -45,7 +45,7 @@ function Frontpage() {
 
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(100vh - 80px)', paddingLeft: '40px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '40px', marginTop: '40px' }}>
-          {/* Left Arrow */}
+          {/* left arrow */}
           <button
             onClick={goToPrevious}
             style={{
@@ -60,7 +60,7 @@ function Frontpage() {
             ❮
           </button>
 
-          {/* Image/Card */}
+          {/* image card */}
           <Link to={currentPage.path} style={{ textDecoration: 'none' }}>
             <div
               style={{
@@ -95,11 +95,10 @@ function Frontpage() {
               >
                 {currentPage.name}
               </h2>
-
             </div>
           </Link>
 
-          {/* Right Arrow */}
+          {/* right arrow */}
           <button
             onClick={goToNext}
             style={{
@@ -115,7 +114,7 @@ function Frontpage() {
           </button>
         </div>
 
-        {/* Title Between */}
+        {/* title */}
         <h2 style={{ 
           marginTop: '40px', 
           marginBottom: '20px', 
@@ -127,9 +126,9 @@ function Frontpage() {
           Explore features
         </h2>
 
-        {/* Text Input Boxes Container */}
+        {/* boxes with text */}
         <div style={{ display: 'flex', gap: '20px', marginTop: '10px', marginBottom: '40px', justifyContent: 'center' }}>
-          {/* First Text Input */}
+          {/* first box */}
           <div
             contentEditable="true"
             suppressContentEditableWarning={true}
@@ -161,7 +160,7 @@ function Frontpage() {
             </p>
           </div>
           
-          {/* Second Text Input */}
+          {/* second box */}
           <div
             contentEditable="true"
             suppressContentEditableWarning={true}
@@ -194,9 +193,9 @@ function Frontpage() {
           </div>
         </div>
 
-        {/* Second Row Text Input Boxes Container */}
+        {/* second row of boxes */}
         <div style={{ display: 'flex', gap: '20px', marginTop: '10px', marginBottom: '40px', justifyContent: 'center' }}>
-          {/* Third Text Input */}
+          {/* third box */}
           <div
             contentEditable="true"
             suppressContentEditableWarning={true}
@@ -228,7 +227,7 @@ function Frontpage() {
             </p>
           </div>
           
-          {/* Fourth Text Input */}
+          {/* fourth box */}
           <div
             contentEditable="true"
             suppressContentEditableWarning={true}

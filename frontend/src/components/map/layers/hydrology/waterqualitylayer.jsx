@@ -24,24 +24,24 @@ function WaterQualityLayer({ showWaterQuality }) {
     }, [showWaterQuality])
 
     useEffect(() => {
-        // Ta bort gamla lagret
+        // remove existing layer if it exists
         if (layerRef.current) {
             map.removeLayer(layerRef.current)
         }
 
-        // Om data inte visas, sluta här
+        // if showWaterQuality is false, don't add layer
         if (!showWaterQuality) {
             return
         }
 
-        // Om ingen data, sluta här
+        // safety check for geojson data
         if (!geojson || !geojson.features || geojson.features.length === 0) {
             return
         }
 
-        // Färgklassificering baserat på vattenkvalitet
+        // color function based on water quality value
         const getColor = (waterQualityValue) => {
-            // Klassificera vattenkvalitet värden
+            // classification based on water quality value
             
             if (waterQualityValue >= 1 && waterQualityValue <= 20) return '#1B1777' // Bra (grön)
             if (waterQualityValue >= 20 && waterQualityValue <= 40) return '#3465BA' // Acceptabel (gul)
@@ -51,7 +51,7 @@ function WaterQualityLayer({ showWaterQuality }) {
             return 'transparent' 
         }
 
-        // Skapa nytt lager och lägg till på kartan
+        // create new GeoJSON layer
         const newLayer = L.geoJSON(geojson, {
             style: (feature) => {
                 const value = feature.properties.water_quality_value || 0
@@ -76,7 +76,7 @@ function WaterQualityLayer({ showWaterQuality }) {
 
         layerRef.current = newLayer
 
-        // Cleanup - ta bort lagret när showWaterQuality blir false
+        // Cleanup - remove layer when showWaterQuality becomes false
         return () => {
             if (layerRef.current) {
                 map.removeLayer(layerRef.current)
@@ -84,7 +84,7 @@ function WaterQualityLayer({ showWaterQuality }) {
         }
     }, [geojson, showWaterQuality, map])
 
-    // Denna komponent renderar ingenting själv, bara Leaflet direkt
+    // if showWaterQuality is false, return null to avoid rendering anything
     return null
 }
 

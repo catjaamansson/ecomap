@@ -6,6 +6,7 @@ function Contact() {
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
+
     return (
         <div style={{
             backgroundImage: "url('/leaf.svg')",
@@ -17,7 +18,7 @@ function Contact() {
             backgroundColor: '#356d4f'
         }}>
             <Navbar />
-            
+          
             <div style={{ 
                 padding: '40px', 
                 maxWidth: '800px', 

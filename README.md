@@ -1,9 +1,9 @@
 # EcoMap
-Ecomap is a project made by me - Catja Månsson - designed to easily illustrate data connected to ecology and hydrology.
+EcoMap is a project made by me - Catja Månsson - designed to easily illustrate data connected to ecology and hydrology.
 
 ## **Background**
-The idea of Ecomap started during an academic project, when I tried to illustrate how hydrology and ecology data affected a given area. I noticed that most existing 
-tools and databases were often complex and difficult to use, especially for beginners. To make this kind of data more accessible, I developed Ecomap as a way to 
+The idea of EcoMap started during an academic project, when I tried to illustrate how hydrology and ecology data affected a given area. I noticed that most existing 
+tools and databases were often complex and difficult to use, especially for beginners. To make this kind of data more accessible, I developed EcoMap as a way to 
 structure and visualize hydrology, ecology, and field observations in a clear and understandable format.
 
 The project focuses on three separate layers that can be analyzed independently or combined to provide an overall understanding of the environment.

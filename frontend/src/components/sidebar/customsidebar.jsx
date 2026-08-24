@@ -1,25 +1,35 @@
 import { useState } from 'react'
 
-const Ecosidebar = ({ active, setActive, setThreatLevel }) => {
+const CustomStudySidebar = ({ active, setActive, setWaterLevel }) => {
+  const [sliderValue, setSliderValue] = useState(0)
+
+  const selectLayer = (layer) => {
+  setActive(active === layer ? null : layer)
+  setSliderValue(0)
+  setWaterLevel(0)
+}
+
+  const toggleLandUse = () => {
+    selectLayer('landUse')
+  }
+
+  const waterbodies = () => {
+    selectLayer('waterbodies')
+  }
 
   const vegetation = () => {
-    setActive('vegetation')
-    setThreatLevel('veg')
+    selectLayer('vegetation')
   }
 
-  const protected_areas = () => {
-    setActive('protected_areas')
-    setThreatLevel('pro')
+  const waterquality = () => {
+    selectLayer('waterquality')
   }
 
-  const threatened_animals = () => {
-    setActive('threatened_animals')
-    setThreatLevel('tha')
-  }
-
-  const threatened_plants = () => {
-    setActive('threatened_plants')
-    setThreatLevel('thp')
+  const handleSliderChange = (e) => {
+    const value = Number(e.target.value)
+    setSliderValue(value)
+    setWaterLevel(value)
+    setActive(null) // deselect buttons when slider is used
   }
 
   return (
@@ -35,6 +45,44 @@ const Ecosidebar = ({ active, setActive, setThreatLevel }) => {
         boxShadow: '0 4px 8px rgba(0,0,0,0.15)'
       }}
     >
+      {/* flooding slider */}
+      <div style={{ paddingTop: '15px' }}>
+        <label style={{ color: '#86DB90', fontWeight: 'bold', fontSize: '14px', display: 'block', marginBottom: '10px' }}>
+          Water level: {sliderValue} m
+        </label>
+        <input 
+          type="range" 
+          min="0" 
+          max="10" 
+          step="0.5"
+          value={sliderValue}
+          onChange={handleSliderChange}
+          style={{
+            width: '100%',
+            cursor: 'pointer',
+            accentColor: '#86DB90'
+          }}
+        />
+      </div>
+
+      {/* waterquality button */}
+      <button
+        onClick={waterquality}
+        style={{
+          width: '100%',
+          padding: '15px',
+          textAlign: 'center',
+          backgroundColor: '#597D68',
+          color: '#223D2D',
+          border: active === 'waterquality' ? '3px solid #86DB90' : 'none',
+          borderRadius: '12px',
+          cursor: 'pointer',
+          fontWeight: active === 'waterquality' ? 'bold' : 'normal'
+        }}
+      >
+        Water Quality
+      </button>
+
       {/* vegetation button */}
       <button
         onClick={vegetation}
@@ -50,64 +98,47 @@ const Ecosidebar = ({ active, setActive, setThreatLevel }) => {
           fontWeight: active === 'vegetation' ? 'bold' : 'normal'
         }}
       >
-        blabla1
+        Vegetation
       </button>
 
-      {/* protected areas button */}
+      {/* land use button */}
       <button
-        onClick={protected_areas}
+        onClick={toggleLandUse}
         style={{
           width: '100%',
           padding: '15px',
           textAlign: 'center',
           backgroundColor: '#597D68',
           color: '#223D2D',
-          border: active === 'protected_areas' ? '3px solid #86DB90' : 'none',
+          border: active === 'landUse' ? '3px solid #86DB90' : 'none',
           borderRadius: '12px',
           cursor: 'pointer',
-          fontWeight: active === 'protected_areas' ? 'bold' : 'normal'
+          fontWeight: active === 'landUse' ? 'bold' : 'normal'
         }}
       >
-        blabla2
+        Land Use
       </button>
 
-      {/* threatened animals button */}
+      {/* water bodies button */}
       <button
-        onClick={threatened_animals}
+        onClick={waterbodies}
         style={{
           width: '100%',
           padding: '15px',
           textAlign: 'center',
           backgroundColor: '#597D68',
           color: '#223D2D',
-          border: active === 'threatened_animals' ? '3px solid #86DB90' : 'none',
+          border: active === 'waterbodies' ? '3px solid #86DB90' : 'none',
           borderRadius: '12px',
           cursor: 'pointer',
-          fontWeight: active === 'threatened_animals' ? 'bold' : 'normal'
+          fontWeight: active === 'waterbodies' ? 'bold' : 'normal'
         }}
       >
-        blabla3
-      </button>
-      {/* threatened plants button */}
-      <button
-        onClick={threatened_plants}
-        style={{
-          width: '100%',
-          padding: '15px',
-          textAlign: 'center',
-          backgroundColor: '#597D68',
-          color: '#223D2D',
-          border: active === 'threatened_plants' ? '3px solid #86DB90' : 'none',
-          borderRadius: '12px',
-          cursor: 'pointer',
-          fontWeight: active === 'threatened_plants' ? 'bold' : 'normal'
-        }}
-      >
-        blabla4
+        Water Bodies
       </button>
 
     </div>
   )
 }
 
-export default Ecosidebar;
+export default CustomStudySidebar;

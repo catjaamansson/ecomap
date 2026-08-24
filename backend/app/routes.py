@@ -6,6 +6,9 @@ from .services.forest_model import forest_to_geojson
 from .services.waterbodies_model import water_bodies_to_geojson
 from .services.soilmoisture_model import soil_moisture_to_geojson
 from .services.forest2_model import forest2_to_geojson
+from .services.landuse_model_click import land_use_at_point
+from .services.land_use_model import land_use_at_point
+from .services.land_use_model import analyze_land_use_area
 import csv
 import os
 
@@ -28,12 +31,22 @@ def flood():
     geojson = flood_to_geojson(level)
     return jsonify(geojson)
 
-@api.route("/land_use")
-def land_use():
+@api.route("/land_use", methods=["GET"])
+def get_land_use_point():
     try:
-        geojson = land_use_to_geojson()
-        return jsonify(geojson)
+        lat = request.args.get("lat", type=float)
+        lng = request.args.get("lng", type=float)
+
+        if lat is None or lng is None:
+            return jsonify({"error": "Sökparametrar 'lat' och 'lng' krävs"}), 400
+
+        # Anropa din funktion i land_use_model.py
+        result = land_use_at_point(lat, lng)
+
+        return jsonify(result)
+
     except Exception as e:
+        print(f"Fel i get_land_use_point: {e}")
         return jsonify({"error": str(e)}), 500
 
 @api.route("/water_quality")
@@ -117,3 +130,38 @@ def privacypolicy():
         "content": "EcoMap collects no personal data. All functionality is client-side, and your data remains on your device."
     }
     return jsonify(policy)
+
+@api.route("/analyze-area", methods=["POST", "OPTIONS"])
+def analyze_area():
+    # 1. Hantera Preflight (OPTIONS) direkt utan att röra datan
+    if request.method == "OPTIONS":
+        return "", 200
+
+    try:
+        # 2. Hämta JSON säkert
+        data = request.get_json(silent=True)
+        if not data:
+            return jsonify({"error": "Ingen giltig JSON skickades"}), 400
+
+        geometry = data.get("geometry")
+        if not geometry:
+            return jsonify({"error": "Geometri saknas i anropet"}), 400
+
+        # 3. KÖR DEN RIKTIGA ANALYSEN MOT DIN TIF-FIL
+        # Ersätt 'analyze_land_use_area' nedan med namnet på din funktion som klipper och beräknar rasterdata:
+        result = analyze_land_use_area(geometry)
+
+        # 'result' förväntas returnera ett dictionary i formatet:
+        # {
+        #     "total_sqm": 9847177,
+        #     "breakdown": [
+        #         {"type": "Arable land", "sqm": 3446500, "percent": 35},
+        #         {"type": "Deciduous forest", "sqm": 4923600, "percent": 50},
+        #         ...
+        #     ]
+        # }
+        return jsonify(result)
+
+    except Exception as e:
+        print(f"FEL I ANALYZE_AREA: {e}")  # Skrivs ut i din Python-terminal
+        return jsonify({"error": str(e)}), 500

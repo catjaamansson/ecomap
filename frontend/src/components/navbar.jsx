@@ -21,7 +21,7 @@ function Navbar() {
       backgroundImage: 'radial-gradient(circle at 20% 50%, #4a8262 0%, #396449 100%)',
       position: 'sticky',
       top: 0,
-      zIndex: 100,
+      zIndex: 2000,
       boxShadow: '0 4px 6px rgba(0, 0, 0, 0.2)'
     }}>
       

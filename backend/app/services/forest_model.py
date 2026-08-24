@@ -21,12 +21,11 @@ def forest_to_geojson():
         print(f"DEBUG: Unique values = {np.unique(forest)[:20]}") 
         transform = src.transform
         
-        # Decimera för snabbare bearbetning (var 10:e pixel)
-        # Ändra decimation_factor för mindre/mer detail
+        # Decimate the raster to reduce the number of features for performance
         decimation_factor = 10
         forest_decimated = forest[::decimation_factor, ::decimation_factor]
         
-        # Justera transform för decimerad data
+        # Adjust transform for decimated data
         from rasterio.transform import Affine
         decimated_transform = Affine(
             transform.a * decimation_factor,
@@ -37,7 +36,7 @@ def forest_to_geojson():
             transform.f
         )
 
-    # Markera alla värden utom nodata (255)
+    # Mark valid forest pixels (exclude nodata)
     forest_mask = forest_decimated != 255
 
     features = []
@@ -47,10 +46,10 @@ def forest_to_geojson():
         transform=decimated_transform
     ):
         value = int(value)
-        # Hoppa över nodata
+        # Skip no data
         if value == 255:
             continue
-        # Klassificera skogstyp baserat på värde
+        # Classify forest type based on value
         forest_type = classify_forest(int(value))
         
         features.append({
@@ -69,20 +68,20 @@ def forest_to_geojson():
 
 def classify_forest(value):
     forest_classes = {
-        0: "Ingen skog",
-        1: "Skog",
-        2: "Annan vegetation",
-        255: "Okänd"
+        0: "No Forest",
+        1: "Forest",
+        2: "Other Vegetation",
+        255: "Unknown"
     }
     
-    # Fallback för okända värden - försök att klassificera baserat på område
+    # Fallback if the value is not in the predefined classes
     if value in forest_classes:
         return forest_classes[value]
     else:
-        # Försök att härleda baserat på mönster
-        # Även värden (0,4,8,12...) = en typ, udda = variant
+        # Try to infer based on patterns
+        # Even values (0,4,8,12...) = a type, odd = variant
         base = (value // 4) * 4
         if base in forest_classes:
             return f"{forest_classes[base]} (variant {value})"
-        return f"Skogstyp {value}" 
+        return f"Forest Type {value}" 
     

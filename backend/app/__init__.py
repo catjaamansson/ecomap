@@ -6,7 +6,7 @@ def create_app():
 
     CORS(app, resources={r"/*": {"origins": "*"}})
 
-    # Tvinga på CORS-headers på ALLA responser, inklusive preflight och felsvar
+    # force CORS headers for all responses
     @app.after_request
     def add_cors_headers(response):
         response.headers['Access-Control-Allow-Origin'] = '*'

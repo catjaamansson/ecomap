@@ -4,12 +4,12 @@ import L from 'leaflet'
 
 function LandUseClickPopup() {
   console.log('LandUseClickPopup mounted')
-  const map = useMap() // LÄGG TILL: Hämta kartinstansen
+  const map = useMap() // fetch the map instance from the context
 
   useEffect(() => {
     if (!map) return
 
-    // LÄGG TILL: Funktion för vad som händer vid klick
+    // function to handle map click events
     const handleMapClick = (e) => {
       console.log('clicked landuse map', e.latlng)
 
@@ -36,10 +36,10 @@ function LandUseClickPopup() {
 
     map.on('click', handleMapClick)
 
-    // LÄGG TILL (NYCKELRADERNA): Stänger popupen när man byter lager
+    // closes the popup when the component unmounts
     return () => {
       map.off('click', handleMapClick)
-      map.closePopup() // <-- Denna stänger popupen automatiskt
+      map.closePopup() // closes any open popup when the component unmounts
     }
   }, [map])
 

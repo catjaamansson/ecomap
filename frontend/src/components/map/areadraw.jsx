@@ -9,7 +9,7 @@ export function AreaDrawer({ onAreaCalculated, onDrawingChange}) {
   useEffect(() => {
     if (!map || !map.pm) return;
 
-    // Utseende på den ritade ytan
+    // appearance of the drawn area
     map.pm.setPathOptions({
       color: '#2e6f40',
       fillColor: '#4caf50',
@@ -17,17 +17,17 @@ export function AreaDrawer({ onAreaCalculated, onDrawingChange}) {
       weight: 3,
     });
 
-    // Aktivera kontrollerna – Rotate är avstängd här
+    // activate drawing tools
     map.pm.addControls({
       position: 'topleft',
-      drawFreehand: true,     // Frihandsritning
-      drawPolygon: true,      // Klicka hörn för hörn
+      drawFreehand: true,     // freehand drawing
+      drawPolygon: true,      // click to draw polygon
       drawRectangle: false,
       drawText: false,   
-      editMode: true,         // Redigera hörn
-      dragMode: true,         // Flytta hela formen
-      removalMode: true,      // Radera
-      rotateMode: false,      // STÄNG AV ROTATE
+      editMode: true,         // edit vertices
+      dragMode: true,         // drag the entire shape
+      removalMode: true,      // delete
+      rotateMode: false,      // turn off rotation
       drawPolyline: false,
       drawCircle: false,
       drawCircleMarker: false,
@@ -43,7 +43,7 @@ export function AreaDrawer({ onAreaCalculated, onDrawingChange}) {
     onDrawingChange?.(false)
     })
 
-    // Beräkning och popup
+    // Calculation and popup
     const updateAreaPopup = (layer) => {
       const geojson = layer.toGeoJSON();
       const areaSqM = turf.area(geojson);

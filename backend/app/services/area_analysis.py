@@ -14,12 +14,32 @@ LAYER_FILES = {
 def analyze_area():
     data = request.get_json()
     geometry = data.get('geometry')
-    selected_layer = data.get('layer', 'landuse') # Standardiserar till landuse om inget valts
+    selected_layer = data.get('layer', 'landuse') # Fetch selected layer, default to 'landuse'
 
     raster_path = LAYER_FILES.get(selected_layer)
     if not raster_path:
-        return jsonify({"error": "Ogiltigt lager valt"}), 400
+        return jsonify({"error": "Invalid layer selected"}), 400
 
     result = analyze_raster_layer(geometry, raster_path)
     
+    return jsonify(result)
+
+
+from flask import Blueprint, request, jsonify
+from services.land_use_model import analyze_land_use_area 
+from services.waterbodies_model import analyze_water_bodies_area
+
+analysis_bp = Blueprint('analysis', __name__)
+
+@analysis_bp.route('/api/analyze-area', methods=['POST'])
+def analyze_area():
+    data = request.get_json()
+    geometry = data.get('geometry')
+    selected_layer = data.get('layer', 'landuse')  # Fetch selected layer, default to 'landuse'
+
+    if selected_layer == 'waterbodies' or selected_layer == 'water':
+        result = analyze_water_bodies_area(geometry)
+    else:
+        result = analyze_land_use_area(geometry)
+
     return jsonify(result)

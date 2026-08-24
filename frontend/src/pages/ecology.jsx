@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Ecosidebar from '../components/sidebar/ecosidebar.jsx';
 import ForestLayer from '../components/map/layers/ecology/forestlayer.jsx';
 import Soilmoisture from '../components/map/layers/ecology/soilmosturetiles.jsx';
+import Footer from '../components/footer.jsx';
 
 const ProtectedAreasLayer = () => null;
 const ThreatenedAnimalsLayer = () => null;
@@ -41,6 +42,7 @@ function Ecology() {
           </Mapview>
         </div>
     </div>
+    <Footer />
     </div>  
     );
 } 

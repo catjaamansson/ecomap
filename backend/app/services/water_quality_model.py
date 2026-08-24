@@ -17,7 +17,7 @@ def water_quality_to_geojson():
         wq = src.read(1)
         transform = src.transform
 
-    # Markera alla värden utom nodata (-128)
+    # Mark valid water quality pixels (exclude nodata)
     wq_mask = wq > -128
 
     features = []
@@ -27,10 +27,10 @@ def water_quality_to_geojson():
         transform=transform
     ):
         value = int(value)
-        # Hoppa över nodata
+        # Skip no data
         if value == -128:
             continue
-        # Klassificera vattenkvalitet baserat på värde
+        # Classify water quality based on value 
         wq_type = classify_water_quality(int(value))
         
         features.append({
@@ -48,10 +48,6 @@ def water_quality_to_geojson():
     }
 
 def water_quality_at_point(lat, lng):
-    """
-    Hämtar vattenkvalitet för en enskild punkt.
-    lat/lng antas vara i EPSG:4326.
-    """
     with rasterio.open(WQ_PATH) as src:
         x, y = lng, lat
 
@@ -72,23 +68,15 @@ def water_quality_at_point(lat, lng):
     }
 
 def classify_water_quality(value):
-    """
-    Klassificerar vattenkvalitet baserat på värde
-    1-20: Bra vattenkvalitet (grön)
-    20-40: Acceptabel vattenkvalitet (gul)
-    40-60: Måttlig vattenkvalitet (orange)
-    60-80: Dålig vattenkvalitet (röd)
-    80-100: Mycket dålig vattenkvalitet (mörkröd)
-    """
     if value >= 1 and value <= 20:
-        return "Bra"
+        return "Good"
     elif value >= 20 and value <= 40:
-        return "Acceptabel"
+        return "Acceptable"
     elif value >= 40 and value <= 60:
-        return "Måttlig"
+        return "Moderate"
     elif value >= 60 and value <= 80:
-        return "Dålig"
+        return "Poor"
     elif value >= 80 and value <= 100:
-        return "Mycket dålig"
+        return "Very Poor"
     else:
-        return f"Okänd" 
+        return f"Unknown" 

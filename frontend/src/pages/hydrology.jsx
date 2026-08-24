@@ -46,6 +46,7 @@ function Hydrology() {
           </Mapview>
         </div>
       </div>
+      <Footer />
     </div>  
     );
 } 

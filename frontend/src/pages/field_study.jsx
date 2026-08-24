@@ -1,5 +1,5 @@
 import Sidebar from '../components/sidebar/fieldstudysidebar.jsx';
-import { useState } from 'react';
+import { useState, useEffect } from 'react'; // <-- LÄGG TILL useEffect
 import Navbar from '../components/navbar.jsx';
 import Mapview from '../components/map/mapview.jsx';
 import Landuselayers from '../components/map/layers/fieldstudy/landuselayer_tiles.jsx';
@@ -7,6 +7,7 @@ import Waterbodieslayers from '../components/map/layers/ecology/soilmosturetiles
 import LandUseClickPopup from '../components/map/layers/fieldstudy/landuse_click.jsx';
 import { AreaDrawer } from '../components/map/areadraw.jsx';
 import AreaSummaryModel from '../components/map/areasummary_model.jsx';
+import Footer from '../components/footer.jsx';
 
 function FieldStudy() {
   const [active, setActive] = useState(null);
@@ -14,9 +15,14 @@ function FieldStudy() {
   const [selectedAreaSqM, setSelectedAreaSqM] = useState(null);
   const [isDrawingArea, setIsDrawingArea] = useState(false);
 
-  // Tar emot både sqMeters och geojson från AreaDrawer
+  // reset analysisData and selectedAreaSqM when active changes
+  useEffect(() => {
+    setAnalysisData(null);
+    setSelectedAreaSqM(null);
+  }, [active]);
+
+  // receive area data from AreaDrawer and send it to backend for analysis
   const handleAreaCalculated = async ({ sqMeters, geojson }) => {
-    // Om ytan raderats eller saknas
     if (!geojson || !sqMeters) {
       setAnalysisData(null);
       setSelectedAreaSqM(null);
@@ -27,7 +33,11 @@ function FieldStudy() {
       const res = await fetch('http://localhost:5000/api/analyze-area', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ geometry: geojson.geometry, sqMeters })
+        body: JSON.stringify({ 
+          geometry: geojson.geometry, 
+          sqMeters,
+          layer: active || 'landuse' // send the active layer to backend for analysis
+        })
       });
 
       if (!res.ok) {
@@ -36,11 +46,11 @@ function FieldStudy() {
       }
 
       const data = await res.json();
-      setAnalysisData(data); // Visar äkta data från Python
+      setAnalysisData(data);
       setSelectedAreaSqM(sqMeters);
     } catch (err) {
       console.error('Kunde inte nå backend:', err);
-      setAnalysisData(null); // Rensar fejkdata
+      setAnalysisData(null);
       setSelectedAreaSqM(null);
       alert(`Analysen misslyckades: ${err.message}`);
     }
@@ -61,7 +71,6 @@ function FieldStudy() {
         flexDirection: 'column'
       }}
     >
-      {/* Navbar låst i toppen över kartan */}
       <div style={{ position: 'sticky', top: 0, zIndex: 2000, width: '100%' }}>
         <Navbar />
       </div>
@@ -73,7 +82,6 @@ function FieldStudy() {
 
         <div style={{ display: 'flex', flexDirection: 'column', flex: 1, width: '100%', position: 'relative', zIndex: 1 }}>
           
-          {/* Map Container */}
           <div
             style={{
               height: '400px',
@@ -96,11 +104,10 @@ function FieldStudy() {
               <AreaDrawer 
                 onAreaCalculated={handleAreaCalculated} 
                 onDrawingChange={setIsDrawingArea}
-                />
+              />
             </Mapview>
           </div>
 
-          {/* Area Summary Rendered Below Map */}
           <AreaSummaryModel
             data={analysisData}
             selectedAreaSqM={selectedAreaSqM}
@@ -109,6 +116,7 @@ function FieldStudy() {
 
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

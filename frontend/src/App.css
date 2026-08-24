@@ -1,4 +1,3 @@
-
 #root {
   width: 100%;
   height: 100%;
@@ -13,9 +12,12 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
+
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -43,7 +45,7 @@
   color: #888;
 }
 
-/* Styling för ritverktygets knapp-panel */
+/* Styling for drawing tools buttons panel */
 .leaflet-pm-toolbar {
   border: none !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
@@ -53,7 +55,7 @@
   margin-top: 10px !important;
 }
 
-/* Enskilda knappar */
+/* Individual buttons */
 .leaflet-pm-toolbar .leaflet-buttons-control-button {
   border: none !important;
   width: 34px !important;
@@ -61,12 +63,12 @@
   transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-/* Hover-effekt på knapparna */
+/* Hover-effect on the buttons */
 .leaflet-pm-toolbar .leaflet-buttons-control-button:hover {
-  background-color: #e8f5e9 !important; /* Svag grön nyans */
+  background-color: #e8f5e9 !important; /* Light green tint */
 }
 
-/* Styling för den nya popupen med resultat */
+/* Styling for the new popup with results */
 .custom-area-popup .leaflet-popup-content-wrapper {
   border-radius: 12px !important;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15) !important;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 export default function AreaSummaryModel({ data, selectedAreaSqM, loading, error, onClose }) {
   const [showLandUse, setShowLandUse] = useState(false);
-  // 1. Visas under tiden backend räknar
+  // shows when backend is processing the area analysis
   if (loading) {
     return (
       <div
@@ -18,12 +18,12 @@ export default function AreaSummaryModel({ data, selectedAreaSqM, loading, error
           fontWeight: '600'
         }}
       >
-         Analyserar markanvändning i valt område...
+         Analysing area, please wait...
       </div>
     );
   }
 
-  // 2. Visas om backend INTE svarar (Ingen fejkdata)
+  // shows when backend returns an error
   if (error) {
     return (
       <div
@@ -39,12 +39,12 @@ export default function AreaSummaryModel({ data, selectedAreaSqM, loading, error
           textAlign: 'center'
         }}
       >
-         <strong>Fel:</strong> {error}
+         <strong>Wrong when loading data:</strong> {error}
       </div>
     );
   }
 
-  // 3. Om ingen yta valts än
+  // if no data is available, show a message prompting the user to draw an area
   if (!data) {
     return (
       <div
@@ -60,12 +60,12 @@ export default function AreaSummaryModel({ data, selectedAreaSqM, loading, error
           border: '2px dashed #d1d5db'
         }}
       >
-         <strong>Ingen yta vald:</strong> Rita en polygon på kartan för att analysera området.
+         <strong>No area selected:</strong> Draw an area on the map to see the summary
       </div>
     );
   }
 
-  // 4. Visas när ÄKTA data skickas tillbaka från Flask backend
+  // show the area summary when data is available
   const selectedSqm = selectedAreaSqM ?? data.total_sqm;
   const totalHa = (selectedSqm / 10000).toFixed(2);
   const totalSqm = Math.round(selectedSqm).toLocaleString('sv-SE');
@@ -94,7 +94,7 @@ export default function AreaSummaryModel({ data, selectedAreaSqM, loading, error
         }}
       >
         <h3 style={{ margin: 0, color: '#1b432a', fontSize: '18px', fontWeight: '700' }}>
-          Area Summary & Land Use Breakdown
+          Area Summary
         </h3>
         {onClose && (
           <button

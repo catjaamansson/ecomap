@@ -2,29 +2,23 @@ import { useState } from 'react'
 
 const CustomStudySidebar = ({ active, setActive, setWaterLevel }) => {
   const [sliderValue, setSliderValue] = useState(0)
-
   const selectLayer = (layer) => {
   setActive(active === layer ? null : layer)
   setSliderValue(0)
   setWaterLevel(0)
 }
-
   const toggleLandUse = () => {
     selectLayer('landUse')
   }
-
   const waterbodies = () => {
     selectLayer('waterbodies')
   }
-
   const vegetation = () => {
     selectLayer('vegetation')
   }
-
   const waterquality = () => {
     selectLayer('waterquality')
   }
-
   const handleSliderChange = (e) => {
     const value = Number(e.target.value)
     setSliderValue(value)

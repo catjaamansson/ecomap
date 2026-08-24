@@ -16,7 +16,7 @@ def forest2_to_geojson():
         f2 = src.read(1)
         transform = src.transform
 
-    # Markera alla värden utom nodata (0)
+    # Mark valid forest pixels (exclude nodata)
     f2_mask = f2 > 0
 
     features = []
@@ -26,10 +26,10 @@ def forest2_to_geojson():
         transform=transform
     ):
         value = int(value)
-        # Hoppa över nodata
+        # Skip no data
         if value == 0:
             continue
-        # Klassificera skog baserat på värde
+        # Classify forest based on value
         f2_type = classify_forest2(int(value))
         
         features.append({
@@ -47,15 +47,9 @@ def forest2_to_geojson():
     }
 
 def classify_forest2(value):
-    """
-    Klassificerar skog baserat på värde
-    1: Lövskog
-    2: Barrskog
-    0: Ingen skog
-    """
     if value == 1:
-        return "Lövskog"
+        return "Deciduous Forest"
     elif value == 2:
-        return "Barrskog"
+        return "Coniferous Forest"
     else:
-        return f"Okänd" 
+        return f"Unknown" 

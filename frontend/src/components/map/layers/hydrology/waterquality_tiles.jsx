@@ -8,7 +8,7 @@ function WaterQualityTiles() {
 
   useEffect(() => {
     const handleMapClick = (e) => {
-      // Hämta data från backend baserat på klickad koordinat
+      // collect lat/lng and fetch water quality data from backend
       fetch(`http://127.0.0.1:5000/water_quality?lat=${e.latlng.lat}&lng=${e.latlng.lng}`)
         .then(async (res) => {
           const data = await res.json()
@@ -20,7 +20,7 @@ function WaterQualityTiles() {
           return data
         })
         .then(data => {
-          // Skapa popup med samma format som GeoJSON-versionen
+          // create popup content based on the water quality data
           const popupContent = `
             <div style="font-size: 12px;">
               <strong>Vattenkvalitet</strong><br/>
@@ -35,10 +35,10 @@ function WaterQualityTiles() {
         .catch(err => console.error("Popup error:", err))
     }
 
-    // Lägg till click-listener
+    // add click listener to the map
     map.on('click', handleMapClick)
 
-    // Cleanup - ta bort listener när komponent unmountar
+    // Cleanup function to remove the click listener when the component unmounts
     return () => map.off('click', handleMapClick)
   }, [map])
 

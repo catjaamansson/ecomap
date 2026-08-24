@@ -24,7 +24,7 @@ function WaterQualityLayer({ showWaterQuality }) {
     }, [showWaterQuality])
 
     useEffect(() => {
-        // remove existing layer if it exists
+        // remove existing layer
         if (layerRef.current) {
             map.removeLayer(layerRef.current)
         }
@@ -43,11 +43,11 @@ function WaterQualityLayer({ showWaterQuality }) {
         const getColor = (waterQualityValue) => {
             // classification based on water quality value
             
-            if (waterQualityValue >= 1 && waterQualityValue <= 20) return '#1B1777' // Bra (grön)
-            if (waterQualityValue >= 20 && waterQualityValue <= 40) return '#3465BA' // Acceptabel (gul)
-            if (waterQualityValue >= 40 && waterQualityValue <= 60) return '#3D89D8' // Måttlig (orange)
-            if (waterQualityValue >= 60 && waterQualityValue <= 80) return '#3CD0C2' // Dålig (röd)
-            if (waterQualityValue >= 80 && waterQualityValue <= 100) return '#45CA84' // Mycket dålig (mörkröd)
+            if (waterQualityValue >= 1 && waterQualityValue <= 20) return '#1B1777' // Good (green)
+            if (waterQualityValue >= 20 && waterQualityValue <= 40) return '#3465BA' // Acceptable (yellow)
+            if (waterQualityValue >= 40 && waterQualityValue <= 60) return '#3D89D8' // Fair (orange)
+            if (waterQualityValue >= 60 && waterQualityValue <= 80) return '#3CD0C2' // Poor (red)
+            if (waterQualityValue >= 80 && waterQualityValue <= 100) return '#45CA84' // Very Poor (dark red)
             return 'transparent' 
         }
 

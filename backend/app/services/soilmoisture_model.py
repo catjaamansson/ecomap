@@ -16,7 +16,7 @@ def soil_moisture_to_geojson():
         sm = src.read(1)
         transform = src.transform
 
-    # Markera alla värden utom nodata (-128)
+    # Mark valid soil moisture pixels (exclude nodata)
     sm_mask = sm > -128
 
     features = []
@@ -26,10 +26,10 @@ def soil_moisture_to_geojson():
         transform=transform
     ):
         value = int(value)
-        # Hoppa över nodata
+        # Skip no data
         if value == -128:
             continue
-        # Klassificera jordfuktighet baserat på värde
+        # Classify soil moisture based on value
         sm_type = classify_soil_moisture(int(value))
         
         features.append({
@@ -47,23 +47,15 @@ def soil_moisture_to_geojson():
     }
 
 def classify_soil_moisture(value):
-    """
-    Klassificerar jordfuktighet baserat på värde
-    1-20: Bra jordfuktighet (grön)
-    20-40: Acceptabel jordfuktighet (gul)
-    40-60: Måttlig jordfuktighet (orange)
-    60-80: Dålig jordfuktighet (röd)
-    80-100: Mycket dålig jordfuktighet (mörkröd)
-    """
     if value >= 1 and value <= 20:
-        return "Bra"
+        return "Very Low"
     elif value >= 20 and value <= 40:
-        return "Acceptabel"
+        return "Low"
     elif value >= 40 and value <= 60:
-        return "Måttlig"
+        return "Moderate"
     elif value >= 60 and value <= 80:
-        return "Dålig"
+        return "High"
     elif value >= 80 and value <= 100:
-        return "Mycket dålig"
+        return "Very High"
     else:
-        return f"Okänd" 
+        return f"Unknown" 

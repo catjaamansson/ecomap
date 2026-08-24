@@ -12,7 +12,6 @@ from .services.land_use_model import analyze_land_use_area
 import csv
 import os
 
-
 api = Blueprint("api", __name__)
 
 @api.route("/ping")
@@ -40,7 +39,7 @@ def get_land_use_point():
         if lat is None or lng is None:
             return jsonify({"error": "Sökparametrar 'lat' och 'lng' krävs"}), 400
 
-        # Anropa din funktion i land_use_model.py
+        # call your function to get land use data at the point
         result = land_use_at_point(lat, lng)
 
         return jsonify(result)
@@ -133,12 +132,12 @@ def privacypolicy():
 
 @api.route("/analyze-area", methods=["POST", "OPTIONS"])
 def analyze_area():
-    # 1. Hantera Preflight (OPTIONS) direkt utan att röra datan
+    # handle CORS preflight request
     if request.method == "OPTIONS":
         return "", 200
 
     try:
-        # 2. Hämta JSON säkert
+        # fetch the JSON data from the request
         data = request.get_json(silent=True)
         if not data:
             return jsonify({"error": "Ingen giltig JSON skickades"}), 400
@@ -147,21 +146,11 @@ def analyze_area():
         if not geometry:
             return jsonify({"error": "Geometri saknas i anropet"}), 400
 
-        # 3. KÖR DEN RIKTIGA ANALYSEN MOT DIN TIF-FIL
-        # Ersätt 'analyze_land_use_area' nedan med namnet på din funktion som klipper och beräknar rasterdata:
+        # fetch the selected layer from the request, defaulting to 'landuse'
         result = analyze_land_use_area(geometry)
 
-        # 'result' förväntas returnera ett dictionary i formatet:
-        # {
-        #     "total_sqm": 9847177,
-        #     "breakdown": [
-        #         {"type": "Arable land", "sqm": 3446500, "percent": 35},
-        #         {"type": "Deciduous forest", "sqm": 4923600, "percent": 50},
-        #         ...
-        #     ]
-        # }
         return jsonify(result)
 
     except Exception as e:
-        print(f"FEL I ANALYZE_AREA: {e}")  # Skrivs ut i din Python-terminal
+        print(f"FEL I ANALYZE_AREA: {e}")  # write to server logs for debugging
         return jsonify({"error": str(e)}), 500

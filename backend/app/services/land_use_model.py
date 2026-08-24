@@ -5,6 +5,10 @@ from rasterio.features import shapes
 import json
 from rasterio.warp import transform as transform_coords
 from shapely import geometry
+from rasterio.mask import mask
+from shapely.geometry import shape, mapping
+from shapely.ops import transform
+import pyproj
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 LU_PATH = BASE_DIR / "data" / "land_use.tif"
@@ -18,7 +22,7 @@ def land_use_to_geojson():
         lu = src.read(1)
         transform = src.transform
 
-    # Markera alla värden utom nodata (-128)
+    # Mark valid land use pixels (exclude nodata)
     land_use_mask = lu > -128
 
     features = []
@@ -28,10 +32,10 @@ def land_use_to_geojson():
         transform=transform
     ):
         value = int(value)
-        # Hoppa över nodata
+        # Skip no data
         if value == -128:
             continue
-        # Klassificera markanvändningstyp baserat på värde
+        # Classify land use type based on value
         land_use_type = classify_land_use(int(value))
         
         features.append({
@@ -50,17 +54,15 @@ def land_use_to_geojson():
 
 def classify_land_use(value):
     """
-    Klassificerar markanvändningstyper baserat på NMD-värden
+    Classifies land use types based on NMD values
     https://www.naturvardsverket.se/verktyg-och-tjanster/kartor-och-karttjanster/nationella-marktackedata/
     """
 
     CODE_ALIASES = {
-        46: 217,  # 217 pekar om till 211 (Urban green)
-        #211: 10,  # 211 pekar om till 10 (Urban green)
-        #113: 18,  # 113 pekar om till 18 (Pastures)
+        46: 217 #Urban green areas (46) should be treated as 217 (Urban green areas)
     }
     
-    # Använd aliaset om det finns, annars ursprungsvärdet
+    # Use the alias if it exists, otherwise use the original value
     target_code = CODE_ALIASES.get(value, value)
 
     land_use_classes = {
@@ -199,42 +201,10 @@ def classify_land_use(value):
     return land_use_classes.get(
         target_code,
         {
-            "name": f"Kod {value}",
-            "description": f"Klass med kod {value} är ännu inte definierad.",
+            "name": f"Code {value}",
+            "description": f"Class with code {value} is not yet defined.",
         },
     )
-    """
-        1: "Tättbebyggda områden",
-        2: "Bostadsområden",
-        3: "Industriområden",
-        4: "Vägar och järnvägar",
-        5: "Kustområden",
-        6: "Flygplatser",
-        7: "Mineralutvinningsplatser",
-        8: "Sophanteringsplatser",
-        9: "Byggarbetsplatser",
-        10: "Stadsnära områden",
-        11: "Sport- och fritidsanläggningar",
-        12: "Åkermark",
-        16: "Fruktodling",
-        18: "Betesmarker",
-        20: "Permanent odling",
-        21: "Jordbruk",
-        23: "Lövskog",
-        24: "Barrskog",
-        25: "Blandad skog",
-        26: "Naturlig gräsmark",
-        29: "Öppen mark - sandig mark",
-        30: "Öppen mark - grus och sten",
-        35: "Vatten - bäck och å",
-        36: "Torvmossar",
-        37: "Kustområden",
-        41: "Sjöar och vattendrag",
-        42: "Kustlagun",
-        43: "Jordbruk - annan permanent gröda",
-        44: "Havsområde",
-        -128: "Nodata/Okänd"
-        """
 
 def land_use_at_point(lat, lng):
     with rasterio.open(LU_PATH) as src:
@@ -256,56 +226,47 @@ def land_use_at_point(lat, lng):
         "land_use_type": classify_land_use(sampled_value)
     }
 
-from rasterio.mask import mask
-from shapely.geometry import shape, mapping
-from shapely.ops import transform
-import pyproj
-
 def analyze_land_use_area(geojson_geometry):
-    """
-    Maskerar land_use_skane_cut_new.tif med en GeoJSON-polygon,
-    räknar pixlar för varje NMD-kod och returnerar en färdig sammanställning.
-    """
-    # Omvandla GeoJSON -> Shapely
+    # convert GeoJSON -> Shapely
     geom_shape = shape(geojson_geometry)
 
     with rasterio.open(LU_PATH) as src:
-        # Om rastret inte är EPSG:4326 (t.ex. SWEREF99 TM / EPSG:3006), projicera om geometrin!
+        # if the raster is not in EPSG:4326, transform the geometry to the raster's CRS
         if src.crs and src.crs.to_string() != "EPSG:4326":
             transformer = pyproj.Transformer.from_crs("EPSG:4326", src.crs, always_xy=True)
             geom_shape = transform(transformer.transform, geom_shape)
 
-        # Konvertera Shapely-geometrin till GeoJSON-format för rasterio.mask
+        # convert Shapely-geometry to GeoJSON-format for rasterio.mask
         mask_shapes = [mapping(geom_shape)]
 
-        # Sätt nodata säkert
+        # Set nodata value safely
         nodata_val = src.nodata if (src.nodata is not None and src.nodata >= 0) else 0
 
-        # Klipp rastret efter polygonens gränser
+        # clip raster after boundaries of the geometry and get the data
         out_image, out_transform = mask(
             src, 
-            mask_shapes,       # <-- Använder den projicerade och omvandlade geometrin!
+            mask_shapes,       # Use the geometry to mask the raster
             crop=True, 
             nodata=nodata_val, 
             filled=True
         )
         
         data = out_image[0]
-        valid_pixels = data[(data != nodata_val) & (data != 0) & (data != 255)]  # Filtrera bort nodata
+        valid_pixels = data[(data != nodata_val) & (data != 0) & (data != 255)]  # filter out nodata and invalid values
 
         total_pixels = len(valid_pixels)
         if total_pixels == 0:
             return {"total_sqm": 0, "breakdown": []}
 
-        # Beräkna m² per pixel baserat på rastrets upplösning
+        # Calculate the area of each pixel in square meters
         px_w, px_h = src.res
         sqm_per_pixel = abs(px_w * px_h)
         
-        # Om rastret är i grader (EPSG:4326)
+        # If the raster is in degrees (EPSG:4326)
         if src.crs and "4326" in src.crs.to_string():
             sqm_per_pixel = 100.0  
 
-        # Räkna förekomsten av varje pixelvärde
+        # Count occurrences of each land use type
         counts = {}
         for pixel_val in valid_pixels:
             val = int(pixel_val)
@@ -316,7 +277,7 @@ def analyze_land_use_area(geojson_geometry):
 
         for val, count in counts.items():
             info = classify_land_use(val)
-            name = info.get("name", f"Kod {val}") if isinstance(info, dict) else str(info)
+            name = info.get("name", f"Code {val}") if isinstance(info, dict) else str(info)
             
             cat_sqm = count * sqm_per_pixel
             percent = round((count / total_pixels) * 100, 1)
@@ -327,7 +288,7 @@ def analyze_land_use_area(geojson_geometry):
                 "percent": percent
             })
 
-        # Sortera så att största ytan hamnar överst
+        # Sort the breakdown by sqm in descending order
         breakdown.sort(key=lambda x: x["sqm"], reverse=True)
 
         return {

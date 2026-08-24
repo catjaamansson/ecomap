@@ -2,6 +2,7 @@ import Navbar from '../components/navbar.jsx';
 import Mapview from '../components/map/mapview.jsx';
 import { useState } from 'react';
 import {Marker, Popup} from 'react-leaflet';
+import { useEffect } from 'react';
 
 import Customsidebar from '../components/sidebar/customsidebar.jsx';
 import ForestLayer from '../components/map/layers/ecology/forestlayer.jsx';
@@ -9,9 +10,9 @@ import Soilmoisture from '../components/map/layers/ecology/soilmosturetiles.jsx'
 import Landuselayers from '../components/map/layers/fieldstudy/landuselayer_tiles.jsx';
 import Waterbodieslayers from '../components/map/layers/ecology/soilmosturetiles.jsx';
 import Waterquality from '../components/map/layers/hydrology/waterquality_tiles.jsx';
-import { useEffect } from 'react';
 import Flooding from '../components/map/layers/hydrology/floodlayers_tiles.jsx';
 import LandUseClickPopup from '../components/map/layers/fieldstudy/landuse_click.jsx';
+import Footer from '../components/footer.jsx';
 
 const ProtectedAreasLayer = () => null;
 const ThreatenedAnimalsLayer = () => null;
@@ -51,13 +52,11 @@ function Custom() {
             {active === 'waterbodies' && <Waterbodieslayers />}
             {active === 'waterquality' && <Waterquality />}
             {waterLevel > 0 && <Flooding level={waterLevel} />}
-            <Marker position={[55.6229, 13.3486]}>
-            <Popup>Test popup</Popup>
-            </Marker>
             <LandUseClickPopup />
           </Mapview>
         </div>
         </div>
+        <Footer />
     </div>  
     );
 } 

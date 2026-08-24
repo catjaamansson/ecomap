@@ -128,7 +128,7 @@ function Frontpage() {
 
         {/* boxes with text */}
         <div style={{ display: 'flex', gap: '20px', marginTop: '10px', marginBottom: '40px', justifyContent: 'center' }}>
-          {/* first box */}
+          {/* hydrology box */}
           <div
             contentEditable="true"
             suppressContentEditableWarning={true}
@@ -160,7 +160,7 @@ function Frontpage() {
             </p>
           </div>
           
-          {/* second box */}
+          {/* ecology box */}
           <div
             contentEditable="true"
             suppressContentEditableWarning={true}
@@ -195,7 +195,7 @@ function Frontpage() {
 
         {/* second row of boxes */}
         <div style={{ display: 'flex', gap: '20px', marginTop: '10px', marginBottom: '40px', justifyContent: 'center' }}>
-          {/* third box */}
+          {/* field study box */}
           <div
             contentEditable="true"
             suppressContentEditableWarning={true}
@@ -227,7 +227,7 @@ function Frontpage() {
             </p>
           </div>
           
-          {/* fourth box */}
+          {/* custom box */}
           <div
             contentEditable="true"
             suppressContentEditableWarning={true}

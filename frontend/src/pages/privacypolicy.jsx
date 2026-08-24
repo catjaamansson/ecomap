@@ -35,7 +35,7 @@ function PrivacyPolicy() {
                 </h1>
 
                 <p style={{ fontSize: '16px', lineHeight: '1.8', marginBottom: '30px' }}>
-                    <strong>Last updated: March 2026</strong>
+                    <strong>Last updated: August 2026</strong>
                 </p>
 
                 <div style={{ marginBottom: '30px' }}>

@@ -1,87 +1,106 @@
 from pathlib import Path
-import rasterio
 import numpy as np
-from rasterio.features import shapes
-import json
-from rasterio.io import MemoryFile
-import os
+import rasterio
+from rasterio.mask import mask
+from rasterio.features import rasterize
+from shapely.geometry import shape
+import pyproj
+from shapely.ops import transform
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-FOREST_PATH = BASE_DIR / "data" / "forest_3035_skane_50m.tif"
+# Sätt sökvägen dynamiskt
+CURRENT_FILE = Path(__file__).resolve()
+BASE_DIR = CURRENT_FILE.parent.parent.parent # ecomap/backend
+
+# Kolla båda möjliga mappsökvägarna
+FOREST_PATH = BASE_DIR / "data" / "forest.tif"
+if not FOREST_PATH.exists():
+    FOREST_PATH = CURRENT_FILE.parent.parent / "data" / "forest.tif"
+
+print(f"[Forest] Använder fil: {FOREST_PATH}")
+print(f"[Forest] Hittades filen? -> {FOREST_PATH.exists()}")
 
 def forest_to_geojson():
-    print(f"DEBUG: FOREST_PATH = {FOREST_PATH}")
-    print(f"DEBUG: File exists = {os.path.exists(FOREST_PATH)}")
-    
-    with rasterio.open(FOREST_PATH) as src:
-        print(f"DEBUG: Opened file successfully")
-        print(f"DEBUG: CRS = {src.crs}")
-        forest = src.read(1)
-        print(f"DEBUG: Forest shape = {forest.shape}, dtype = {forest.dtype}")
-        print(f"DEBUG: Unique values = {np.unique(forest)[:20]}") 
-        transform = src.transform
-        
-        # Decimate the raster to reduce the number of features for performance
-        decimation_factor = 10
-        forest_decimated = forest[::decimation_factor, ::decimation_factor]
-        
-        # Adjust transform for decimated data
-        from rasterio.transform import Affine
-        decimated_transform = Affine(
-            transform.a * decimation_factor,
-            transform.b,
-            transform.c,
-            transform.d,
-            transform.e * decimation_factor,
-            transform.f
-        )
+    return {"type": "FeatureCollection", "features": []}
 
-    # Mark valid forest pixels (exclude nodata)
-    forest_mask = forest_decimated != 255
+def analyze_forest_area(geojson_geometry, total_sq_meters=None):
+    if not geojson_geometry or not FOREST_PATH.exists():
+        print(f"[Forest] Hittar inte filen: {FOREST_PATH}")
+        return {'breakdown': []}
 
-    features = []
-    for geom, value in shapes(
-        forest_decimated.astype(np.uint8),
-        mask=forest_mask,
-        transform=decimated_transform
-    ):
-        value = int(value)
-        # Skip no data
-        if value == 255:
-            continue
-        # Classify forest type based on value
-        forest_type = classify_forest(int(value))
-        
-        features.append({
-            "type": "Feature",
-            "geometry": geom,
-            "properties": {
-                "forest_value": int(value),
-                "forest_type": forest_type
-            }
-        })
+    try:
+        user_shape = shape(geojson_geometry)
+        if not user_shape.is_valid:
+            user_shape = user_shape.buffer(0)
 
-    return {
-        "type": "FeatureCollection",
-        "features": features
-    }
+        with rasterio.open(FOREST_PATH) as src:
+            tif_crs = src.crs if src.crs else "EPSG:3006"
+            
+            # Projektion till rasterns CRS
+            transformer = pyproj.Transformer.from_crs("EPSG:4326", tif_crs, always_xy=True)
+            transformed_shape = transform(transformer.transform, user_shape)
 
-def classify_forest(value):
-    forest_classes = {
-        0: "No Forest",
-        1: "Forest",
-        2: "Other Vegetation",
-        255: "Unknown"
-    }
-    
-    # Fallback if the value is not in the predefined classes
-    if value in forest_classes:
-        return forest_classes[value]
-    else:
-        # Try to infer based on patterns
-        # Even values (0,4,8,12...) = a type, odd = variant
-        base = (value // 4) * 4
-        if base in forest_classes:
-            return f"{forest_classes[base]} (variant {value})"
-        return f"Forest Type {value}" 
-    
+            # 1. Klipp rastern
+            out_image, out_transform = mask(
+                src, 
+                [transformed_shape], 
+                crop=True, 
+                filled=False, 
+                all_touched=True
+            )
+
+            # 2. Skapa exakt polygon-mask för urvalet
+            poly_mask = rasterize(
+                [(transformed_shape, 1)],
+                out_shape=(out_image.shape[1], out_image.shape[2]),
+                transform=out_transform,
+                fill=0,
+                default_value=1,
+                dtype=np.uint8
+            )
+
+            # 3. Omvandla MaskedArray till matris där maskerade pixlar blir 0
+            data_band = out_image[0]
+            if np.ma.is_masked(data_band):
+                data_band = data_band.filled(0)
+
+            # 4. Spara enbart pixlar som hamnar INUTI din ritade polygon
+            valid_pixels = data_band[poly_mask == 1]
+
+            calc_total_sqm = float(total_sq_meters) if (total_sq_meters and float(total_sq_meters) > 0) else 0.0
+
+            if valid_pixels.size == 0:
+                return {'breakdown': [{'type': 'No Forest / Other', 'sqm': round(calc_total_sqm, 2), 'percent': 100.0}]}
+
+            # 5. Räkna Skog (1) och Övrigt (0)
+            forest_pixel_count = np.sum(valid_pixels == 1)
+            total_pixel_count = valid_pixels.size
+
+            forest_ratio = forest_pixel_count / total_pixel_count if total_pixel_count > 0 else 0.0
+            
+            forest_sqm = calc_total_sqm * forest_ratio
+            other_sqm = max(0.0, calc_total_sqm - forest_sqm)
+
+            forest_percent = round(forest_ratio * 100, 2)
+            other_percent = round((other_sqm / calc_total_sqm) * 100, 2) if calc_total_sqm > 0 else 0.0
+
+            breakdown = []
+
+            if forest_sqm > 0:
+                breakdown.append({
+                    'type': 'Forest Area',
+                    'sqm': round(forest_sqm, 2),
+                    'percent': min(forest_percent, 100.0)
+                })
+
+            if other_sqm > 0:
+                breakdown.append({
+                    'type': 'Other',
+                    'sqm': round(other_sqm, 2),
+                    'percent': min(other_percent, 100.0)
+                })
+
+            return {'breakdown': breakdown}
+
+    except Exception as e:
+        print(f"[Forest ERROR]: {e}")
+        return {'breakdown': []}

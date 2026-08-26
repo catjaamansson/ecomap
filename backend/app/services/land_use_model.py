@@ -1,56 +1,14 @@
-from pathlib import Path
 import rasterio
-import numpy as np
 from rasterio.features import shapes
-import json
-from rasterio.warp import transform as transform_coords
-from shapely import geometry
 from rasterio.mask import mask
+import numpy as np
+from pathlib import Path
+from pyproj import Transformer
 from shapely.geometry import shape, mapping
 from shapely.ops import transform
-import pyproj
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-LU_PATH = BASE_DIR / "data" / "land_use.tif"
-
-def land_use_to_geojson():
-    """
-    Konverterar landuse.tif till GeoJSON
-    Visar alla markanvändningstyper
-    """
-    with rasterio.open(LU_PATH) as src:
-        lu = src.read(1)
-        transform = src.transform
-
-    # Mark valid land use pixels (exclude nodata)
-    land_use_mask = lu > -128
-
-    features = []
-    for geom, value in shapes(
-        lu.astype(np.int8),
-        mask=land_use_mask,
-        transform=transform
-    ):
-        value = int(value)
-        # Skip no data
-        if value == -128:
-            continue
-        # Classify land use type based on value
-        land_use_type = classify_land_use(int(value))
-        
-        features.append({
-            "type": "Feature",
-            "geometry": geom,
-            "properties": {
-                "land_use_value": int(value),
-                "land_use_type": land_use_type
-            }
-        })
-
-    return {
-        "type": "FeatureCollection",
-        "features": features
-    }
+# Sökväg till rasterfilen
+LU_PATH = Path(__file__).parent.parent / "data" / "land_use.tif"
 
 def classify_land_use(value):
     """
@@ -207,91 +165,186 @@ def classify_land_use(value):
     )
 
 def land_use_at_point(lat, lng):
+    if not LU_PATH.exists():
+        return {
+            "land_use_value": 0,
+            "land_use_type": {"name": "File Error", "description": "land_use.tif missing"},
+            "type": "File Error",
+            "description": "land_use.tif missing"
+        }
+
+    lat_f = float(lat)
+    lng_f = float(lng)
+
     with rasterio.open(LU_PATH) as src:
-        x, y = lng, lat
+        bounds = src.bounds
 
-        if src.crs and src.crs.to_string() != "EPSG:4326":
-            x_coords, y_coords = transform_coords("EPSG:4326", src.crs, [lng], [lat])
-            x, y = x_coords[0], y_coords[0]
+        # Om rastret har ett CRS definierat, transformerar vi direkt till det!
+        if src.crs:
+            # Transformera från WGS84 (EPSG:4326) direkt till rastrets exakta CRS
+            transformer = Transformer.from_crs("EPSG:4326", src.crs, always_xy=True)
+            x, y = transformer.transform(lng_f, lat_f)
+        else:
+            # Fallback om CRS saknas helt i tif-filen (gissar RT90 2.5 gon V)
+            transformer = Transformer.from_crs("EPSG:4326", "EPSG:2400", always_xy=True)
+            x, y = transformer.transform(lng_f, lat_f)
 
-        sampled_value = next(src.sample([(x, y)]))[0]
+        try:
+            val = list(src.sample([(x, y)]))[0][0]
+            sampled_val = int(val)
+        except Exception as e:
+            print(f"Sample-fel vid ({x}, {y}): {e}")
+            sampled_val = 0
 
-    if sampled_value == -128:
-        return {"error": "No data at this location"}
-
-    sampled_value = int(sampled_value)
+    info = classify_land_use(sampled_val)
+    name = info.get("name", f"Code {sampled_val}") if isinstance(info, dict) else str(info)
+    desc = info.get("description", "N/A") if isinstance(info, dict) else "N/A"
 
     return {
-        "land_use_value": sampled_value,
-        "land_use_type": classify_land_use(sampled_value)
+        "land_use_value": sampled_val,
+        "land_use_type": {
+            "name": name,
+            "description": desc
+        },
+        "type": name,
+        "name": name,
+        "description": desc
     }
 
-def analyze_land_use_area(geojson_geometry):
-    # convert GeoJSON -> Shapely
-    geom_shape = shape(geojson_geometry)
+from pyproj import Geod
+
+import rasterio
+from rasterio.mask import mask
+from shapely.geometry import shape, mapping
+from shapely.ops import transform
+from pyproj import Transformer, Geod
+import numpy as np
+
+def analyze_land_use_area(geojson_geometry, total_sq_meters=None):
+    if not geojson_geometry or not LU_PATH.exists():
+        return {"total_sqm": 0, "breakdown": []}
+
+    try:
+        wgs84_geom = shape(geojson_geometry)
+    except Exception as e:
+        print(f"Geometry error: {e}")
+        return {"total_sqm": 0, "breakdown": []}
+
+    # 1. Beräkna den riktiga geodetiska ytan på jordklotet (WGS84)
+    geod = Geod(ellps="WGS84")
+    total_area_sqm = abs(geod.geometry_area_perimeter(wgs84_geom)[0])
 
     with rasterio.open(LU_PATH) as src:
-        # if the raster is not in EPSG:4326, transform the geometry to the raster's CRS
-        if src.crs and src.crs.to_string() != "EPSG:4326":
-            transformer = pyproj.Transformer.from_crs("EPSG:4326", src.crs, always_xy=True)
-            geom_shape = transform(transformer.transform, geom_shape)
+        # 2. Omvandla WGS84-geometrin till rastrets interna koordinatsystem (CRS)
+        target_crs = src.crs if src.crs else "EPSG:3006"  # SWEREF99 TM som standard i Sverige
+        try:
+            transformer = Transformer.from_crs("EPSG:4326", target_crs, always_xy=True)
+            transformed_geom = transform(transformer.transform, wgs84_geom)
+        except Exception as e:
+            print(f"Transform error: {e}")
+            transformed_geom = wgs84_geom
 
-        # convert Shapely-geometry to GeoJSON-format for rasterio.mask
-        mask_shapes = [mapping(geom_shape)]
+        mask_shapes = [mapping(transformed_geom)]
 
-        # Set nodata value safely
-        nodata_val = src.nodata if (src.nodata is not None and src.nodata >= 0) else 0
+        # 3. Klipp ut rastret för den valda geometrin
+        try:
+            out_image, _ = mask(src, mask_shapes, crop=True, filled=False)
+        except Exception as e:
+            print(f"Mask error: {e}")
+            return {"total_sqm": round(total_area_sqm, 2), "breakdown": []}
 
-        # clip raster after boundaries of the geometry and get the data
-        out_image, out_transform = mask(
-            src, 
-            mask_shapes,       # Use the geometry to mask the raster
-            crop=True, 
-            nodata=nodata_val, 
-            filled=True
-        )
-        
         data = out_image[0]
-        valid_pixels = data[(data != nodata_val) & (data != 0) & (data != 255)]  # filter out nodata and invalid values
 
-        total_pixels = len(valid_pixels)
-        if total_pixels == 0:
-            return {"total_sqm": 0, "breakdown": []}
+        # Hämta enbart de pixlar som faller inom polygonen
+        if hasattr(data, 'compressed'):
+            pixels = data.compressed()
+        else:
+            pixels = data.flatten()
 
-        # Calculate the area of each pixel in square meters
-        px_w, px_h = src.res
-        sqm_per_pixel = abs(px_w * px_h)
-        
-        # If the raster is in degrees (EPSG:4326)
-        if src.crs and "4326" in src.crs.to_string():
-            sqm_per_pixel = 100.0  
+        if len(pixels) == 0:
+            return {"total_sqm": round(total_area_sqm, 2), "breakdown": []}
 
-        # Count occurrences of each land use type
+        # Ta bort Nodata / bakgrundsvärden
+        nodata_val = src.nodata if src.nodata is not None else 0
+        valid_pixels = pixels[pixels != nodata_val]
+
+        total_valid_pixels = len(valid_pixels)
+        if total_valid_pixels == 0:
+            return {"total_sqm": round(total_area_sqm, 2), "breakdown": []}
+
+        # 4. Räkna förekomsten av varje markanvändningskod
         counts = {}
         for pixel_val in valid_pixels:
             val = int(pixel_val)
             counts[val] = counts.get(val, 0) + 1
 
-        total_sqm = total_pixels * sqm_per_pixel
+        # 5. Räkna ut procenten exakt baserat på antalet träffade markpixlar
         breakdown = []
-
         for val, count in counts.items():
             info = classify_land_use(val)
-            name = info.get("name", f"Code {val}") if isinstance(info, dict) else str(info)
-            
-            cat_sqm = count * sqm_per_pixel
-            percent = round((count / total_pixels) * 100, 1)
+            name = info.get("name", f"Kod {val}") if isinstance(info, dict) else str(info)
+
+            # Procentandel av den faktiska markytan
+            percent = (count / total_valid_pixels) * 100.0
+            cat_sqm = (percent / 100.0) * total_area_sqm
 
             breakdown.append({
                 "type": name,
+                "name": name,
                 "sqm": round(cat_sqm, 2),
-                "percent": percent
+                "percent": round(percent, 2)
             })
 
-        # Sort the breakdown by sqm in descending order
         breakdown.sort(key=lambda x: x["sqm"], reverse=True)
 
         return {
-            "total_sqm": round(total_sqm, 2),
+            "total_sqm": round(total_area_sqm, 2),
             "breakdown": breakdown
         }
+
+def land_use_to_geojson():
+    """
+    Vektoriserar landuse.tif till GeoJSON-format.
+    """
+    if not LU_PATH.exists():
+        return {"type": "FeatureCollection", "features": []}
+
+    with rasterio.open(LU_PATH) as src:
+        lu = src.read(1)
+        transform_mat = src.transform
+
+    land_use_mask = lu > -128
+    features = []
+
+    for geom, value in shapes(lu, mask=land_use_mask, transform=transform_mat):
+        try:
+            val_int = int(value)
+        except (ValueError, TypeError):
+            continue
+
+        if val_int <= -128 or val_int == 0:
+            continue
+
+        info = classify_land_use(val_int)
+        name = info.get("name", f"Code {val_int}")
+        desc = info.get("description", "N/A")
+
+        features.append({
+            "type": "Feature",
+            "geometry": geom,
+            "properties": {
+                "land_use_value": val_int,
+                "land_use_type": {
+                    "name": name,
+                    "description": desc
+                },
+                "type": name,
+                "name": name,
+                "description": desc
+            }
+        })
+
+    return {
+        "type": "FeatureCollection",
+        "features": features
+    }

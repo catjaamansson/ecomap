@@ -1,33 +1,59 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useMap } from 'react-leaflet';
 import '@geoman-io/leaflet-geoman-free';
 import * as turf from '@turf/turf';
 
-export function AreaDrawer({ onAreaCalculated, onDrawingChange}) {
+export function AreaDrawer({ 
+  onAreaCreated, 
+  onAreaSelected, 
+  onAreaDeleted, 
+  onDrawingChange, 
+  clearTrigger,
+  activeAreaId 
+}) {
   const map = useMap();
+
+  // 1. Spara alla callbacks i refs för att förhindra att useEffect körs om vid varje ändring
+  const callbacksRef = useRef({ onAreaCreated, onAreaSelected, onAreaDeleted, onDrawingChange });
+  useEffect(() => {
+    callbacksRef.current = { onAreaCreated, onAreaSelected, onAreaDeleted, onDrawingChange };
+  }, [onAreaCreated, onAreaSelected, onAreaDeleted, onDrawingChange]);
+
+  // Ta bort alla områden när radering triggas globalt
+  useEffect(() => {
+    if (!map || !map.pm) return;
+    if (clearTrigger) {
+      const geomanLayers = map.pm.getGeomanLayers();
+      geomanLayers.forEach((layer) => {
+        if (layer._areaId === activeAreaId) {
+          map.removeLayer(layer);
+        }
+      });
+    }
+  }, [clearTrigger, map, activeAreaId]);
 
   useEffect(() => {
     if (!map || !map.pm) return;
 
-    // appearance of the drawn area
-    map.pm.setPathOptions({
+    const defaultStyle = {
       color: '#2e6f40',
       fillColor: '#4caf50',
       fillOpacity: 0.35,
       weight: 3,
-    });
+    };
 
-    // activate drawing tools
+    map.pm.setPathOptions(defaultStyle);
+
     map.pm.addControls({
       position: 'topleft',
-      drawFreehand: true,     // freehand drawing
-      drawPolygon: true,      // click to draw polygon
+      drawFreehand: true,
+      drawPolygon: true,
       drawRectangle: false,
       drawText: false,   
-      editMode: true,         // edit vertices
-      dragMode: true,         // drag the entire shape
-      removalMode: true,      // delete
-      rotateMode: false,      // turn off rotation
+      editMode: true,
+      dragMode: true,
+      removalMode: true,
+      rotateMode: false,
       drawPolyline: false,
       drawCircle: false,
       drawCircleMarker: false,
@@ -35,19 +61,10 @@ export function AreaDrawer({ onAreaCalculated, onDrawingChange}) {
       cutPolygon: false,
     });
 
-    map.on('pm:drawstart', () => {
-    onDrawingChange?.(true)
-    })
+    map.on('pm:drawstart', () => callbacksRef.current.onDrawingChange?.(true));
+    map.on('pm:drawend', () => callbacksRef.current.onDrawingChange?.(false));
 
-    map.on('pm:drawend', () => {
-    onDrawingChange?.(false)
-    })
-
-    // Calculation and popup
-    const updateAreaPopup = (layer) => {
-      const geojson = layer.toGeoJSON();
-      const areaSqM = turf.area(geojson);
-
+    const createPopupContent = (areaSqM) => {
       let primaryArea = '';
       let secondaryArea = '';
 
@@ -59,7 +76,7 @@ export function AreaDrawer({ onAreaCalculated, onDrawingChange}) {
         secondaryArea = `${(areaSqM / 10000).toFixed(4)} ha`;
       }
 
-      const popupContent = `
+      return `
         <div style="font-family: system-ui, -apple-system, sans-serif; padding: 4px; min-width: 130px;">
           <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: #6b7280; font-weight: 700; margin-bottom: 2px;">
             SELECTED AREA
@@ -72,33 +89,73 @@ export function AreaDrawer({ onAreaCalculated, onDrawingChange}) {
           </div>
         </div>
       `;
-
-      layer.bindPopup(popupContent, { className: 'custom-area-popup' }).openPopup();
-
-      if (onAreaCalculated) {
-        onAreaCalculated({ sqMeters: areaSqM, geojson });
-      }
     };
 
     const handleCreate = (e) => {
       const layer = e.layer;
-      updateAreaPopup(layer);
+      const id = Date.now().toString() + Math.random().toString(36).substr(2, 5);
+      layer._areaId = id;
 
-      layer.on('pm:edit', (evt) => updateAreaPopup(evt.target));
-      layer.on('pm:dragend', (evt) => updateAreaPopup(evt.target));
+      const initialGeojson = JSON.parse(JSON.stringify(layer.toGeoJSON()));
+      const areaSqM = turf.area(initialGeojson);
+
+      layer.bindPopup(createPopupContent(areaSqM), { className: 'custom-area-popup' }).openPopup();
+
+      layer.on('click', () => {
+        callbacksRef.current.onAreaSelected?.(id);
+      });
+
+      const handleUpdate = () => {
+        const freshGeojson = JSON.parse(JSON.stringify(layer.toGeoJSON()));
+        const freshAreaSqM = turf.area(freshGeojson);
+        
+        if (layer.getPopup()) {
+          layer.getPopup().setContent(createPopupContent(freshAreaSqM));
+        }
+
+        // Använd callbacksRef så att anropen alltid skickas rätt utan att rendera om hela Geoman
+        callbacksRef.current.onAreaCreated?.({ id, sqMeters: freshAreaSqM, geojson: freshGeojson });
+        callbacksRef.current.onAreaSelected?.(id);
+      };
+
+      // Geoman redigerings-events
+      layer.on('pm:edit', handleUpdate);
+      layer.on('pm:dragend', handleUpdate);
+      layer.on('pm:vertexchange', handleUpdate);
+      layer.on('pm:markerdragend', handleUpdate);
+
+      callbacksRef.current.onAreaCreated?.({ id, sqMeters: areaSqM, geojson: initialGeojson });
+    };
+
+    const handleRemove = (e) => {
+      if (e.layer && e.layer._areaId) {
+        callbacksRef.current.onAreaDeleted?.(e.layer._areaId);
+      }
     };
 
     map.on('pm:create', handleCreate);
+    map.on('pm:remove', handleRemove);
 
     return () => {
       map.off('pm:create', handleCreate);
-      if (map.pm) {
-        map.pm.removeControls();
-      }
-        map.off('pm:drawstart')
-        map.off('pm:drawend')
+      map.off('pm:remove', handleRemove);
+      if (map.pm) map.pm.removeControls();
+      map.off('pm:drawstart');
+      map.off('pm:drawend');
     };
-  }, [map, onAreaCalculated]);
+  }, [map]); // Kör BARA om när 'map' ändras, inga andra dependencies!
+
+  // Uppdatera visuell markering
+  useEffect(() => {
+    if (!map || !map.pm) return;
+    map.pm.getGeomanLayers().forEach((layer) => {
+      if (layer._areaId === activeAreaId) {
+        layer.setStyle?.({ color: '#154125', fillColor: '#2e7d32', fillOpacity: 0.5, weight: 4 });
+      } else {
+        layer.setStyle?.({ color: '#2e6f40', fillColor: '#4caf50', fillOpacity: 0.3, weight: 2 });
+      }
+    });
+  }, [activeAreaId, map]);
 
   return null;
 }

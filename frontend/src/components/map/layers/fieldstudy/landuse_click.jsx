@@ -4,12 +4,11 @@ import L from 'leaflet'
 
 function LandUseClickPopup() {
   console.log('LandUseClickPopup mounted')
-  const map = useMap() // fetch the map instance from the context
+  const map = useMap()
 
   useEffect(() => {
     if (!map) return
 
-    // function to handle map click events
     const handleMapClick = (e) => {
       console.log('clicked landuse map', e.latlng)
 
@@ -20,13 +19,26 @@ function LandUseClickPopup() {
           return data
         })
         .then((data) => {
+          // Robust utläsning oavsett om land_use_type är ett objekt eller en sträng
+          const typeName = 
+            data.land_use_type?.name || 
+            (typeof data.land_use_type === 'string' ? data.land_use_type : null) ||
+            data.type ||
+            data.name ||
+            `Code ${data.land_use_value}`
+
+          const description = 
+            data.land_use_type?.description || 
+            data.description || 
+            'N/A'
+
           L.popup()
             .setLatLng(e.latlng)
             .setContent(`
-              <div style="font-size: 12px;">
+              <div style="font-size: 12px; font-family: sans-serif;">
                 <strong>Land Use</strong><br/>
-                Type: ${data.land_use_type?.name || data.land_use_value}<br/>
-                Description: ${data.land_use_type?.description || 'N/A'}<br/>
+                Type: ${typeName}<br/>
+                Description: ${description}<br/>
               </div>
             `)
             .openOn(map)
@@ -36,10 +48,9 @@ function LandUseClickPopup() {
 
     map.on('click', handleMapClick)
 
-    // closes the popup when the component unmounts
     return () => {
       map.off('click', handleMapClick)
-      map.closePopup() // closes any open popup when the component unmounts
+      map.closePopup()
     }
   }, [map])
 

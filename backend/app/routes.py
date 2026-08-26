@@ -1,14 +1,12 @@
 from flask import Blueprint, jsonify, request
 from .services.flood_model import flood_to_geojson
-from .services.land_use_model import land_use_to_geojson
-from .services.water_quality_model import water_quality_to_geojson, water_quality_at_point
-from .services.forest_model import forest_to_geojson
-from .services.waterbodies_model import water_bodies_to_geojson
+from .services.land_use_model import land_use_to_geojson, analyze_land_use_area, land_use_at_point
+from .services.water_quality_model import water_quality_to_geojson, water_quality_at_point, analyze_water_quality_area
+from .services.forest_model import forest_to_geojson, analyze_forest_area
+from .services.waterbodies_model import water_bodies_to_geojson, analyze_water_bodies_area
 from .services.soilmoisture_model import soil_moisture_to_geojson
 from .services.forest2_model import forest2_to_geojson
-from .services.landuse_model_click import land_use_at_point
-from .services.land_use_model import land_use_at_point
-from .services.land_use_model import analyze_land_use_area
+from .services.landuse_model_click import land_use_at_point as land_use_click_at_point
 import csv
 import os
 
@@ -39,8 +37,23 @@ def get_land_use_point():
         if lat is None or lng is None:
             return jsonify({"error": "Sökparametrar 'lat' och 'lng' krävs"}), 400
 
-        # call your function to get land use data at the point
         result = land_use_at_point(lat, lng)
+
+        # Säkerställ att responset har exakt de nycklar som Frontend letar efter
+        if isinstance(result, dict):
+            info = result.get("land_use_type", {})
+            name = info.get("name") if isinstance(info, dict) else (result.get("type") or str(info))
+            desc = info.get("description") if isinstance(info, dict) else (result.get("description") or "N/A")
+
+            return jsonify({
+                "land_use_value": result.get("land_use_value", 0),
+                "land_use_type": {
+                    "name": name,
+                    "description": desc
+                },
+                "type": name,
+                "description": desc
+            })
 
         return jsonify(result)
 
@@ -83,9 +96,17 @@ def soil_moisture():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@api.route("/forest")
+def forest():
+    try:
+        geojson = forest_to_geojson()
+        return jsonify(geojson)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @api.route("/species")
 def species():
-    threat = request.args.get("threat", "VU")  # Default: Vulnerable
+    threat = request.args.get("threat", "VU")
     
     species_list = []
     csv_path = os.path.join(os.path.dirname(__file__), "data", "rodlistade_arten.csv")
@@ -94,7 +115,7 @@ def species():
         with open(csv_path, 'r', encoding='utf-8') as f:
             reader = csv.reader(f, delimiter=';')
             for row in reader:
-                if len(row) >= 4 and row[3] == threat:  # Column 4 is threat status
+                if len(row) >= 4 and row[3] == threat:
                     species_list.append({
                         "swedish_name": row[0],
                         "scientific_name": row[1],
@@ -132,25 +153,65 @@ def privacypolicy():
 
 @api.route("/analyze-area", methods=["POST", "OPTIONS"])
 def analyze_area():
-    # handle CORS preflight request
     if request.method == "OPTIONS":
         return "", 200
 
     try:
-        # fetch the JSON data from the request
         data = request.get_json(silent=True)
         if not data:
             return jsonify({"error": "Ingen giltig JSON skickades"}), 400
 
         geometry = data.get("geometry")
+        sq_meters = data.get("sqMeters")
+        layer_type = data.get("layer", "landuse") # Hämta aktivt lager från frontend
+
         if not geometry:
             return jsonify({"error": "Geometri saknas i anropet"}), 400
 
-        # fetch the selected layer from the request, defaulting to 'landuse'
-        result = analyze_land_use_area(geometry)
+        # SKICKA MED sq_meters TILL ALLA ANALYSER
+        land_use_res = analyze_land_use_area(geometry, sq_meters)
+        water_res = analyze_water_bodies_area(geometry, sq_meters)
+        forest_res = analyze_forest_area(geometry, sq_meters)
+        water_quality_res = analyze_water_quality_area(geometry)
 
-        return jsonify(result)
+        # Extrahera breakdown-listor säkert
+        land_breakdown = land_use_res.get('breakdown', []) if isinstance(land_use_res, dict) else []
+        water_breakdown = water_res.get('breakdown', []) if isinstance(water_res, dict) else []
+        forest_breakdown = forest_res.get('breakdown', []) if isinstance(forest_res, dict) else []
+        wq_breakdown = water_quality_res.get('breakdown', []) if isinstance(water_quality_res, dict) else []
+
+        # Om frontend förväntar sig ett platt 'breakdown' direkt på rotnivå (beroende på vilket lager som är valt):
+        active_breakdown = land_breakdown
+        if layer_type in ['waterbodies', 'waterBodies']:
+            active_breakdown = water_breakdown
+        elif layer_type in ['forest', 'vegetation']:
+            active_breakdown = forest_breakdown
+        elif layer_type in ['waterquality', 'waterQuality']:
+            active_breakdown = wq_breakdown
+
+        return jsonify({
+            'total_sqm': sq_meters,
+            'breakdown': active_breakdown, # <--- Direkt breakdown för det valda lagret!
+            'layers': {
+                'landUse': {
+                    'title': 'Land Use Coverage',
+                    'breakdown': land_breakdown
+                },
+                'waterbodies': {
+                    'title': 'Water Bodies Coverage',
+                    'breakdown': water_breakdown
+                },
+                'forest': {
+                    'title': 'Forest Coverage',
+                    'breakdown': forest_breakdown
+                },
+                'waterQuality': {
+                    'title': 'Water Quality Coverage',
+                    'breakdown': wq_breakdown
+                }
+            }
+        })
 
     except Exception as e:
-        print(f"FEL I ANALYZE_AREA: {e}")  # write to server logs for debugging
+        print(f"FEL I ANALYZE_AREA: {e}")
         return jsonify({"error": str(e)}), 500

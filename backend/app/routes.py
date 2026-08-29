@@ -4,7 +4,7 @@ from .services.land_use_model import land_use_to_geojson, analyze_land_use_area,
 from .services.water_quality_model import water_quality_to_geojson, water_quality_at_point, analyze_water_quality_area
 from .services.forest_model import forest_to_geojson, analyze_forest_area
 from .services.waterbodies_model import water_bodies_to_geojson, analyze_water_bodies_area
-from .services.soilmoisture_model import soil_moisture_to_geojson, soil_moisture_at_point
+from .services.soilmoisture_model import soil_moisture_to_geojson, soil_moisture_at_point, calculate_soilmoisture_summary
 from .services.forest2_model import forest2_to_geojson
 from .services.landuse_model_click import land_use_at_point as land_use_click_at_point
 import csv
@@ -187,14 +187,18 @@ def analyze_area():
         water_res = analyze_water_bodies_area(geometry, sq_meters)
         forest_res = analyze_forest_area(geometry, sq_meters)
         water_quality_res = analyze_water_quality_area(geometry)
+        
+        # Beräkna markfuktighet och skicka med sq_meters för korrekt yta
+        soil_moisture_res = calculate_soilmoisture_summary(geometry, sq_meters)
 
         # Extrahera breakdown-listor säkert
         land_breakdown = land_use_res.get('breakdown', []) if isinstance(land_use_res, dict) else []
         water_breakdown = water_res.get('breakdown', []) if isinstance(water_res, dict) else []
         forest_breakdown = forest_res.get('breakdown', []) if isinstance(forest_res, dict) else []
         wq_breakdown = water_quality_res.get('breakdown', []) if isinstance(water_quality_res, dict) else []
+        soil_breakdown = soil_moisture_res.get('breakdown', []) if isinstance(soil_moisture_res, dict) else []
 
-        # Om frontend förväntar sig ett platt 'breakdown' direkt på rotnivå (beroende på vilket lager som är valt):
+        # Om frontend förväntar sig ett platt 'breakdown' direkt på rotnivå:
         active_breakdown = land_breakdown
         if layer_type in ['waterbodies', 'waterBodies']:
             active_breakdown = water_breakdown
@@ -202,10 +206,13 @@ def analyze_area():
             active_breakdown = forest_breakdown
         elif layer_type in ['waterquality', 'waterQuality']:
             active_breakdown = wq_breakdown
+        elif layer_type in ['soilmoisture', 'soil_moisture', 'soilMoisture']:
+            active_breakdown = soil_breakdown
 
         return jsonify({
             'total_sqm': sq_meters,
             'breakdown': active_breakdown, # <--- Direkt breakdown för det valda lagret!
+            'soil_moisture': soil_moisture_res, # Snabbåtkomst till min/max/medel för markfuktighet
             'layers': {
                 'landUse': {
                     'title': 'Land Use Coverage',
@@ -222,6 +229,11 @@ def analyze_area():
                 'waterQuality': {
                     'title': 'Water Quality Coverage',
                     'breakdown': wq_breakdown
+                },
+                'soilMoisture': {
+                    'title': 'Soil Moisture Coverage',
+                    'data': soil_moisture_res,
+                    'breakdown': soil_breakdown
                 }
             }
         })

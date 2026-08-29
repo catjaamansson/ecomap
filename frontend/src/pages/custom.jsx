@@ -4,15 +4,16 @@ import { useState, useEffect } from 'react';
 
 import Customsidebar from '../components/sidebar/customsidebar.jsx';
 import ForestLayer from '../components/map/layers/ecology/forestlayer.jsx';
-import Soilmoisture from '../components/map/layers/ecology/soilmosturetiles.jsx';
 import Landuselayers from '../components/map/layers/fieldstudy/landuselayer_tiles.jsx';
-import Waterbodieslayers from '../components/map/layers/ecology/soilmosturetiles.jsx';
+import Waterbodieslayers from '../components/map/layers/ecology/waterbodiestiles.jsx';
 import Waterquality from '../components/map/layers/hydrology/waterquality_tiles.jsx';
 import Flooding from '../components/map/layers/hydrology/floodlayers_tiles.jsx';
 import LandUseClickPopup from '../components/map/layers/fieldstudy/landuse_click.jsx';
 import { AreaDrawer } from '../components/map/areadraw.jsx';
 import AreaSummaryModel from '../components/map/areasummary_model.jsx';
 import Footer from '../components/footer.jsx';
+import Soilmoisture from '../components/map/layers/ecology/soilmoisturetiles.jsx';
+import SoilmoistureClickPopup from '../components/map/layers/ecology/soilmoisture_click.jsx';
 
 const ProtectedAreasLayer = () => null;
 const ThreatenedAnimalsLayer = () => null;
@@ -149,9 +150,15 @@ function Custom() {
               />
 
               {active === 'vegetation' && <ForestLayer key="vegetation" />}
-              {active === 'soil_moisture' && <Soilmoisture key="soil_moisture" />}
+              {active === 'waterbodies' && <Waterbodieslayers key="waterbodies" />}
               {active === 'protected_areas' && <ProtectedAreasLayer key="protected" />}
               {active === 'threatened_animals' && <ThreatenedAnimalsLayer key="animals" />}
+              {active === 'soil_moisture' && !isDrawingArea && (
+                <>
+                  <Soilmoisture key="soil_moisture" />
+                  <SoilmoistureClickPopup key="soil_moisture_click" />
+                </>
+              )}
               
               {active === 'landUse' && !isDrawingArea && (
                 <>
@@ -160,7 +167,6 @@ function Custom() {
                 </>
               )}
               
-              {active === 'waterbodies' && <Waterbodieslayers key="waterbodies" />}
               {active === 'waterquality' && <Waterquality key="waterquality" />}
               {waterLevel > 0 && <Flooding level={waterLevel} key="flooding" />}
             </Mapview>

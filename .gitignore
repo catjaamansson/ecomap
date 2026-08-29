@@ -10,5 +10,7 @@ frontend/public/tiles_waterbodies/
 frontend/public/waterquality_tiles4/
 backend/app/data/dem.tif
 backend/app/data/landuse.tif
+frontend/public/soil_moistures_tiles/
+frontend/public/soilmoisturetiles/
 
 

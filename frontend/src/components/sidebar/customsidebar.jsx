@@ -10,6 +10,11 @@ const CustomStudySidebar = ({ active, setActive, setWaterLevel }) => {
   const toggleLandUse = () => {
     selectLayer('landUse')
   }
+
+  const soilmoisture = () => {
+    selectLayer('soil_moisture')
+  }
+
   const waterbodies = () => {
     selectLayer('waterbodies')
   }
@@ -129,6 +134,24 @@ const CustomStudySidebar = ({ active, setActive, setWaterLevel }) => {
         }}
       >
         Water Bodies
+      </button>
+
+      {/* soil moisture button */}
+      <button
+        onClick={soilmoisture}
+        style={{
+          width: '100%',
+          padding: '15px',
+          textAlign: 'center',
+          backgroundColor: '#597D68',
+          color: '#223D2D',
+          border: active === 'soil_moisture' ? '3px solid #86DB90' : 'none',
+          borderRadius: '12px',
+          cursor: 'pointer',
+          fontWeight: active === 'soil_moisture' ? 'bold' : 'normal'
+        }}
+      >
+        Soil Moisture
       </button>
 
     </div>

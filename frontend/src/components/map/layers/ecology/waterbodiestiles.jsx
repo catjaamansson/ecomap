@@ -1,6 +1,6 @@
 import { TileLayer } from 'react-leaflet'
 
-function Soilmoisture() {
+function WaterBodiesLayer() {
   return (
     <TileLayer
       url="/tiles_waterbodies/{z}/{x}/{y}.png"
@@ -15,4 +15,4 @@ function Soilmoisture() {
   )
 }
 
-export default Soilmoisture
+export default WaterBodiesLayer

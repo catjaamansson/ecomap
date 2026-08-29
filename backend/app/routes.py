@@ -4,7 +4,7 @@ from .services.land_use_model import land_use_to_geojson, analyze_land_use_area,
 from .services.water_quality_model import water_quality_to_geojson, water_quality_at_point, analyze_water_quality_area
 from .services.forest_model import forest_to_geojson, analyze_forest_area
 from .services.waterbodies_model import water_bodies_to_geojson, analyze_water_bodies_area
-from .services.soilmoisture_model import soil_moisture_to_geojson
+from .services.soilmoisture_model import soil_moisture_to_geojson, soil_moisture_at_point
 from .services.forest2_model import forest2_to_geojson
 from .services.landuse_model_click import land_use_at_point as land_use_click_at_point
 import csv
@@ -93,6 +93,20 @@ def soil_moisture():
     try:
         geojson = soil_moisture_to_geojson()
         return jsonify(geojson)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@api.route("/soil_moisture_point")
+def soil_moisture_point():
+    lat = request.args.get("lat", type=float)
+    lng = request.args.get("lng", type=float)
+
+    if lat is None or lng is None:
+        return jsonify({"error": "Missing parameters"}), 400
+
+    try:
+        data = soil_moisture_at_point(lat, lng)
+        return jsonify(data)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

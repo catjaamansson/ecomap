@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'; // <-- LÄGG TILL useEffect
 import Navbar from '../components/navbar.jsx';
 import Mapview from '../components/map/mapview.jsx';
 import Landuselayers from '../components/map/layers/fieldstudy/landuselayer_tiles.jsx';
-import Waterbodieslayers from '../components/map/layers/ecology/soilmosturetiles.jsx';
+import Waterbodieslayers from '../components/map/layers/ecology/waterbodiestiles.jsx';
 import LandUseClickPopup from '../components/map/layers/fieldstudy/landuse_click.jsx';
 import { AreaDrawer } from '../components/map/areadraw.jsx';
 import AreaSummaryModel from '../components/map/areasummary_model.jsx';

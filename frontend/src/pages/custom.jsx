@@ -1,6 +1,6 @@
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/navbar.jsx';
 import Mapview from '../components/map/mapview.jsx';
-import { useState, useEffect } from 'react';
 
 import Customsidebar from '../components/sidebar/customsidebar.jsx';
 import ForestLayer from '../components/map/layers/ecology/forestlayer.jsx';
@@ -33,7 +33,7 @@ function Custom() {
   const activeArea = areas.find((a) => a.id === activeAreaId);
 
   // Återanvändbar funktion för backend-analys
-  const fetchAnalysis = async (geojson, sqMeters, layerToAnalyze) => {
+  const fetchAnalysis = async (geojson, sqMeters, layerToAnalyze, currentWaterLevel) => {
     if (!geojson || !sqMeters) return;
 
     try {
@@ -42,8 +42,11 @@ function Custom() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           geometry: geojson.geometry, 
-          sqMeters,
-          layer: layerToAnalyze || 'landuse'
+          sqMeters: sqMeters,
+          total_sqm: sqMeters,                     // Skickar båda formaten på yta för kompatibilitet
+          layer: layerToAnalyze || 'flooding',     // Fallback till flooding om inget annat lager är aktivt
+          water_level: currentWaterLevel,         // Python/Flask snake_case
+          waterLevel: currentWaterLevel           // Express/Node camelCase
         })
       });
 
@@ -66,7 +69,6 @@ function Custom() {
     setAreas((prev) => {
       const exists = prev.some((a) => a.id === newArea.id);
       if (exists) {
-        // Skapa ett helt nytt objekt i tillståndet så React upptäcker att geometrin ändrats
         return prev.map((a) => (a.id === newArea.id ? { ...newArea } : a));
       }
       return [...prev, { ...newArea }];
@@ -98,20 +100,20 @@ function Custom() {
     }
   };
 
-  // Kör om analysen när det AKTIVA OMRÅDET (dess geojson/yta) eller kartlagret ändras
+  // Kör om analysen när det AKTIVA OMRÅDET, kartlagret ELLER vattennivån ändras
   useEffect(() => {
     if (!activeArea || !activeArea.geojson || !activeArea.sqMeters) {
       setAnalysisData(null);
       return;
     }
 
-    // Debounce: vänta 300 ms efter sista dragningen/nodändringen innan backend kallas
+    // Debounce: vänta 300 ms efter sista dragningen/sliderändringen innan backend kallas
     const timer = setTimeout(() => {
-      fetchAnalysis(activeArea.geojson, activeArea.sqMeters, active);
+      fetchAnalysis(activeArea.geojson, activeArea.sqMeters, active, waterLevel);
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [activeArea, active]); // Lyssnar direkt på hela activeArea-objektet!
+  }, [activeArea, active, waterLevel]);
 
   return (
     <div
@@ -134,7 +136,12 @@ function Custom() {
       
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: '60px', padding: '30px', flex: "1" }}>
         <div style={{ position: 'relative', zIndex: 900 }}>
-          <Customsidebar active={active} setActive={setActive} setWaterLevel={setWaterLevel} />
+          <Customsidebar 
+            active={active} 
+            setActive={setActive} 
+            waterLevel={waterLevel} 
+            setWaterLevel={setWaterLevel} 
+          />
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', flex: 1, width: '100%', position: 'relative', zIndex: 1 }}>

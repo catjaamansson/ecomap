@@ -1,6 +1,6 @@
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
-import { MapContainer, TileLayer, GeoJSON, Marker, Popup } from 'react-leaflet'
+import { MapContainer, TileLayer } from 'react-leaflet'
 import { AreaDrawer } from './areadraw.jsx';
 
 L.Icon.Default.mergeOptions({
@@ -9,8 +9,16 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
 })
 
-function MapView({ center, zoom, children }) {
-  console.log('MapView mounted, children:', children)
+function MapView({ 
+  center, 
+  zoom, 
+  children, 
+  onAreaCreated, 
+  onAreaDeleted, 
+  onAreaSelected,
+  clearTrigger,
+  activeAreaId 
+}) {
   return (
     <div style={{ height: '100%', width: '100%' }}>
       <MapContainer
@@ -23,11 +31,19 @@ function MapView({ center, zoom, children }) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
+        <AreaDrawer 
+          onAreaCreated={onAreaCreated} 
+          onAreaDeleted={onAreaDeleted} 
+          onAreaSelected={onAreaSelected}
+          clearTrigger={clearTrigger}
+          activeAreaId={activeAreaId}
+        />
+
         {children}
       </MapContainer>
     </div>
   )
 }
 
-export default MapView
+export default MapView;
 

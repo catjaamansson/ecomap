@@ -1,12 +1,11 @@
-import { useState } from 'react'
+import React from 'react'
 
-const CustomStudySidebar = ({ active, setActive, setWaterLevel }) => {
-  const [sliderValue, setSliderValue] = useState(0)
+const CustomStudySidebar = ({ active, setActive, waterLevel, setWaterLevel }) => {
+
   const selectLayer = (layer) => {
-  setActive(active === layer ? null : layer)
-  setSliderValue(0)
-  setWaterLevel(0)
-}
+    setActive(active === layer ? null : layer)
+  }
+
   const toggleLandUse = () => {
     selectLayer('landUse')
   }
@@ -18,17 +17,19 @@ const CustomStudySidebar = ({ active, setActive, setWaterLevel }) => {
   const waterbodies = () => {
     selectLayer('waterbodies')
   }
+
   const vegetation = () => {
     selectLayer('vegetation')
   }
+
   const waterquality = () => {
     selectLayer('waterquality')
   }
+
   const handleSliderChange = (e) => {
     const value = Number(e.target.value)
-    setSliderValue(value)
     setWaterLevel(value)
-    setActive(null) // deselect buttons when slider is used
+    setActive(null) // Avmarkera knappar när slidern används
   }
 
   return (
@@ -47,14 +48,14 @@ const CustomStudySidebar = ({ active, setActive, setWaterLevel }) => {
       {/* flooding slider */}
       <div style={{ paddingTop: '15px' }}>
         <label style={{ color: '#86DB90', fontWeight: 'bold', fontSize: '14px', display: 'block', marginBottom: '10px' }}>
-          Water level: {sliderValue} m
+          Water level: {waterLevel} m
         </label>
         <input 
           type="range" 
           min="0" 
           max="10" 
           step="0.5"
-          value={sliderValue}
+          value={waterLevel}
           onChange={handleSliderChange}
           style={{
             width: '100%',

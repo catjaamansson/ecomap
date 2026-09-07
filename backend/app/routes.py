@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from .services.flood_model import flood_to_geojson
+from .services.flood_model import flood_to_geojson, analyze_flood_area
 from .services.land_use_model import land_use_to_geojson, analyze_land_use_area, land_use_at_point
 from .services.water_quality_model import water_quality_to_geojson, water_quality_at_point, analyze_water_quality_area
 from .services.forest_model import forest_to_geojson, analyze_forest_area
@@ -39,7 +39,6 @@ def get_land_use_point():
 
         result = land_use_at_point(lat, lng)
 
-        # Säkerställ att responset har exakt de nycklar som Frontend letar efter
         if isinstance(result, dict):
             info = result.get("land_use_type", {})
             name = info.get("name") if isinstance(info, dict) else (result.get("type") or str(info))
@@ -176,31 +175,58 @@ def analyze_area():
             return jsonify({"error": "Ingen giltig JSON skickades"}), 400
 
         geometry = data.get("geometry")
-        sq_meters = data.get("sqMeters")
-        layer_type = data.get("layer", "landuse") # Hämta aktivt lager från frontend
+        sq_meters = data.get("total_sqm") or data.get("sqMeters") or 0
+        water_level = data.get("water_level", 0)
+        layer_type = data.get("layer", "landuse")
 
         if not geometry:
             return jsonify({"error": "Geometri saknas i anropet"}), 400
 
-        # SKICKA MED sq_meters TILL ALLA ANALYSER
+        # Utför den skarpa översvämningsanalysen mot DEM via flood_model.py
+        flood_res = analyze_flood_area(geometry, water_level, sq_meters)
+        flooded_sqm = flood_res.get("flooded_sqm", 0)
+        flooded_percentage = flood_res.get("flooded_percentage", 0)
+        
+        # Säkerställ att etiketter skickas med flera nyckelnamn för frontend-kompatibilitet
+        dry_sqm = max(0, sq_meters - flooded_sqm)
+        dry_percentage = round(max(0, 100 - flooded_percentage), 1)
+        
+        flood_breakdown = [
+            {
+                "name": "Flooded mark",
+                "label": "Flooded mark",
+                "category": "Flooded mark",
+                "sqm": flooded_sqm,
+                "percentage": flooded_percentage
+            },
+            {
+                "name": "Torr mark",
+                "label": "Torr mark",
+                "category": "Torr mark",
+                "sqm": dry_sqm,
+                "percentage": dry_percentage
+            }
+        ]
+
+        # Utför övriga analysmodeller
         land_use_res = analyze_land_use_area(geometry, sq_meters)
         water_res = analyze_water_bodies_area(geometry, sq_meters)
         forest_res = analyze_forest_area(geometry, sq_meters)
         water_quality_res = analyze_water_quality_area(geometry)
-        
-        # Beräkna markfuktighet och skicka med sq_meters för korrekt yta
         soil_moisture_res = calculate_soilmoisture_summary(geometry, sq_meters)
 
-        # Extrahera breakdown-listor säkert
+        # Extrahera breakdown-listor
         land_breakdown = land_use_res.get('breakdown', []) if isinstance(land_use_res, dict) else []
         water_breakdown = water_res.get('breakdown', []) if isinstance(water_res, dict) else []
         forest_breakdown = forest_res.get('breakdown', []) if isinstance(forest_res, dict) else []
         wq_breakdown = water_quality_res.get('breakdown', []) if isinstance(water_quality_res, dict) else []
         soil_breakdown = soil_moisture_res.get('breakdown', []) if isinstance(soil_moisture_res, dict) else []
 
-        # Om frontend förväntar sig ett platt 'breakdown' direkt på rotnivå:
+        # Välj aktiva breakdown-data baserat på lager eller vattennivå
         active_breakdown = land_breakdown
-        if layer_type in ['waterbodies', 'waterBodies']:
+        if water_level > 0 or layer_type in ['flood', 'hydrology']:
+            active_breakdown = flood_breakdown
+        elif layer_type in ['waterbodies', 'waterBodies']:
             active_breakdown = water_breakdown
         elif layer_type in ['forest', 'vegetation']:
             active_breakdown = forest_breakdown
@@ -211,9 +237,16 @@ def analyze_area():
 
         return jsonify({
             'total_sqm': sq_meters,
-            'breakdown': active_breakdown, # <--- Direkt breakdown för det valda lagret!
-            'soil_moisture': soil_moisture_res, # Snabbåtkomst till min/max/medel för markfuktighet
+            'water_level': water_level,
+            'flooded_sqm': flooded_sqm,
+            'flooded_percentage': flooded_percentage,
+            'breakdown': active_breakdown,
+            'soil_moisture': soil_moisture_res,
             'layers': {
+                'flood': {
+                    'title': f'Flooding at {water_level}m',
+                    'breakdown': flood_breakdown
+                },
                 'landUse': {
                     'title': 'Land Use Coverage',
                     'breakdown': land_breakdown

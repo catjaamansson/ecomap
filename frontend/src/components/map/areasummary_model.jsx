@@ -118,14 +118,15 @@ export default function AreaSummaryModel({ data, selectedAreaSqM, loading, error
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                       {layer.breakdown && layer.breakdown.length > 0 ? (
                         layer.breakdown.map((item, index) => {
-                          const hasSqm = typeof item.sqm === 'number' && item.sqm > 0;
-                          const itemSqm = hasSqm ? item.sqm : (item.percent / 100) * selectedSqm;
+                          const hasSqm = typeof item.sqm === 'number' && Number.isFinite(item.sqm);
+                          const itemPercent = item.percent ?? item.percentage ?? 0;
+                          const itemSqm = hasSqm ? item.sqm : (itemPercent / 100) * selectedSqm;
                           const itemHa = (itemSqm / 10000).toFixed(2);
                           
                           // Räkna ut % mot ritad yta om sqm finns, annars ta backendens %
                           const realPercent = (hasSqm && selectedSqm > 0)
                             ? ((itemSqm / selectedSqm) * 100).toFixed(2)
-                            : item.percent;
+                            : itemPercent;
 
                           return (
                             <div

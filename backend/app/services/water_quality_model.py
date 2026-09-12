@@ -2,11 +2,9 @@ from pathlib import Path
 import rasterio
 import numpy as np
 from rasterio.features import shapes
-from rasterio.warp import transform as transform_coords
 from rasterio.mask import mask
-import pyproj
 from shapely.geometry import shape, mapping
-from shapely.ops import transform
+from .raster_utils import transform_geometry_to_raster, transform_point_to_raster
 import json
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -53,11 +51,7 @@ def water_quality_to_geojson():
 
 def water_quality_at_point(lat, lng):
     with rasterio.open(WQ_PATH) as src:
-        x, y = lng, lat
-
-        if src.crs and src.crs.to_string() != "EPSG:4326":
-            x_coords, y_coords = transform_coords("EPSG:4326", src.crs, [lng], [lat])
-            x, y = x_coords[0], y_coords[0]
+        x, y = transform_point_to_raster(lng, lat, src, fallback="EPSG:4326")
 
         sampled_value = next(src.sample([(x, y)]))[0]
 
@@ -90,9 +84,11 @@ def analyze_water_quality_area(geojson_geometry, total_sq_meters=None):
         geom_shape = shape(geojson_geometry)
 
         with rasterio.open(WQ_PATH) as src:
-            if src.crs and src.crs.to_string() != "EPSG:4326":
-                transformer = pyproj.Transformer.from_crs("EPSG:4326", src.crs, always_xy=True)
-                geom_shape = transform(transformer.transform, geom_shape)
+            geom_shape = transform_geometry_to_raster(
+                geom_shape,
+                src,
+                fallback="EPSG:4326",
+            )
 
             mask_shapes = [mapping(geom_shape)]
 

@@ -1,10 +1,10 @@
 import rasterio
 from rasterio.mask import mask
 import numpy as np
-from pyproj import Transformer
 from shapely.geometry import shape
-from shapely.ops import transform
+from shapely.ops import transform as shapely_transform
 from .forest_model import FOREST_PATH
+from .raster_utils import transform_geometry_to_raster, transform_point_to_raster
 
 SOIL_PATH = FOREST_PATH.parent / "soilmoisture.tif"
 
@@ -32,13 +32,7 @@ def soil_moisture_at_point(lat, lng):
 
     try:
         with rasterio.open(SOIL_PATH) as src:
-            tif_crs = src.crs if src.crs else "EPSG:4326"
-            
-            if tif_crs.to_string().upper() not in ["EPSG:4326", "OGC:CRS84"]:
-                transformer = Transformer.from_crs("EPSG:4326", tif_crs, always_xy=True)
-                x, y = transformer.transform(lng, lat)
-            else:
-                x, y = lng, lat
+            x, y = transform_point_to_raster(lng, lat, src, fallback="EPSG:4326")
 
             vals = list(src.sample([(x, y)]))
             val = float(vals[0][0]) if len(vals) > 0 else None
@@ -61,14 +55,7 @@ def calculate_soilmoisture_summary(geojson_geometry, total_sqm=None):
         raw_geom = shape(geojson_geometry)
 
         with rasterio.open(SOIL_PATH) as src:
-            tif_crs = src.crs if src.crs else "EPSG:4326"
-
-            # 1. Transformera om rastern inte är i WGS84
-            if tif_crs.to_string().upper() not in ["EPSG:4326", "OGC:CRS84"]:
-                project = Transformer.from_crs("EPSG:4326", tif_crs, always_xy=True).transform
-                geom = transform(project, raw_geom)
-            else:
-                geom = raw_geom
+            geom = transform_geometry_to_raster(raw_geom, src, fallback="EPSG:4326")
 
             # 2. Försök första maskeringen (standard lat/lng)
             try:
@@ -83,11 +70,15 @@ def calculate_soilmoisture_summary(geojson_geometry, total_sqm=None):
 
             # 3. Om ingen data hittades: Vänd på lat/lng (x/y) och försök igen
             if len(valid_pixels) == 0:
-                flipped_geom = transform(lambda x, y, z=None: (y, x), raw_geom)
-                
-                if tif_crs.to_string().upper() not in ["EPSG:4326", "OGC:CRS84"]:
-                    project = Transformer.from_crs("EPSG:4326", tif_crs, always_xy=True).transform
-                    flipped_geom = transform(project, flipped_geom)
+                flipped_geom = shapely_transform(
+                    lambda x, y, z=None: (y, x),
+                    raw_geom,
+                )
+                flipped_geom = transform_geometry_to_raster(
+                    flipped_geom,
+                    src,
+                    fallback="EPSG:4326",
+                )
 
                 out_image, out_transform = mask(src, [flipped_geom], crop=True, all_touched=True)
                 data = out_image[0]

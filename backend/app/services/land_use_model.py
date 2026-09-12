@@ -3,9 +3,8 @@ from rasterio.features import shapes
 from rasterio.mask import mask
 import numpy as np
 from pathlib import Path
-from pyproj import Transformer
 from shapely.geometry import shape, mapping
-from shapely.ops import transform
+from .raster_utils import transform_geometry_to_raster, transform_point_to_raster
 
 # Sökväg till rasterfilen
 LU_PATH = Path(__file__).parent.parent / "data" / "land_use.tif"
@@ -179,15 +178,7 @@ def land_use_at_point(lat, lng):
     with rasterio.open(LU_PATH) as src:
         bounds = src.bounds
 
-        # Om rastret har ett CRS definierat, transformerar vi direkt till det
-        if src.crs:
-            # Transformera från WGS84 (EPSG:4326) direkt till rastrets exakta CRS
-            transformer = Transformer.from_crs("EPSG:4326", src.crs, always_xy=True)
-            x, y = transformer.transform(lng_f, lat_f)
-        else:
-            # Fallback om CRS saknas helt i tif-filen
-            transformer = Transformer.from_crs("EPSG:4326", "EPSG:2400", always_xy=True)
-            x, y = transformer.transform(lng_f, lat_f)
+        x, y = transform_point_to_raster(lng_f, lat_f, src, fallback="EPSG:2400")
 
         try:
             val = list(src.sample([(x, y)]))[0][0]
@@ -216,8 +207,7 @@ from pyproj import Geod
 import rasterio
 from rasterio.mask import mask
 from shapely.geometry import shape, mapping
-from shapely.ops import transform
-from pyproj import Transformer, Geod
+from pyproj import Geod
 import numpy as np
 
 def analyze_land_use_area(geojson_geometry, total_sq_meters=None):
@@ -235,11 +225,8 @@ def analyze_land_use_area(geojson_geometry, total_sq_meters=None):
     total_area_sqm = abs(geod.geometry_area_perimeter(wgs84_geom)[0])
 
     with rasterio.open(LU_PATH) as src:
-        # Omvandlar WGS84-geometrin till rastrets interna koordinatsystem (CRS)
-        target_crs = src.crs if src.crs else "EPSG:3006"  # SWEREF99 TM som standard i Sverige
         try:
-            transformer = Transformer.from_crs("EPSG:4326", target_crs, always_xy=True)
-            transformed_geom = transform(transformer.transform, wgs84_geom)
+            transformed_geom = transform_geometry_to_raster(wgs84_geom, src)
         except Exception as e:
             print(f"Transform error: {e}")
             transformed_geom = wgs84_geom

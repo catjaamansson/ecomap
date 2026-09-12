@@ -3,6 +3,8 @@ import rasterio
 import rasterio.mask
 import numpy as np
 from rasterio.features import shapes
+from shapely.geometry import shape
+from .raster_utils import transform_geometry_to_raster
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DEM_PATH = BASE_DIR / "data" / "dem.tif"
@@ -44,9 +46,14 @@ def analyze_flood_area(geometry, water_level, total_sqm=0):
 
     try:
         with rasterio.open(DEM_PATH) as src:
+            raster_geometry = transform_geometry_to_raster(
+                shape(geometry),
+                src,
+                fallback="EPSG:4326",
+            )
             out_image, out_transform = rasterio.mask.mask(
                 src,
-                [geometry],
+                [raster_geometry],
                 crop=True,
                 filled=False,
             )

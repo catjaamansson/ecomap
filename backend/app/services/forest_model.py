@@ -4,8 +4,7 @@ import rasterio
 from rasterio.mask import mask
 from rasterio.features import rasterize
 from shapely.geometry import shape
-import pyproj
-from shapely.ops import transform
+from .raster_utils import transform_geometry_to_raster
 
 # Sökväg till skogsdatasetet i backend/app/data
 CURRENT_FILE = Path(__file__).resolve()
@@ -25,11 +24,7 @@ def analyze_forest_area(geojson_geometry, total_sq_meters=None):
             user_shape = user_shape.buffer(0)
 
         with rasterio.open(FOREST_PATH) as src:
-            tif_crs = src.crs if src.crs else "EPSG:3006"
-            
-            # Projektion till rasterns CRS
-            transformer = pyproj.Transformer.from_crs("EPSG:4326", tif_crs, always_xy=True)
-            transformed_shape = transform(transformer.transform, user_shape)
+            transformed_shape = transform_geometry_to_raster(user_shape, src)
 
             # klipp ut rasterdata med den inskickade polygonen
             out_image, out_transform = mask(

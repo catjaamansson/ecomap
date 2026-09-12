@@ -15,9 +15,9 @@ function Navbar() {
   return (
     <nav style={{
       display: 'flex',
-      justifyContent: 'space-around',
+      justifyContent: 'center',
       alignItems: 'center',
-      padding: '15px 20px',
+      padding: '6px 20px',
       backgroundImage: 'radial-gradient(circle at 20% 50%, #4a8262 0%, #396449 100%)',
       position: 'sticky',
       top: 0,
@@ -25,18 +25,33 @@ function Navbar() {
       boxShadow: '0 4px 6px rgba(0, 0, 0, 0.2)'
     }}>
       
-      <div style={{ display: 'flex', gap: '20px', justifyContent: 'space-around', width: '100%' }}>
-        <h1 className="font-bold" style={{ 
-          fontFamily: 'Playfair Display, serif',
-          color: '#223D2D', 
-          fontSize: '28px', 
-          margin: 0, 
-          padding: '0 20px',
-          fontWeight: '700',
-          textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)',
-          transition: 'all 0.3s ease',
-          letterSpacing: '2px'
-        }}>EcoMap</h1>
+      <div style={{ display: 'flex', gap: '42px', justifyContent: 'space-between', alignItems: 'center', width: '100%', maxWidth: '1600px' }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+          flexShrink: 0,
+        }}>
+          <img
+            src="/ecomap_logo.svg"
+            alt="EcoMap logo"
+            style={{
+              width: '68px',
+              height: '48px',
+              objectFit: 'contain',
+            }}
+          />
+          <span style={{
+            color: '#223D2D',
+            fontFamily: 'Playfair Display, serif',
+            fontSize: '24px',
+            fontWeight: '700',
+            letterSpacing: '2px',
+            textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)',
+          }}>
+            EcoMap
+          </span>
+        </div>
         
         {tabs.map((tab) => (
           <Link key={tab.label} to={tab.path} style={{ textDecoration: 'none' }}>

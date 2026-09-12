@@ -179,13 +179,13 @@ def land_use_at_point(lat, lng):
     with rasterio.open(LU_PATH) as src:
         bounds = src.bounds
 
-        # Om rastret har ett CRS definierat, transformerar vi direkt till det!
+        # Om rastret har ett CRS definierat, transformerar vi direkt till det
         if src.crs:
             # Transformera från WGS84 (EPSG:4326) direkt till rastrets exakta CRS
             transformer = Transformer.from_crs("EPSG:4326", src.crs, always_xy=True)
             x, y = transformer.transform(lng_f, lat_f)
         else:
-            # Fallback om CRS saknas helt i tif-filen (gissar RT90 2.5 gon V)
+            # Fallback om CRS saknas helt i tif-filen
             transformer = Transformer.from_crs("EPSG:4326", "EPSG:2400", always_xy=True)
             x, y = transformer.transform(lng_f, lat_f)
 
@@ -230,12 +230,12 @@ def analyze_land_use_area(geojson_geometry, total_sq_meters=None):
         print(f"Geometry error: {e}")
         return {"total_sqm": 0, "breakdown": []}
 
-    # 1. Beräkna den riktiga geodetiska ytan på jordklotet (WGS84)
+    # Beräknar den riktiga geodetiska ytan på jordklotet (WGS84)
     geod = Geod(ellps="WGS84")
     total_area_sqm = abs(geod.geometry_area_perimeter(wgs84_geom)[0])
 
     with rasterio.open(LU_PATH) as src:
-        # 2. Omvandla WGS84-geometrin till rastrets interna koordinatsystem (CRS)
+        # Omvandlar WGS84-geometrin till rastrets interna koordinatsystem (CRS)
         target_crs = src.crs if src.crs else "EPSG:3006"  # SWEREF99 TM som standard i Sverige
         try:
             transformer = Transformer.from_crs("EPSG:4326", target_crs, always_xy=True)
@@ -246,7 +246,7 @@ def analyze_land_use_area(geojson_geometry, total_sq_meters=None):
 
         mask_shapes = [mapping(transformed_geom)]
 
-        # 3. Klipp ut rastret för den valda geometrin
+        # Klipper ut rastret för den valda geometrin
         try:
             out_image, _ = mask(src, mask_shapes, crop=True, filled=False)
         except Exception as e:
@@ -255,7 +255,7 @@ def analyze_land_use_area(geojson_geometry, total_sq_meters=None):
 
         data = out_image[0]
 
-        # Hämta enbart de pixlar som faller inom polygonen
+        # Hämtar enbart de pixlar som faller inom polygonen
         if hasattr(data, 'compressed'):
             pixels = data.compressed()
         else:
@@ -264,7 +264,7 @@ def analyze_land_use_area(geojson_geometry, total_sq_meters=None):
         if len(pixels) == 0:
             return {"total_sqm": round(total_area_sqm, 2), "breakdown": []}
 
-        # Ta bort Nodata / bakgrundsvärden
+        # Tar bort Nodata / bakgrundsvärden
         nodata_val = src.nodata if src.nodata is not None else 0
         valid_pixels = pixels[pixels != nodata_val]
 
@@ -272,13 +272,13 @@ def analyze_land_use_area(geojson_geometry, total_sq_meters=None):
         if total_valid_pixels == 0:
             return {"total_sqm": round(total_area_sqm, 2), "breakdown": []}
 
-        # 4. Räkna förekomsten av varje markanvändningskod
+        # Räknar förekomsten av varje markanvändningskod
         counts = {}
         for pixel_val in valid_pixels:
             val = int(pixel_val)
             counts[val] = counts.get(val, 0) + 1
 
-        # 5. Räkna ut procenten exakt baserat på antalet träffade markpixlar
+        # Räknar ut procenten exakt baserat på antalet träffade markpixlar
         breakdown = []
         for val, count in counts.items():
             info = classify_land_use(val)

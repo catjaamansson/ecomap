@@ -5,7 +5,6 @@ from .services.water_quality_model import water_quality_to_geojson, water_qualit
 from .services.forest_model import forest_to_geojson, analyze_forest_area
 from .services.waterbodies_model import water_bodies_to_geojson, analyze_water_bodies_area
 from .services.soilmoisture_model import soil_moisture_to_geojson, soil_moisture_at_point, calculate_soilmoisture_summary
-from .services.forest2_model import forest2_to_geojson
 from .services.landuse_model_click import land_use_at_point as land_use_click_at_point
 import csv
 import os

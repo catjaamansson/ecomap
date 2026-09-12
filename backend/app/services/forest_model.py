@@ -7,17 +7,9 @@ from shapely.geometry import shape
 import pyproj
 from shapely.ops import transform
 
-# Sätt sökvägen dynamiskt
+# Sökväg till skogsdatasetet i backend/app/data
 CURRENT_FILE = Path(__file__).resolve()
-BASE_DIR = CURRENT_FILE.parent.parent.parent # ecomap/backend
-
-# Kolla båda möjliga mappsökvägarna
-FOREST_PATH = BASE_DIR / "data" / "forest.tif"
-if not FOREST_PATH.exists():
-    FOREST_PATH = CURRENT_FILE.parent.parent / "data" / "forest.tif"
-
-print(f"[Forest] Använder fil: {FOREST_PATH}")
-print(f"[Forest] Hittades filen? -> {FOREST_PATH.exists()}")
+FOREST_PATH = CURRENT_FILE.parent.parent / "data" / "forest.tif"
 
 def forest_to_geojson():
     return {"type": "FeatureCollection", "features": []}
@@ -39,7 +31,7 @@ def analyze_forest_area(geojson_geometry, total_sq_meters=None):
             transformer = pyproj.Transformer.from_crs("EPSG:4326", tif_crs, always_xy=True)
             transformed_shape = transform(transformer.transform, user_shape)
 
-            # 1. Klipp rastern
+            # klipp ut rasterdata med den inskickade polygonen
             out_image, out_transform = mask(
                 src, 
                 [transformed_shape], 
@@ -48,7 +40,7 @@ def analyze_forest_area(geojson_geometry, total_sq_meters=None):
                 all_touched=True
             )
 
-            # 2. Skapa exakt polygon-mask för urvalet
+            # Skapar exakt polygon-mask för urvalet
             poly_mask = rasterize(
                 [(transformed_shape, 1)],
                 out_shape=(out_image.shape[1], out_image.shape[2]),
@@ -58,12 +50,12 @@ def analyze_forest_area(geojson_geometry, total_sq_meters=None):
                 dtype=np.uint8
             )
 
-            # 3. Omvandla MaskedArray till matris där maskerade pixlar blir 0
+            # Omvandlar MaskedArray till matris där maskerade pixlar blir 0
             data_band = out_image[0]
             if np.ma.is_masked(data_band):
                 data_band = data_band.filled(0)
 
-            # 4. Spara enbart pixlar som hamnar INUTI din ritade polygon
+            # Sparar enbart pixlar som hamnar INUTI din ritade polygon
             valid_pixels = data_band[poly_mask == 1]
 
             calc_total_sqm = float(total_sq_meters) if (total_sq_meters and float(total_sq_meters) > 0) else 0.0
@@ -71,7 +63,7 @@ def analyze_forest_area(geojson_geometry, total_sq_meters=None):
             if valid_pixels.size == 0:
                 return {'breakdown': [{'type': 'No Forest / Other', 'sqm': round(calc_total_sqm, 2), 'percent': 100.0}]}
 
-            # 5. Räkna Skog (1) och Övrigt (0)
+            # Räknar ut antal pixlar som representerar Skog (1) och Övrigt (0)
             forest_pixel_count = np.sum(valid_pixels == 1)
             total_pixel_count = valid_pixels.size
 

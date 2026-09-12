@@ -43,11 +43,11 @@ function WaterQualityLayer({ showWaterQuality }) {
         const getColor = (waterQualityValue) => {
             // classification based on water quality value
             
-            if (waterQualityValue >= 1 && waterQualityValue <= 20) return '#1B1777' // Good (green)
-            if (waterQualityValue >= 20 && waterQualityValue <= 40) return '#3465BA' // Acceptable (yellow)
-            if (waterQualityValue >= 40 && waterQualityValue <= 60) return '#3D89D8' // Fair (orange)
-            if (waterQualityValue >= 60 && waterQualityValue <= 80) return '#3CD0C2' // Poor (red)
-            if (waterQualityValue >= 80 && waterQualityValue <= 100) return '#45CA84' // Very Poor (dark red)
+            if (waterQualityValue >= 1 && waterQualityValue <= 30) return '#1B1777' // Good (green)
+            if (waterQualityValue >= 30 && waterQualityValue <= 50) return '#3465BA' // Acceptable (yellow)
+            if (waterQualityValue >= 50 && waterQualityValue <= 70) return '#3D89D8' // Fair (orange)
+            if (waterQualityValue >= 70 && waterQualityValue <= 90) return '#3CD0C2' // Poor (red)
+            if (waterQualityValue >= 90) return '#45CA84' // Very Poor 
             return 'transparent' 
         }
 

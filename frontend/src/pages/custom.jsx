@@ -7,6 +7,7 @@ import ForestLayer from '../components/map/layers/ecology/forestlayer.jsx';
 import Landuselayers from '../components/map/layers/fieldstudy/landuselayer_tiles.jsx';
 import Waterbodieslayers from '../components/map/layers/ecology/waterbodiestiles.jsx';
 import Waterquality from '../components/map/layers/hydrology/waterquality_tiles.jsx';
+import WaterQualityClickPopup from '../components/map/layers/hydrology/waterquality_click.jsx';
 import Flooding from '../components/map/layers/hydrology/floodlayers_tiles.jsx';
 import LandUseClickPopup from '../components/map/layers/fieldstudy/landuse_click.jsx';
 import { AreaDrawer } from '../components/map/areadraw.jsx';
@@ -174,7 +175,12 @@ function Custom() {
                 </>
               )}
               
-              {active === 'waterquality' && <Waterquality key="waterquality" />}
+              {active === 'waterquality' && (
+                <>
+                  <Waterquality key="waterquality" />
+                  <WaterQualityClickPopup key="waterquality_click" />
+                </>
+              )}
               {waterLevel > 0 && <Flooding level={waterLevel} key="flooding" />}
             </Mapview>
           </div>

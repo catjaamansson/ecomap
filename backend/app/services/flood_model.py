@@ -34,10 +34,7 @@ def flood_to_geojson(water_level):
     }
 
 def analyze_flood_area(geometry, water_level, total_sqm=0):
-    """
-    Klipper DEM-rastern mot den inskickade polygonen (geometry)
-    och beräknar hur stor del av området som ligger under water_level.
-    """
+    """Klipper DEM-rastern mot den inskickade polygonen (geometry) och beräknar hur stor del av området som ligger under water_level."""
     if not geometry or water_level is None:
         return {
             "flooded_sqm": 0,

@@ -16,17 +16,17 @@ def analyze_area():
     if not geometry:
         return jsonify({'error': 'No geometry provided'}), 400
 
-    # 1. Beräkna den exakta valda ytan i meter (EPSG:3006 / SWEREF99 TM)
+    # beräknar ytan i kvadratmeter för den inskickade geometrin
     user_shape = shape(geometry)
     user_gdf = gpd.GeoDataFrame(geometry=[user_shape], crs="EPSG:4326").to_crs(epsg=3006)
     calculated_sqm = float(user_gdf.geometry.area.sum())
 
-    # 2. Kör alla tre analyser med den RIKTIGA kvadratmeterytan
+    # kör analyser för land use, water bodies och water quality
     land_use_res = analyze_land_use_area(geometry, calculated_sqm)
     water_res = analyze_water_bodies_area(geometry, calculated_sqm)
     water_quality_res = analyze_water_quality_area(geometry, calculated_sqm)
 
-    # 3. Returnera i layers-formatet med den verifierade ytan
+    # return sammanställning av resultaten
     return jsonify({
         'total_sqm': calculated_sqm,
         'layers': {

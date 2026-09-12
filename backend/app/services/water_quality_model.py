@@ -22,7 +22,7 @@ def water_quality_to_geojson():
         transform = src.transform
 
     # Mark valid water quality pixels (exclude nodata)
-    wq_mask = wq > -128
+    wq_mask = wq > 0
 
     features = []
     for geom, value in shapes(
@@ -32,7 +32,7 @@ def water_quality_to_geojson():
     ):
         value = int(value)
         # Skip no data
-        if value == -128:
+        if value <= 0:
             continue
         # Classify water quality based on value 
         wq_type = classify_water_quality(int(value))
@@ -61,7 +61,7 @@ def water_quality_at_point(lat, lng):
 
         sampled_value = next(src.sample([(x, y)]))[0]
 
-    if sampled_value == -128:
+    if sampled_value <= 0:
         return {"error": "No data at this location"}
 
     sampled_value = int(sampled_value)
@@ -72,15 +72,15 @@ def water_quality_at_point(lat, lng):
     }
 
 def classify_water_quality(value):
-    if value >= 1 and value <= 20:
+    if value >= 1 and value <= 30:
         return "Good"
-    elif value >= 20 and value <= 40:
+    elif value >= 30 and value <= 50:
         return "Acceptable"
-    elif value >= 40 and value <= 60:
+    elif value >= 50 and value <= 70:
         return "Moderate"
-    elif value >= 60 and value <= 80:
+    elif value >= 70 and value <= 90:
         return "Poor"
-    elif value >= 80 and value <= 100:
+    elif value >= 90:
         return "Very Poor"
     else:
         return f"Unclassified / Land"

@@ -47,7 +47,7 @@ const CustomStudySidebar = ({ active, setActive, waterLevel, setWaterLevel }) =>
     >
       {/* flooding slider */}
       <div style={{ paddingTop: '15px' }}>
-        <label style={{ color: '#86DB90', fontWeight: 'bold', fontSize: '14px', display: 'block', marginBottom: '10px' }}>
+        <label style={{ color: '#ffffff', fontWeight: 'bold', fontSize: '14px', display: 'block', marginBottom: '10px' }}>
           Water level: {waterLevel} m
         </label>
         <input 
@@ -73,7 +73,7 @@ const CustomStudySidebar = ({ active, setActive, waterLevel, setWaterLevel }) =>
           padding: '15px',
           textAlign: 'center',
           backgroundColor: '#597D68',
-          color: '#223D2D',
+          color: '#ffffff',
           border: active === 'waterquality' ? '3px solid #86DB90' : 'none',
           borderRadius: '12px',
           cursor: 'pointer',
@@ -91,7 +91,7 @@ const CustomStudySidebar = ({ active, setActive, waterLevel, setWaterLevel }) =>
           padding: '15px',
           textAlign: 'center',
           backgroundColor: '#597D68',
-          color: '#223D2D',
+          color: '#ffffff',
           border: active === 'vegetation' ? '3px solid #86DB90' : 'none',
           borderRadius: '12px',
           cursor: 'pointer',
@@ -109,7 +109,7 @@ const CustomStudySidebar = ({ active, setActive, waterLevel, setWaterLevel }) =>
           padding: '15px',
           textAlign: 'center',
           backgroundColor: '#597D68',
-          color: '#223D2D',
+          color: '#ffffff',
           border: active === 'landUse' ? '3px solid #86DB90' : 'none',
           borderRadius: '12px',
           cursor: 'pointer',
@@ -127,7 +127,7 @@ const CustomStudySidebar = ({ active, setActive, waterLevel, setWaterLevel }) =>
           padding: '15px',
           textAlign: 'center',
           backgroundColor: '#597D68',
-          color: '#223D2D',
+          color: '#ffffff',
           border: active === 'waterbodies' ? '3px solid #86DB90' : 'none',
           borderRadius: '12px',
           cursor: 'pointer',
@@ -145,7 +145,7 @@ const CustomStudySidebar = ({ active, setActive, waterLevel, setWaterLevel }) =>
           padding: '15px',
           textAlign: 'center',
           backgroundColor: '#597D68',
-          color: '#223D2D',
+          color: '#ffffff',
           border: active === 'soil_moisture' ? '3px solid #86DB90' : 'none',
           borderRadius: '12px',
           cursor: 'pointer',

@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom'
 function Navbar() {
   const tabs = [
     { label: "Home", path: "/" },
-    { label: "Hydrology", path: "/hydrology" },
-    { label: "Ecology", path: "/ecology" },
-    { label: "Field Study", path: "/field_study" },
+    { label: "Map", path: "/hydrology" },
+    { label: "About Ecomap", path: "/ecology" },
+    { label: "Data sources", path: "/field_study" },
     { label: "Custom", path: "/custom" }
   ]
   
@@ -25,26 +25,27 @@ function Navbar() {
       boxShadow: '0 4px 6px rgba(0, 0, 0, 0.2)'
     }}>
       
-      <div style={{ display: 'flex', gap: '42px', justifyContent: 'space-between', alignItems: 'center', width: '100%', maxWidth: '1600px' }}>
+      <div className="navbar-content">
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '6px',
+          justifyContent: 'center',
+          gap: '10px',
           flexShrink: 0,
         }}>
           <img
             src="/ecomap_logo.svg"
             alt="EcoMap logo"
             style={{
-              width: '68px',
-              height: '48px',
+              width: '84px',
+              height: '58px',
               objectFit: 'contain',
             }}
           />
           <span style={{
             color: '#223D2D',
             fontFamily: 'Playfair Display, serif',
-            fontSize: '24px',
+            fontSize: '27px',
             fontWeight: '700',
             letterSpacing: '2px',
             textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)',

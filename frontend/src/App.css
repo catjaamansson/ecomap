@@ -6,6 +6,22 @@
   text-align: center;
 }
 
+.navbar-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  max-width: 1600px;
+}
+
+@media (max-width: 760px) {
+  .navbar-content {
+    gap: 8px;
+    overflow-x: auto;
+  }
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;

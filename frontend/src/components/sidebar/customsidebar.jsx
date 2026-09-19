@@ -37,10 +37,10 @@ const CustomStudySidebar = ({ active, setActive, waterLevel, setWaterLevel }) =>
       style={{ 
         display: 'flex',
         flexDirection: 'column',
-        gap: '15px',
-        padding: '25px',
-        backgroundColor: '#345742ff',
-        width: '220px',
+        gap: '10px',
+        padding: '20px',
+        backgroundColor: 'rgba(25, 56, 25, 0.6)',
+        width: '200px',
         borderRadius: '20px',
         boxShadow: '0 4px 8px rgba(0,0,0,0.15)'
       }}
@@ -60,7 +60,7 @@ const CustomStudySidebar = ({ active, setActive, waterLevel, setWaterLevel }) =>
           style={{
             width: '100%',
             cursor: 'pointer',
-            accentColor: '#86DB90'
+            accentColor: '#A6BB77'
           }}
         />
       </div>
@@ -72,9 +72,9 @@ const CustomStudySidebar = ({ active, setActive, waterLevel, setWaterLevel }) =>
           width: '100%',
           padding: '15px',
           textAlign: 'center',
-          backgroundColor: '#597D68',
+          backgroundColor: '#6F967C',
           color: '#ffffff',
-          border: active === 'waterquality' ? '3px solid #86DB90' : 'none',
+          border: active === 'waterquality' ? '3px solid #A6BB77' : 'none',
           borderRadius: '12px',
           cursor: 'pointer',
           fontWeight: active === 'waterquality' ? 'bold' : 'normal'
@@ -90,9 +90,9 @@ const CustomStudySidebar = ({ active, setActive, waterLevel, setWaterLevel }) =>
           width: '100%',
           padding: '15px',
           textAlign: 'center',
-          backgroundColor: '#597D68',
+          backgroundColor: '#6F967C',
           color: '#ffffff',
-          border: active === 'vegetation' ? '3px solid #86DB90' : 'none',
+          border: active === 'vegetation' ? '3px solid #A6BB77' : 'none',
           borderRadius: '12px',
           cursor: 'pointer',
           fontWeight: active === 'vegetation' ? 'bold' : 'normal'
@@ -108,9 +108,9 @@ const CustomStudySidebar = ({ active, setActive, waterLevel, setWaterLevel }) =>
           width: '100%',
           padding: '15px',
           textAlign: 'center',
-          backgroundColor: '#597D68',
+          backgroundColor: '#6F967C',
           color: '#ffffff',
-          border: active === 'landUse' ? '3px solid #86DB90' : 'none',
+          border: active === 'landUse' ? '3px solid #A6BB77' : 'none',
           borderRadius: '12px',
           cursor: 'pointer',
           fontWeight: active === 'landUse' ? 'bold' : 'normal'
@@ -126,9 +126,9 @@ const CustomStudySidebar = ({ active, setActive, waterLevel, setWaterLevel }) =>
           width: '100%',
           padding: '15px',
           textAlign: 'center',
-          backgroundColor: '#597D68',
+          backgroundColor: '#6F967C',
           color: '#ffffff',
-          border: active === 'waterbodies' ? '3px solid #86DB90' : 'none',
+          border: active === 'waterbodies' ? '3px solid #A6BB77' : 'none',
           borderRadius: '12px',
           cursor: 'pointer',
           fontWeight: active === 'waterbodies' ? 'bold' : 'normal'
@@ -144,9 +144,9 @@ const CustomStudySidebar = ({ active, setActive, waterLevel, setWaterLevel }) =>
           width: '100%',
           padding: '15px',
           textAlign: 'center',
-          backgroundColor: '#597D68',
+          backgroundColor: '#6F967C',
           color: '#ffffff',
-          border: active === 'soil_moisture' ? '3px solid #86DB90' : 'none',
+          border: active === 'soil_moisture' ? '3px solid #A6BB77' : 'none',
           borderRadius: '12px',
           cursor: 'pointer',
           fontWeight: active === 'soil_moisture' ? 'bold' : 'normal'

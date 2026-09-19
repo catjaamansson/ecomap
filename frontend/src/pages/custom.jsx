@@ -126,16 +126,14 @@ function Custom() {
         minHeight: '100vh',
         margin: 0,
         padding: 0,
-        backgroundColor: '#356d4f',
+        backgroundColor: '#3E663A',
         display: 'flex',
         flexDirection: 'column'
       }}
     >
-      <div style={{ position: 'sticky', top: 0, zIndex: 2000, width: '100%' }}>
-        <Navbar />
-      </div>
+      <Navbar />
       
-      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '60px', padding: '30px', flex: "1" }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '24px', padding: '12px 30px 30px', flex: "1" }}>
         <div style={{ position: 'relative', zIndex: 900 }}>
           <Customsidebar 
             active={active} 
@@ -146,7 +144,7 @@ function Custom() {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', flex: 1, width: '100%', position: 'relative', zIndex: 1 }}>
-          <div style={{ height: '400px', width: '100%', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+          <div style={{ height: '490px', width: '100%', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 8px 20px rgba(15, 35, 24, 0.35)' }}>
             <Mapview center={[55.6229, 13.3486]} zoom={9.4}>
               <AreaDrawer 
                 onAreaCreated={handleAreaCreated}

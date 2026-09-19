@@ -71,7 +71,7 @@ function FieldStudy() {
         flexDirection: 'column'
       }}
     >
-      <div style={{ position: 'sticky', top: 0, zIndex: 2000, width: '100%' }}>
+      <div style={{ width: '100%' }}>
         <Navbar />
       </div>
 

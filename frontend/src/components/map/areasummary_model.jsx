@@ -29,7 +29,7 @@ export default function AreaSummaryModel({ data, selectedAreaSqM, loading, error
 
   if (!data) {
     return (
-      <div style={{ marginTop: '20px', backgroundColor: '#ffffff', borderRadius: '15px', padding: '16px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', fontFamily: 'system-ui, sans-serif', color: '#6b7280', textAlign: 'center', border: '2px dashed #d1d5db' }}>
+      <div style={{ marginTop: '20px', backgroundColor: 'rgba(25, 56, 25, 0.6)', borderRadius: '15px', padding: '16px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', fontFamily: 'system-ui, sans-serif', color: '#ffffff', textAlign: 'center' }}>
         <strong>No area selected:</strong> Draw an area on the map to see the summary
       </div>
     );
@@ -47,13 +47,13 @@ export default function AreaSummaryModel({ data, selectedAreaSqM, loading, error
   };
 
   return (
-    <div style={{ marginTop: '20px', backgroundColor: '#ffffff', borderRadius: '15px', padding: '20px 24px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', fontFamily: 'system-ui, -apple-system, sans-serif', width: '100%', boxSizing: 'border-box' }}>
+    <div style={{ marginTop: '20px', backgroundColor: 'rgba(25, 56, 25, 0.6)', borderRadius: '15px', padding: '20px 24px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', fontFamily: 'system-ui, -apple-system, sans-serif', width: '100%', boxSizing: 'border-box' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid #e5e7eb', paddingBottom: '12px' }}>
-        <h3 style={{ margin: 0, color: '#1b432a', fontSize: '18px', fontWeight: '700' }}>
+        <h3 style={{ margin: 0, color: '#ffffff', fontSize: '18px', fontWeight: '700' }}>
           Area Summary
         </h3>
         {onClose && (
-          <button onClick={onClose} style={{ border: 'none', background: '#f3f4f6', borderRadius: '50%', width: '28px', height: '28px', cursor: 'pointer', fontSize: '14px', color: '#6b7280', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <button onClick={onClose} style={{ border: 'none', background: '#6F967C', borderRadius: '50%', width: '28px', height: '28px', cursor: 'pointer', fontSize: '14px', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             ✕
           </button>
         )}
@@ -61,14 +61,14 @@ export default function AreaSummaryModel({ data, selectedAreaSqM, loading, error
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '20px', alignItems: 'start' }}>
         {/* Vänster spalt: Total Area */}
-        <div style={{ backgroundColor: '#e8f5e9', border: '1px solid #c8e6c9', padding: '16px', borderRadius: '10px', position: 'sticky', top: '10px' }}>
-          <span style={{ fontSize: '11px', color: '#2e6f40', fontWeight: '700', textTransform: 'uppercase' }}>
+        <div style={{ backgroundColor: '#6F967C', border: '1px solid #c8e6c9', padding: '16px', borderRadius: '10px', alignSelf: 'start' }}>
+          <span style={{ fontSize: '11px', color: '#ffffff', fontWeight: '700', textTransform: 'uppercase' }}>
             Selected Area
           </span>
-          <div style={{ fontSize: '24px', fontWeight: '800', color: '#1b432a', marginTop: '4px' }}>
+          <div style={{ fontSize: '24px', fontWeight: '800', color: '#ffffff', marginTop: '4px' }}>
             {totalHa} ha
           </div>
-          <div style={{ fontSize: '13px', color: '#4b5563', marginTop: '2px' }}>
+          <div style={{ fontSize: '13px', color: '#ffffff', marginTop: '2px' }}>
             ({totalSqmStr} m²)
           </div>
         </div>
@@ -88,7 +88,7 @@ export default function AreaSummaryModel({ data, selectedAreaSqM, loading, error
                     width: '100%',
                     padding: '10px 14px',
                     border: 'none',
-                    backgroundColor: isOpen ? '#e8f5e9' : '#f9fafb',
+                    backgroundColor: isOpen ? '#6F967C' : '#f9fafb',
                     color: '#1b432a',
                     fontSize: '13px',
                     fontWeight: '700',

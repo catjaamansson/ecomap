@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Navbar from '../components/navbar.jsx';
 import Mapview from '../components/map/mapview.jsx';
 
@@ -24,7 +24,8 @@ function Custom() {
   const [waterLevel, setWaterLevel] = useState(0);
   const [analysisData, setAnalysisData] = useState(null);
   const [isDrawingArea, setIsDrawingArea] = useState(false);
-  const [clearTrigger, setClearTrigger] = useState(0);
+  const [clearTrigger, setClearTrigger] = useState(null);
+  const layersBeforeDrawingRef = useRef(null);
 
   // Hanterar flera områden
   const [areas, setAreas] = useState([]); // Array av { id, sqMeters, geojson }
@@ -89,14 +90,31 @@ function Custom() {
       const remaining = areas.filter((a) => a.id !== id);
       const nextActive = remaining.length > 0 ? remaining[remaining.length - 1].id : null;
       setActiveAreaId(nextActive);
-      if (!nextActive) setAnalysisData(null);
+      setAnalysisData(null);
+    }
+  };
+
+  const handleDrawingChange = (isDrawing) => {
+    setIsDrawingArea(isDrawing);
+
+    if (isDrawing) {
+      if (layersBeforeDrawingRef.current === null) {
+        layersBeforeDrawingRef.current = activeLayers;
+        setActiveLayers([]);
+      }
+      return;
+    }
+
+    if (layersBeforeDrawingRef.current !== null) {
+      setActiveLayers(layersBeforeDrawingRef.current);
+      layersBeforeDrawingRef.current = null;
     }
   };
 
   // Stäng sammanfattningen och ta bort just det AKTIVA området
   const handleCloseSummary = () => {
     if (activeAreaId) {
-      setClearTrigger((prev) => prev + 1);
+      setClearTrigger(activeAreaId);
       handleAreaDeleted(activeAreaId);
     }
   };
@@ -142,6 +160,7 @@ function Custom() {
             setActive={setActiveLayers}
             waterLevel={waterLevel} 
             setWaterLevel={setWaterLevel} 
+            isDrawingArea={isDrawingArea}
           />
         </div>
 
@@ -152,15 +171,15 @@ function Custom() {
                 onAreaCreated={handleAreaCreated}
                 onAreaSelected={handleAreaSelected}
                 onAreaDeleted={handleAreaDeleted}
-                onDrawingChange={setIsDrawingArea}
+                onDrawingChange={handleDrawingChange}
                 clearTrigger={clearTrigger}
                 activeAreaId={activeAreaId}
               />
 
-              {activeLayers.includes('vegetation') && <ForestLayer key="vegetation" />}
-              {activeLayers.includes('waterbodies') && <Waterbodieslayers key="waterbodies" />}
-              {activeLayers.includes('protected_areas') && <ProtectedAreasLayer key="protected" />}
-              {activeLayers.includes('threatened_animals') && <ThreatenedAnimalsLayer key="animals" />}
+              {activeLayers.includes('vegetation') && !isDrawingArea && <ForestLayer key="vegetation" />}
+              {activeLayers.includes('waterbodies') && !isDrawingArea && <Waterbodieslayers key="waterbodies" />}
+              {activeLayers.includes('protected_areas') && !isDrawingArea && <ProtectedAreasLayer key="protected" />}
+              {activeLayers.includes('threatened_animals') && !isDrawingArea && <ThreatenedAnimalsLayer key="animals" />}
               {activeLayers.includes('soil_moisture') && !isDrawingArea && (
                 <>
                   <Soilmoisture key="soil_moisture" />
@@ -175,13 +194,13 @@ function Custom() {
                 </>
               )}
               
-              {activeLayers.includes('waterquality') && (
+              {activeLayers.includes('waterquality') && !isDrawingArea && (
                 <>
                   <Waterquality key="waterquality" />
                   <WaterQualityClickPopup key="waterquality_click" />
                 </>
               )}
-              {activeLayers.includes('flooding') && waterLevel > 0 && <Flooding level={waterLevel} key="flooding" />}
+              {activeLayers.includes('flooding') && waterLevel > 0 && !isDrawingArea && <Flooding level={waterLevel} key="flooding" />}
             </Mapview>
           </div>
 

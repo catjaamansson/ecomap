@@ -25,12 +25,12 @@ export function AreaDrawer({
     if (clearTrigger) {
       const geomanLayers = map.pm.getGeomanLayers();
       geomanLayers.forEach((layer) => {
-        if (layer._areaId === activeAreaId) {
+        if (layer._areaId === clearTrigger) {
           map.removeLayer(layer);
         }
       });
     }
-  }, [clearTrigger, map, activeAreaId]);
+  }, [clearTrigger, map]);
 
   useEffect(() => {
     if (!map || !map.pm) return;

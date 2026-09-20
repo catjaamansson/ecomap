@@ -69,5 +69,5 @@ python run.py
 ```
 
 ## Screenshots
-<img width="947" height="437" alt="Skärmbild 2026-09-20 213346" src="https://github.com/user-attachments/assets/01a8b497-7db2-4162-b18b-68f42e5c8cc0" />
 <img width="947" height="437" alt="Skärmbild 2026-09-20 213043" src="https://github.com/user-attachments/assets/2ff78685-43f9-47ac-8ef6-ef8fed4e6e2e" />
+<img width="947" height="437" alt="Skärmbild 2026-09-20 213346" src="https://github.com/user-attachments/assets/01a8b497-7db2-4162-b18b-68f42e5c8cc0" />

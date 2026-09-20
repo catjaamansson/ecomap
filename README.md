@@ -69,7 +69,5 @@ python run.py
 ```
 
 ## Screenshots
-<img width="400" height="300" alt="Skärmbild 2026-03-07 130409" src="https://github.com/user-attachments/assets/7b9518d7-edcf-45f4-a5c3-beca77b54e4e" />
-<img width="400" height="300" alt="Skärmbild 2026-03-07 131720" src="https://github.com/user-attachments/assets/48073208-c8ad-468c-9462-b19e8fe89e1c" />
-<img width="400" height="300" alt="Skärmbild 2026-03-07 130534" src="https://github.com/user-attachments/assets/21685fca-b34e-4905-a09d-9d191c124ec2" />
-<img width="400" height="300" alt="Skärmbild 2026-03-07 130601" src="https://github.com/user-attachments/assets/b24ba98d-c3ed-4b77-a477-083711e544dc" />
+<img width="947" height="437" alt="Skärmbild 2026-09-20 213346" src="https://github.com/user-attachments/assets/01a8b497-7db2-4162-b18b-68f42e5c8cc0" />
+<img width="947" height="437" alt="Skärmbild 2026-09-20 213043" src="https://github.com/user-attachments/assets/2ff78685-43f9-47ac-8ef6-ef8fed4e6e2e" />

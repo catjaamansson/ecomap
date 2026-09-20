@@ -17,13 +17,26 @@
 
 @media (max-width: 760px) {
   .navbar-content {
-    gap: 8px;
-    overflow-x: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 8px;
+    padding: 0;
+    overflow-x: visible;
+  }
+
+  .navbar-content img {
+    width: 58px !important;
+    height: 38px !important;
+  }
+
+  .navbar-content button {
+    padding: 4px 8px !important;
+    font-size: 13px !important;
   }
 }
 
 .logo {
-  height: 6em;
+  height: 3em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
@@ -95,4 +108,81 @@
   background: #ffffff;
 }
 
+.custom-page {
+  overflow-x: hidden;
+}
 
+.custom-content,
+.custom-map-column {
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .custom-content {
+    flex-direction: column;
+    gap: 20px !important;
+    padding: 12px 20px 24px !important;
+  }
+
+  .custom-sidebar-wrapper,
+  .custom-map-column {
+    width: 100%;
+  }
+
+  .custom-sidebar-wrapper > div {
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  .custom-map-container {
+    height: 420px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .custom-content {
+    padding: 8px 12px 20px !important;
+  }
+
+  .custom-map-container {
+    height: 340px !important;
+    border-radius: 12px !important;
+  }
+}
+
+.main-layout, 
+.map-page-container,
+.content-wrapper,
+.app-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 760px) {
+  /* Stapla allt vertikalt på mobiler och surfplattor */
+  .main-layout, 
+  .map-page-container,
+  .content-wrapper,
+  .app-container {
+    flex-direction: column !important;
+    align-items: center;
+  }
+
+  /* Gör att sidopanel, karta och inforutor tar hela skärmbredden */
+  .sidebar, 
+  .leaflet-container, 
+  .summary-box,
+  .info-panel {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  /* Ge kartan en tydlig höjd så den inte blir ihopklämd */
+  .leaflet-container {
+    height: 350px !important;
+    margin-top: 15px;
+  }
+}

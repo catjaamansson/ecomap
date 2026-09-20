@@ -17,7 +17,7 @@ function Navbar() {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      padding: '6px 20px',
+      padding: '3px 20px',
       background: `
   linear-gradient(
     to bottom,
@@ -44,8 +44,8 @@ function Navbar() {
             src="/ecomap_logo.svg"
             alt="EcoMap logo"
             style={{
-              width: '84px',
-              height: '58px',
+              width: '72px',
+              height: '56px',
               objectFit: 'contain',
               filter: 'brightness(0) invert(1)',
             }}
@@ -53,7 +53,7 @@ function Navbar() {
           <span style={{
             color: '#ffffff',
             fontFamily: 'Playfair Display, serif',
-            fontSize: '27px',
+            fontSize: '24px',
             fontWeight: '700',
             letterSpacing: '2px',
             textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)',
@@ -66,7 +66,7 @@ function Navbar() {
           <Link key={tab.label} to={tab.path} style={{ textDecoration: 'none' }}>
             <button
               style={{
-                padding: '8px 16px',
+                padding: '6px 12px',
                 backgroundColor: 'transparent',
                 color: '#ffffff',
                 fontFamily: 'Playfair Display, serif',

@@ -20,7 +20,7 @@ const ProtectedAreasLayer = () => null;
 const ThreatenedAnimalsLayer = () => null;
 
 function Custom() {
-  const [active, setActive] = useState(null);
+  const [activeLayers, setActiveLayers] = useState([]);
   const [waterLevel, setWaterLevel] = useState(0);
   const [analysisData, setAnalysisData] = useState(null);
   const [isDrawingArea, setIsDrawingArea] = useState(false);
@@ -110,14 +110,16 @@ function Custom() {
 
     // Debounce: vänta 300 ms efter sista dragningen/sliderändringen innan backend kallas
     const timer = setTimeout(() => {
-      fetchAnalysis(activeArea.geojson, activeArea.sqMeters, active, waterLevel);
+      const analysisLayer = activeLayers[activeLayers.length - 1] || 'flooding';
+      fetchAnalysis(activeArea.geojson, activeArea.sqMeters, analysisLayer, waterLevel);
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [activeArea, active, waterLevel]);
+  }, [activeArea, activeLayers, waterLevel]);
 
   return (
     <div
+      className="custom-page"
       style={{
         backgroundImage: "url('/leaf.svg')",
         backgroundRepeat: 'repeat',
@@ -133,18 +135,18 @@ function Custom() {
     >
       <Navbar />
       
-      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '24px', padding: '12px 30px 30px', flex: "1" }}>
-        <div style={{ position: 'relative', zIndex: 900 }}>
+      <div className="custom-content" style={{ display: 'flex', alignItems: 'flex-start', gap: '24px', padding: '12px 30px 30px', flex: "1" }}>
+        <div className="custom-sidebar-wrapper" style={{ position: 'relative', zIndex: 900 }}>
           <Customsidebar 
-            active={active} 
-            setActive={setActive} 
+            active={activeLayers}
+            setActive={setActiveLayers}
             waterLevel={waterLevel} 
             setWaterLevel={setWaterLevel} 
           />
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, width: '100%', position: 'relative', zIndex: 1 }}>
-          <div style={{ height: '490px', width: '100%', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 8px 20px rgba(15, 35, 24, 0.35)' }}>
+        <div className="custom-map-column" style={{ display: 'flex', flexDirection: 'column', flex: 1, width: '100%', position: 'relative', zIndex: 1 }}>
+          <div className="custom-map-container" style={{ height: '500px', width: '100%', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 8px 20px rgba(15, 35, 24, 0.35)' }}>
             <Mapview center={[55.6229, 13.3486]} zoom={9.4}>
               <AreaDrawer 
                 onAreaCreated={handleAreaCreated}
@@ -155,31 +157,31 @@ function Custom() {
                 activeAreaId={activeAreaId}
               />
 
-              {active === 'vegetation' && <ForestLayer key="vegetation" />}
-              {active === 'waterbodies' && <Waterbodieslayers key="waterbodies" />}
-              {active === 'protected_areas' && <ProtectedAreasLayer key="protected" />}
-              {active === 'threatened_animals' && <ThreatenedAnimalsLayer key="animals" />}
-              {active === 'soil_moisture' && !isDrawingArea && (
+              {activeLayers.includes('vegetation') && <ForestLayer key="vegetation" />}
+              {activeLayers.includes('waterbodies') && <Waterbodieslayers key="waterbodies" />}
+              {activeLayers.includes('protected_areas') && <ProtectedAreasLayer key="protected" />}
+              {activeLayers.includes('threatened_animals') && <ThreatenedAnimalsLayer key="animals" />}
+              {activeLayers.includes('soil_moisture') && !isDrawingArea && (
                 <>
                   <Soilmoisture key="soil_moisture" />
                   <SoilmoistureClickPopup key="soil_moisture_click" />
                 </>
               )}
               
-              {active === 'landUse' && !isDrawingArea && (
+              {activeLayers.includes('landUse') && !isDrawingArea && (
                 <>
                   <Landuselayers />
                   <LandUseClickPopup />
                 </>
               )}
               
-              {active === 'waterquality' && (
+              {activeLayers.includes('waterquality') && (
                 <>
                   <Waterquality key="waterquality" />
                   <WaterQualityClickPopup key="waterquality_click" />
                 </>
               )}
-              {waterLevel > 0 && <Flooding level={waterLevel} key="flooding" />}
+              {activeLayers.includes('flooding') && waterLevel > 0 && <Flooding level={waterLevel} key="flooding" />}
             </Mapview>
           </div>
 

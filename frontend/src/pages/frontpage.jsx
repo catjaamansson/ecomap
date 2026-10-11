@@ -10,10 +10,9 @@ function Frontpage() {
           window.scrollTo(0, 0);
   }, []);
   const pages = [
-    { name: 'Hydrology', path: '/hydrology', image: '/images/hydrology.png' },
-    { name: 'Ecology', path: '/ecology', image: '/images/ecology.png' },
-    { name: 'Field study', path: '/field_study', image: '/images/fieldstudy.png' },
-    { name: 'Custom', path: '/custom', image: '/images/custom.png' }
+    { name: 'Map', path: '/custom', image: '/images/custom.png' },
+    { name: 'About EcoMap', path: '/aboutecomap', image: '/images/ecology.png' },
+    { name: 'Data Sources', path: '/datasources', image: '/images/fieldstudy.png' }
   ]
 
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -38,7 +37,7 @@ function Frontpage() {
         minHeight: '100vh',
         margin: 0,
         padding: 0,
-        backgroundColor: 'rgb(53, 109, 79)',
+        backgroundColor: '#3E663A',
       }}
     >
       <Navbar />
@@ -123,15 +122,13 @@ function Frontpage() {
           fontFamily: 'Playfair Display, serif',
           textAlign: 'center' 
         }}>
-          Explore features
+          Explore EcoMap
         </h2>
 
         {/* boxes with text */}
         <div style={{ display: 'flex', gap: '20px', marginTop: '10px', marginBottom: '40px', justifyContent: 'center' }}>
           {/* hydrology box */}
           <div
-            contentEditable="true"
-            suppressContentEditableWarning={true}
             style={{
               width: '300px',
               minHeight: '150px',
@@ -162,8 +159,6 @@ function Frontpage() {
           
           {/* ecology box */}
           <div
-            contentEditable="true"
-            suppressContentEditableWarning={true}
             style={{
               width: '300px',
               minHeight: '150px',
@@ -197,8 +192,6 @@ function Frontpage() {
         <div style={{ display: 'flex', gap: '20px', marginTop: '10px', marginBottom: '40px', justifyContent: 'center' }}>
           {/* field study box */}
           <div
-            contentEditable="true"
-            suppressContentEditableWarning={true}
             style={{
               width: '300px',
               minHeight: '150px',
@@ -229,8 +222,6 @@ function Frontpage() {
           
           {/* custom box */}
           <div
-            contentEditable="true"
-            suppressContentEditableWarning={true}
             style={{
               width: '300px',
               minHeight: '150px',
@@ -252,7 +243,7 @@ function Frontpage() {
             <Map size={36} color="#8edb97" />
 
             <h3 style={{ fontSize: '24px', margin: '0 0 10px 0', fontWeight: 'bold', color: 'white' }}>
-              Custom
+              Map
             </h3>
             <p style={{ fontSize: '14px', margin: '0', lineHeight: '1.6', color: 'white' }}>
               Explore hydrology, ecology, and field study data combined into a single map.

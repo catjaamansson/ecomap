@@ -4,10 +4,9 @@ import { Link } from 'react-router-dom'
 function Navbar() {
   const tabs = [
     { label: "Home", path: "/" },
-    { label: "Map", path: "/hydrology" },
-    { label: "About Ecomap", path: "/ecology" },
-    { label: "Data sources", path: "/field_study" },
-    { label: "Custom", path: "/custom" }
+    { label: "Map", path: "/custom" },
+    { label: "About Ecomap", path: "/aboutecomap" },
+    { label: "Data sources", path: "/datasources" }
   ]
   
   const location = useLocation()

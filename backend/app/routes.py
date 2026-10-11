@@ -192,16 +192,16 @@ def analyze_area():
         
         flood_breakdown = [
             {
-                "name": "Flooded mark",
-                "label": "Flooded mark",
-                "category": "Flooded mark",
+                "name": "Flooded ground",
+                "label": "Flooded ground",
+                "category": "Flooded ground",
                 "sqm": flooded_sqm,
                 "percentage": flooded_percentage
             },
             {
-                "name": "Torr mark",
-                "label": "Torr mark",
-                "category": "Torr mark",
+                "name": "Dry ground",
+                "label": "Dry ground",
+                "category": "Dry ground",
                 "sqm": dry_sqm,
                 "percentage": dry_percentage
             }

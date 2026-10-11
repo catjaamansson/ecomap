@@ -11,6 +11,7 @@ import Ecology from './pages/ecology.jsx'
 import FieldStudy from './pages/field_study.jsx'
 import Custom from './pages/custom.jsx'
 import Datasources from './pages/datasources.jsx'
+import AboutEcomap from './pages/aboutecomap.jsx'
 import Contact from './pages/contact&feedback.jsx'
 import PrivacyPolicy from './pages/privacypolicy.jsx'
 
@@ -23,6 +24,7 @@ function App() {
         <Route path ='/field_study' element={<FieldStudy />} />
         <Route path ='/custom' element={<Custom />} />
         <Route path ='/datasources' element={<Datasources />} />
+        <Route path ='/aboutecomap' element={<AboutEcomap />} />
         <Route path ='/contact' element={<Contact />} />
         <Route path ='/privacypolicy' element={<PrivacyPolicy />} />
       </Routes>

@@ -30,7 +30,7 @@ function Footer() {
               <Link to="/hydrology" style={{ color: '#ffffff', textDecoration: 'none', fontSize: '14px' }}>Hydrology</Link>
             </li>
             <li style={{marginBottom: '10px' }}>
-              <Link to="/ecology" style={{ color: '#ffffff', textDecoration: 'none', fontSize: '14px' }}>Ecology</Link>
+              <Link to="/aboutecomap" style={{ color: '#ffffff', textDecoration: 'none', fontSize: '14px' }}>About Ecomap</Link>
             </li>
             <li style={{marginBottom: '10px' }}>
               <Link to="/field_study" style={{ color: '#ffffff', textDecoration: 'none', fontSize: '14px' }}>Field Study</Link>

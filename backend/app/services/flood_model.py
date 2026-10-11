@@ -86,12 +86,12 @@ def analyze_flood_area(geometry, water_level, total_sqm=0):
                 "flooded_percentage": flooded_percentage,
                 "breakdown": [
                     {
-                        "name": "Översvämmad mark",
+                        "name": "Flooded ground",
                         "sqm": flooded_sqm,
                         "percentage": flooded_percentage
                     },
                     {
-                        "name": "Torr mark",
+                        "name": "Dry ground",
                         "sqm": dry_sqm,
                         "percentage": round(100 - flooded_percentage, 1)
                     }
